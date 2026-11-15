@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:review_enqueue_requests:1",
+  "title": "ReviewEnqueueRequestRow",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "request_id",
+    "schema_version",
+    "request_hash",
+    "trigger_event_id",
+    "trigger_kind",
+    "trigger_dedupe_key",
+    "version_binding_json",
+    "stable_evidence_ref",
+    "request_json",
+    "result_json",
+    "review_job_id",
+    "created_at"
+  ],
+  "properties": {
+    "request_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "schema_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "request_hash": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "trigger_event_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "trigger_kind": {
+      "type": "string",
+      "minLength": 1
+    },
+    "trigger_dedupe_key": {
+      "type": "string",
+      "minLength": 1
+    },
+    "version_binding_json": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Canonical JSON text."
+    },
+    "stable_evidence_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "request_json": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Canonical JSON text."
+    },
+    "result_json": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Canonical JSON text."
+    },
+    "review_job_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "created_at": {
+      "type": "integer"
+    }
+  }
+}

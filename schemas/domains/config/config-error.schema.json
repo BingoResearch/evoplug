@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:config_error:1",
+  "title": "ConfigError",
+  "description": "CFG domain error with registered scalar details (DD-CFG-144).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["code", "message_key", "field_id", "path", "retryable", "details"],
+  "properties": {
+    "code": { "type": "string", "pattern": "^E_CFG_[A-Z0-9_]+$" },
+    "message_key": { "type": "string", "pattern": "^cfg\\.[a-z0-9_]+$" },
+    "field_id": { "oneOf": [{ "type": "null" }, { "type": "string", "pattern": "^fld:[0-9A-HJKMNP-TV-Z]{26}$" }] },
+    "path": { "oneOf": [{ "type": "null" }, { "type": "string", "maxLength": 1024 }] },
+    "retryable": { "type": "boolean" },
+    "details": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["key", "value"],
+        "properties": {
+          "key": { "type": "string", "minLength": 1, "maxLength": 64 },
+          "value": { "type": ["string", "number", "boolean", "null"] }
+        }
+      }
+    }
+  }
+}

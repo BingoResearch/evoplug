@@ -1,0 +1,186 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:ledger_view:1",
+  "title": "LedgerView",
+  "description": "Watermark-scoped ledger projection returned by ledger.read (DD-FND-074).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["binding", "requirements", "facts", "feedback", "corrections", "constraints", "outcome", "view_hash"],
+  "properties": {
+    "binding": { "$ref": "#/$defs/VersionBinding" },
+    "requirements": { "type": "array", "items": { "$ref": "#/$defs/CurrentRequirement" } },
+    "facts": { "type": "array", "items": { "$ref": "#/$defs/StateFactView" } },
+    "feedback": { "type": "array", "items": { "$ref": "#/$defs/FeedbackRecord" } },
+    "corrections": { "type": "array", "items": { "$ref": "#/$defs/LedgerCorrection" } },
+    "constraints": { "type": "array", "items": { "$ref": "#/$defs/UnverifiedConstraint" } },
+    "outcome": { "oneOf": [{ "$ref": "#/$defs/TaskOutcomeRecord" }, { "type": "null" }] },
+    "view_hash": { "$ref": "#/$defs/Hash" }
+  },
+  "$defs": {
+    "Hash": { "title": "Hash", "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "SourceRef": {
+      "title": "SourceRef",
+      "oneOf": [
+        { "type": "string", "pattern": "^journal://ev:[0-9A-HJKMNP-TV-Z]{26}#bytes=(0|[1-9][0-9]*)-(0|[1-9][0-9]*)$" },
+        { "type": "string", "pattern": "^blob://sha256:[0-9a-f]{64}#bytes=(0|[1-9][0-9]*)-(0|[1-9][0-9]*)$" }
+      ]
+    },
+    "VersionBinding": {
+      "title": "VersionBinding",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["task_id", "branch_id", "input_epoch", "goal_version", "config_version", "watermark"],
+      "properties": {
+        "task_id": { "type": "string" },
+        "branch_id": { "type": "string" },
+        "input_epoch": { "type": "integer", "minimum": 1 },
+        "goal_version": { "type": "string" },
+        "config_version": { "type": "string" },
+        "watermark": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "RequirementScope": {
+      "title": "RequirementScope",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["paths", "hosts", "modes", "project_ids"],
+      "properties": {
+        "paths": { "type": "array", "items": { "type": "string" } },
+        "hosts": { "type": "array", "items": { "type": "string" } },
+        "modes": { "type": "array", "items": { "enum": ["online", "review", "trial", "global"] } },
+        "project_ids": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "AcceptanceCriterion": {
+      "title": "AcceptanceCriterion",
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["kind"],
+      "properties": { "kind": { "enum": ["human_acceptance", "test_pass", "artifact_check", "external_verification"] } }
+    },
+    "CurrentRequirement": {
+      "title": "CurrentRequirement",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["requirement_id", "revision", "statement_ref", "statement_text_hash", "scope", "acceptance", "status", "source_refs"],
+      "properties": {
+        "requirement_id": { "type": "string", "pattern": "^req:[0-9A-HJKMNP-TV-Z]{26}$" },
+        "revision": { "type": "integer", "minimum": 1 },
+        "statement_ref": { "$ref": "#/$defs/SourceRef" },
+        "statement_text_hash": { "$ref": "#/$defs/Hash" },
+        "scope": { "$ref": "#/$defs/RequirementScope" },
+        "acceptance": { "type": "array", "items": { "$ref": "#/$defs/AcceptanceCriterion" } },
+        "status": { "enum": ["proposed", "active"] },
+        "source_refs": { "type": "array", "items": { "$ref": "#/$defs/SourceRef" } }
+      }
+    },
+    "StateFactView": {
+      "title": "StateFactView",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "fact_id", "binding", "kind", "subject", "value", "truth_state", "stale", "stale_reason", "source_ref", "producer_ref", "verifier_ref", "artifact_version", "observed_at", "row_version"],
+      "properties": {
+        "schema_version": { "const": "rsi.state_fact/1" },
+        "fact_id": { "type": "string" },
+        "binding": { "$ref": "#/$defs/VersionBinding" },
+        "kind": { "enum": ["code", "interface_contract", "call", "result", "diff", "test", "message"] },
+        "subject": { "type": "string" },
+        "value": { "type": "string" },
+        "truth_state": { "enum": ["claim", "observed", "verified", "contradicted", "unknown"] },
+        "stale": { "type": "boolean" },
+        "stale_reason": { "type": ["string", "null"] },
+        "source_ref": { "$ref": "#/$defs/SourceRef" },
+        "producer_ref": { "$ref": "#/$defs/SourceRef" },
+        "verifier_ref": { "oneOf": [{ "$ref": "#/$defs/SourceRef" }, { "type": "null" }] },
+        "artifact_version": { "type": ["string", "null"] },
+        "observed_at": { "type": "integer", "minimum": 0 },
+        "row_version": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "FeedbackRecord": {
+      "title": "FeedbackRecord",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "feedback_id", "kind", "quote_ref", "status", "goal_version", "input_epoch", "recorded_at"],
+      "properties": {
+        "schema_version": { "const": "rsi.feedback/2" },
+        "feedback_id": { "type": "string" },
+        "kind": { "enum": ["correction", "dissatisfaction", "new_goal", "acceptance"] },
+        "quote_ref": { "$ref": "#/$defs/SourceRef" },
+        "target_issue_id": { "type": ["string", "null"] },
+        "status": { "enum": ["recorded", "needs_evidence"] },
+        "goal_version": { "type": "string" },
+        "input_epoch": { "type": "integer", "minimum": 1 },
+        "recorded_at": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "LedgerCorrection": {
+      "title": "LedgerCorrection",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "correction_id", "status", "correction_hash"],
+      "properties": {
+        "schema_version": { "const": "rsi.ledger_correction/2" },
+        "correction_id": { "type": "string" },
+        "status": { "enum": ["applied", "rejected_original_missing"] },
+        "correction_hash": { "$ref": "#/$defs/Hash" }
+      }
+    },
+    "UnverifiedConstraint": {
+      "title": "UnverifiedConstraint",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "constraint_id", "binding", "source_ref", "quote", "quote_hash", "status", "authorization", "usable_for", "recorded_at_watermark", "created_at", "row_version"],
+      "properties": {
+        "schema_version": { "const": "rsi.unverified_constraint/2" },
+        "constraint_id": { "type": "string" },
+        "binding": { "$ref": "#/$defs/VersionBinding" },
+        "source_ref": { "$ref": "#/$defs/SourceRef" },
+        "quote": { "type": "string" },
+        "quote_hash": { "$ref": "#/$defs/Hash" },
+        "scope_hint": { "oneOf": [{ "$ref": "#/$defs/RequirementScope" }, { "type": "null" }] },
+        "status": { "enum": ["unverified_constraint", "confirmed", "rejected"] },
+        "authorization": { "const": 0 },
+        "usable_for": { "type": "array", "items": { "enum": ["context", "review", "trial"] } },
+        "conflict_with_requirement_ids": { "type": "array", "items": { "type": "string" } },
+        "confirmed_by_event_id": { "type": ["string", "null"] },
+        "recorded_at_watermark": { "type": "integer", "minimum": 0 },
+        "created_at": { "type": "integer", "minimum": 0 },
+        "row_version": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "TaskOutcomeRecord": {
+      "title": "TaskOutcomeRecord",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "outcome_id", "task_id", "branch_id", "binding", "revision", "outcome", "success_evidence_refs", "uncovered_requirement_ids", "pending_work", "reason_code", "boundary_event_id", "decided_at", "outcome_hash"],
+      "properties": {
+        "schema_version": { "const": "rsi.task_outcome/2" },
+        "outcome_id": { "type": "string" },
+        "task_id": { "type": "string" },
+        "branch_id": { "type": "string" },
+        "binding": { "$ref": "#/$defs/VersionBinding" },
+        "revision": { "type": "integer", "minimum": 1 },
+        "outcome": { "enum": ["active", "paused", "cancelled", "ended_unverified", "succeeded", "failed"] },
+        "success_evidence_refs": { "type": "array", "items": { "$ref": "#/$defs/SourceRef" } },
+        "uncovered_requirement_ids": { "type": "array", "items": { "type": "string" } },
+        "pending_work": { "type": "array", "items": { "$ref": "#/$defs/PendingWorkItem" } },
+        "reason_code": { "type": "string" },
+        "boundary_event_id": { "type": ["string", "null"] },
+        "decided_at": { "type": "integer", "minimum": 0 },
+        "outcome_hash": { "$ref": "#/$defs/Hash" }
+      }
+    },
+    "PendingWorkItem": {
+      "title": "PendingWorkItem",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "ref", "reason_code"],
+      "properties": {
+        "kind": { "enum": ["issue", "review", "write", "delivery", "verification", "human_decision"] },
+        "ref": { "type": "string" },
+        "reason_code": { "enum": ["queued", "in_progress", "awaiting_human", "awaiting_evidence"] }
+      }
+    }
+  }
+}

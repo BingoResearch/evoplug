@@ -1,0 +1,4029 @@
+{
+  "schema_version": "rsi.state_row_registry/1",
+  "rows": [
+    {
+      "row_schema": "rsi.requirement_op_row/1",
+      "owner_domain": "fnd",
+      "table": "requirement_op",
+      "ts_type": "RequirementOpRow",
+      "primary_key": [
+        "op_id"
+      ],
+      "unique_keys": [],
+      "event_types": [
+        "state_row.recorded"
+      ],
+      "allowed_operations": [
+        "insert"
+      ],
+      "binding_source": "batch",
+      "row_versioned": false,
+      "blob_ref_paths": [
+        "source_quote_ref",
+        "statement_ref"
+      ],
+      "payload_blob_paths": [],
+      "derived_reducer": null,
+      "document": null,
+      "allocation": null,
+      "schema_artifact": "schemas/ledger/requirement.schema.json",
+      "columns": [
+        {
+          "name": "op_id",
+          "type": "string"
+        },
+        {
+          "name": "task_id",
+          "type": "string"
+        },
+        {
+          "name": "branch_id",
+          "type": "string"
+        },
+        {
+          "name": "source_event_id",
+          "type": "string"
+        },
+        {
+          "name": "actor_origin",
+          "type": "string"
+        },
+        {
+          "name": "directive_strength",
+          "type": "string"
+        },
+        {
+          "name": "op",
+          "type": "string"
+        },
+        {
+          "name": "target_requirement_id",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "created_requirement_id",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "superseded_requirement_ids_json",
+          "type": "string",
+          "json_text": true
+        },
+        {
+          "name": "statement_ref",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "scope_json",
+          "type": "string",
+          "json_text": true
+        },
+        {
+          "name": "acceptance_json",
+          "type": "string",
+          "json_text": true
+        },
+        {
+          "name": "source_quote_ref",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "source_text_hash",
+          "type": "string"
+        },
+        {
+          "name": "status",
+          "type": "string"
+        },
+        {
+          "name": "recorded_at",
+          "type": "number"
+        },
+        {
+          "name": "valid_from_event",
+          "type": "number"
+        },
+        {
+          "name": "valid_to_event",
+          "type": "number",
+          "nullable": true
+        },
+        {
+          "name": "effective_input_epoch",
+          "type": "number"
+        },
+        {
+          "name": "goal_version_before",
+          "type": "string"
+        },
+        {
+          "name": "goal_version_after",
+          "type": "string"
+        },
+        {
+          "name": "content_hash",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "row_schema": "rsi.requirement_row/1",
+      "owner_domain": "fnd",
+      "table": "requirement",
+      "ts_type": "RequirementRow",
+      "primary_key": [
+        "requirement_id",
+        "revision"
+      ],
+      "unique_keys": [],
+      "event_types": [
+        "state_row.recorded"
+      ],
+      "allowed_operations": [
+        "insert"
+      ],
+      "binding_source": "batch",
+      "row_versioned": false,
+      "blob_ref_paths": [
+        "statement_ref"
+      ],
+      "payload_blob_paths": [],
+      "derived_reducer": null,
+      "document": null,
+      "allocation": null,
+      "schema_artifact": "schemas/ledger/requirement.schema.json",
+      "columns": [
+        {
+          "name": "requirement_id",
+          "type": "string"
+        },
+        {
+          "name": "revision",
+          "type": "number"
+        },
+        {
+          "name": "task_id",
+          "type": "string"
+        },
+        {
+          "name": "branch_id",
+          "type": "string"
+        },
+        {
+          "name": "statement_ref",
+          "type": "string"
+        },
+        {
+          "name": "statement_text_hash",
+          "type": "string"
+        },
+        {
+          "name": "scope_json",
+          "type": "string",
+          "json_text": true
+        },
+        {
+          "name": "acceptance_json",
+          "type": "string",
+          "json_text": true
+        },
+        {
+          "name": "status",
+          "type": "string"
+        },
+        {
+          "name": "created_by_op_id",
+          "type": "string"
+        },
+        {
+          "name": "superseded_by_requirement_id",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "valid_from_event",
+          "type": "number"
+        },
+        {
+          "name": "valid_to_event",
+          "type": "number",
+          "nullable": true
+        },
+        {
+          "name": "effective_input_epoch",
+          "type": "number"
+        },
+        {
+          "name": "content_hash",
+          "type": "string"
+        },
+        {
+          "name": "recorded_at",
+          "type": "number"
+        }
+      ]
+    },
+    {
+      "row_schema": "rsi.requirement_source_row/1",
+      "owner_domain": "fnd",
+      "table": "requirement_source",
+      "ts_type": "RequirementSourceRow",
+      "primary_key": [
+        "requirement_id",
+        "requirement_revision",
+        "source_event_id",
+        "source_ref"
+      ],
+      "unique_keys": [],
+      "event_types": [
+        "state_row.recorded"
+      ],
+      "allowed_operations": [
+        "insert"
+      ],
+      "binding_source": "batch",
+      "row_versioned": false,
+      "blob_ref_paths": [
+        "source_ref"
+      ],
+      "payload_blob_paths": [],
+      "derived_reducer": null,
+      "document": null,
+      "allocation": null,
+      "schema_artifact": "schemas/ledger/requirement.schema.json",
+      "columns": [
+        {
+          "name": "requirement_id",
+          "type": "string"
+        },
+        {
+          "name": "requirement_revision",
+          "type": "number"
+        },
+        {
+          "name": "source_event_id",
+          "type": "string"
+        },
+        {
+          "name": "source_ref",
+          "type": "string"
+        },
+        {
+          "name": "quote_hash",
+          "type": "string"
+        },
+        {
+          "name": "role",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "row_schema": "rsi.requirement_head_row/1",
+      "owner_domain": "fnd",
+      "table": "requirement_head",
+      "ts_type": "RequirementHeadRow",
+      "primary_key": [
+        "requirement_id"
+      ],
+      "unique_keys": [],
+      "event_types": [
+        "state_row.recorded"
+      ],
+      "allowed_operations": [
+        "insert",
+        "transition"
+      ],
+      "binding_source": "batch",
+      "row_versioned": true,
+      "blob_ref_paths": [],
+      "payload_blob_paths": [],
+      "derived_reducer": null,
+      "document": null,
+      "allocation": null,
+      "schema_artifact": "schemas/ledger/requirement.schema.json",
+      "columns": [
+        {
+          "name": "requirement_id",
+          "type": "string"
+        },
+        {
+          "name": "revision",
+          "type": "number"
+        },
+        {
+          "name": "status",
+          "type": "string"
+        },
+        {
+          "name": "current_goal_version",
+          "type": "string"
+        },
+        {
+          "name": "updated_at",
+          "type": "number"
+        },
+        {
+          "name": "row_version",
+          "type": "number"
+        }
+      ]
+    },
+    {
+      "row_schema": "rsi.goal_snapshot_row/1",
+      "owner_domain": "fnd",
+      "table": "goal_snapshot",
+      "ts_type": "GoalSnapshotRow",
+      "primary_key": [
+        "snapshot_id"
+      ],
+      "unique_keys": [],
+      "event_types": [
+        "state_row.recorded"
+      ],
+      "allowed_operations": [
+        "insert"
+      ],
+      "binding_source": "batch",
+      "row_versioned": false,
+      "blob_ref_paths": [],
+      "payload_blob_paths": [],
+      "derived_reducer": null,
+      "document": null,
+      "allocation": null,
+      "schema_artifact": "schemas/ledger/requirement.schema.json",
+      "columns": [
+        {
+          "name": "snapshot_id",
+          "type": "string"
+        },
+        {
+          "name": "task_id",
+          "type": "string"
+        },
+        {
+          "name": "source_branch_id",
+          "type": "string"
+        },
+        {
+          "name": "source_goal_version",
+          "type": "string"
+        },
+        {
+          "name": "local_goal_version",
+          "type": "string"
+        },
+        {
+          "name": "local_goal_revision",
+          "type": "number"
+        },
+        {
+          "name": "watermark",
+          "type": "number"
+        },
+        {
+          "name": "active_requirement_ids_json",
+          "type": "array",
+          "items": "string"
+        },
+        {
+          "name": "snapshot_hash",
+          "type": "string"
+        },
+        {
+          "name": "created_at",
+          "type": "number"
+        }
+      ]
+    },
+    {
+      "row_schema": "rsi.ledger_correction_row/1",
+      "owner_domain": "fnd",
+      "table": "ledger_correction",
+      "ts_type": "LedgerCorrectionRow",
+      "primary_key": [
+        "correction_id"
+      ],
+      "unique_keys": [],
+      "event_types": [
+        "state_row.recorded"
+      ],
+      "allowed_operations": [
+        "insert"
+      ],
+      "binding_source": "batch",
+      "row_versioned": false,
+      "blob_ref_paths": [],
+      "payload_blob_paths": [],
+      "derived_reducer": null,
+      "document": null,
+      "allocation": null,
+      "schema_artifact": "schemas/ledger/requirement.schema.json",
+      "columns": [
+        {
+          "name": "correction_id",
+          "type": "string"
+        },
+        {
+          "name": "task_id",
+          "type": "string"
+        },
+        {
+          "name": "branch_id",
+          "type": "string"
+        },
+        {
+          "name": "corrected_record_id",
+          "type": "string"
+        },
+        {
+          "name": "correction_kind",
+          "type": "string"
+        },
+        {
+          "name": "original_source_event_id",
+          "type": "string"
+        },
+        {
+          "name": "original_source_ref",
+          "type": "string"
+        },
+        {
+          "name": "original_text_hash",
+          "type": "string"
+        },
+        {
+          "name": "status",
+          "type": "string"
+        },
+        {
+          "name": "recorded_at",
+          "type": "number"
+        },
+        {
+          "name": "valid_from_event",
+          "type": "number"
+        },
+        {
+          "name": "replacement_op_ids_json",
+          "type": "array",
+          "items": "string"
+        },
+        {
+          "name": "invalidated_judgment_ids_json",
+          "type": "array",
+          "items": "string"
+        },
+        {
+          "name": "correction_hash",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "row_schema": "rsi.state_fact_row/1",
+      "owner_domain": "fnd",
+      "table": "state_fact",
+      "ts_type": "StateFactRow",
+      "primary_key": [
+        "fact_id"
+      ],
+      "unique_keys": [],
+      "event_types": [
+        "state_row.recorded"
+      ],
+      "allowed_operations": [
+        "insert",
+        "update"
+      ],
+      "binding_source": "row",
+      "row_versioned": true,
+      "blob_ref_paths": [
+        "source_ref",
+        "producer_ref"
+      ],
+      "payload_blob_paths": [],
+      "derived_reducer": null,
+      "document": null,
+      "allocation": null,
+      "schema_artifact": "schemas/ledger/fact.schema.json",
+      "columns": [
+        {
+          "name": "fact_id",
+          "type": "string"
+        },
+        {
+          "name": "task_id",
+          "type": "string"
+        },
+        {
+          "name": "branch_id",
+          "type": "string"
+        },
+        {
+          "name": "input_epoch",
+          "type": "number"
+        },
+        {
+          "name": "goal_version",
+          "type": "string"
+        },
+        {
+          "name": "config_version",
+          "type": "string"
+        },
+        {
+          "name": "watermark",
+          "type": "number"
+        },
+        {
+          "name": "kind",
+          "type": "string"
+        },
+        {
+          "name": "subject",
+          "type": "string"
+        },
+        {
+          "name": "value",
+          "type": "string"
+        },
+        {
+          "name": "truth_state",
+          "type": "string"
+        },
+        {
+          "name": "source_ref",
+          "type": "string"
+        },
+        {
+          "name": "producer_ref",
+          "type": "string"
+        },
+        {
+          "name": "verifier_ref",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "artifact_version",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "observed_at",
+          "type": "number"
+        },
+        {
+          "name": "stale",
+          "type": "number"
+        },
+        {
+          "name": "stale_reason",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "content_hash",
+          "type": "string"
+        },
+        {
+          "name": "row_version",
+          "type": "number"
+        }
+      ]
+    },
+    {
+      "row_schema": "rsi.fact_verification_row/1",
+      "owner_domain": "fnd",
+      "table": "fact_verification",
+      "ts_type": "FactVerificationRow",
+      "primary_key": [
+        "fact_id",
+        "verifier_ref"
+      ],
+      "unique_keys": [
+        [
+          "event_id"
+        ]
+      ],
+      "event_types": [
+        "state_row.recorded"
+      ],
+      "allowed_operations": [
+        "insert"
+      ],
+      "binding_source": "batch",
+      "row_versioned": true,
+      "blob_ref_paths": [
+        "verifier_ref",
+        "source_refs_json[*]"
+      ],
+      "payload_blob_paths": [],
+      "derived_reducer": null,
+      "document": null,
+      "allocation": null,
+      "schema_artifact": "schemas/ledger/fact.schema.json",
+      "columns": [
+        {
+          "name": "fact_id",
+          "type": "string"
+        },
+        {
+          "name": "event_id",
+          "type": "string"
+        },
+        {
+          "name": "verifier_ref",
+          "type": "string"
+        },
+        {
+          "name": "verifier_id",
+          "type": "string"
+        },
+        {
+          "name": "verifier_kind",
+          "type": "string"
+        },
+        {
+          "name": "method_ref_json",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "reservation_ids_json",
+          "type": "string",
+          "json_text": true
+        },
+        {
+          "name": "independent",
+          "type": "number"
+        },
+        {
+          "name": "input_epoch",
+          "type": "number"
+        },
+        {
+          "name": "goal_version",
+          "type": "string"
+        },
+        {
+          "name": "config_version",
+          "type": "string"
+        },
+        {
+          "name": "watermark",
+          "type": "number"
+        },
+        {
+          "name": "requirement_ids_json",
+          "type": "string",
+          "json_text": true
+        },
+        {
+          "name": "proposition_ids_json",
+          "type": "string",
+          "json_text": true
+        },
+        {
+          "name": "effect",
+          "type": "string"
+        },
+        {
+          "name": "artifact_version",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "source_ids_json",
+          "type": "string",
+          "json_text": true
+        },
+        {
+          "name": "source_refs_json",
+          "type": "string",
+          "json_text": true
+        },
+        {
+          "name": "result",
+          "type": "string"
+        },
+        {
+          "name": "status",
+          "type": "string"
+        },
+        {
+          "name": "content_hash",
+          "type": "string"
+        },
+        {
+          "name": "verified_at",
+          "type": "number"
+        },
+        {
+          "name": "row_version",
+          "type": "number"
+        }
+      ]
+    },
+    {
+      "row_schema": "rsi.feedback_row/1",
+      "owner_domain": "fnd",
+      "table": "feedback",
+      "ts_type": "FeedbackRow",
+      "primary_key": [
+        "feedback_id"
+      ],
+      "unique_keys": [],
+      "event_types": [
+        "state_row.recorded"
+      ],
+      "allowed_operations": [
+        "insert"
+      ],
+      "binding_source": "batch",
+      "row_versioned": false,
+      "blob_ref_paths": [
+        "quote_ref"
+      ],
+      "payload_blob_paths": [],
+      "derived_reducer": null,
+      "document": null,
+      "allocation": null,
+      "schema_artifact": "schemas/ledger/requirement.schema.json",
+      "columns": [
+        {
+          "name": "feedback_id",
+          "type": "string"
+        },
+        {
+          "name": "task_id",
+          "type": "string"
+        },
+        {
+          "name": "branch_id",
+          "type": "string"
+        },
+        {
+          "name": "source_event_id",
+          "type": "string"
+        },
+        {
+          "name": "kind",
+          "type": "string"
+        },
+        {
+          "name": "quote_ref",
+          "type": "string"
+        },
+        {
+          "name": "target_issue_id",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "status",
+          "type": "string"
+        },
+        {
+          "name": "goal_version",
+          "type": "string"
+        },
+        {
+          "name": "input_epoch",
+          "type": "number"
+        },
+        {
+          "name": "recorded_at",
+          "type": "number"
+        }
+      ]
+    },
+    {
+      "row_schema": "rsi.unverified_constraint_row/1",
+      "owner_domain": "fnd",
+      "table": "unverified_constraint",
+      "ts_type": "UnverifiedConstraintRow",
+      "primary_key": [
+        "constraint_id"
+      ],
+      "unique_keys": [],
+      "event_types": [
+        "state_row.recorded"
+      ],
+      "allowed_operations": [
+        "insert",
+        "update"
+      ],
+      "binding_source": "row",
+      "row_versioned": true,
+      "blob_ref_paths": [
+        "source_ref"
+      ],
+      "payload_blob_paths": [],
+      "derived_reducer": null,
+      "document": null,
+      "allocation": null,
+      "schema_artifact": "schemas/ledger/requirement.schema.json",
+      "columns": [
+        {
+          "name": "constraint_id",
+          "type": "string"
+        },
+        {
+          "name": "task_id",
+          "type": "string"
+        },
+        {
+          "name": "branch_id",
+          "type": "string"
+        },
+        {
+          "name": "binding_json",
+          "type": "string",
+          "json_text": true
+        },
+        {
+          "name": "source_event_id",
+          "type": "string"
+        },
+        {
+          "name": "source_ref",
+          "type": "string"
+        },
+        {
+          "name": "quote",
+          "type": "string"
+        },
+        {
+          "name": "quote_hash",
+          "type": "string"
+        },
+        {
+          "name": "scope_hint_json",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "status",
+          "type": "string"
+        },
+        {
+          "name": "authorization",
+          "type": "number"
+        },
+        {
+          "name": "usable_for_json",
+          "type": "string",
+          "json_text": true
+        },
+        {
+          "name": "conflict_with_requirement_ids_json",
+          "type": "string",
+          "json_text": true
+        },
+        {
+          "name": "confirmed_by_event_id",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "recorded_at_watermark",
+          "type": "number"
+        },
+        {
+          "name": "created_at",
+          "type": "number"
+        },
+        {
+          "name": "row_version",
+          "type": "number"
+        }
+      ]
+    },
+    {
+      "row_schema": "rsi.success_evidence_row/1",
+      "owner_domain": "fnd",
+      "table": "success_evidence",
+      "ts_type": "SuccessEvidenceRow",
+      "primary_key": [
+        "evidence_id"
+      ],
+      "unique_keys": [
+        [
+          "branch_id",
+          "evidence_hash"
+        ]
+      ],
+      "event_types": [
+        "state_row.recorded"
+      ],
+      "allowed_operations": [
+        "insert"
+      ],
+      "binding_source": "row",
+      "row_versioned": false,
+      "blob_ref_paths": [
+        "source_ref",
+        "producer_ref"
+      ],
+      "payload_blob_paths": [],
+      "derived_reducer": null,
+      "document": null,
+      "allocation": null,
+      "schema_artifact": "schemas/ledger/task-outcome.schema.json",
+      "columns": [
+        {
+          "name": "evidence_id",
+          "type": "string"
+        },
+        {
+          "name": "task_id",
+          "type": "string"
+        },
+        {
+          "name": "branch_id",
+          "type": "string"
+        },
+        {
+          "name": "kind",
+          "type": "string"
+        },
+        {
+          "name": "source_event_id",
+          "type": "string"
+        },
+        {
+          "name": "source_ref",
+          "type": "string"
+        },
+        {
+          "name": "producer_ref",
+          "type": "string"
+        },
+        {
+          "name": "producer_kind",
+          "type": "string"
+        },
+        {
+          "name": "covered_requirement_ids_json",
+          "type": "string",
+          "json_text": true
+        },
+        {
+          "name": "version_binding_json",
+          "type": "string",
+          "json_text": true
+        },
+        {
+          "name": "human_attestation_json",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "attestation_subject_hash",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "verified_at",
+          "type": "number"
+        },
+        {
+          "name": "recorded_at",
+          "type": "number"
+        },
+        {
+          "name": "recorded_at_watermark",
+          "type": "number"
+        },
+        {
+          "name": "evidence_hash",
+          "type": "string"
+        },
+        {
+          "name": "row_version",
+          "type": "number"
+        }
+      ]
+    },
+    {
+      "row_schema": "rsi.task_outcome_row/1",
+      "owner_domain": "fnd",
+      "table": "task_outcome",
+      "ts_type": "TaskOutcomeRow",
+      "primary_key": [
+        "outcome_id"
+      ],
+      "unique_keys": [
+        [
+          "branch_id",
+          "revision"
+        ]
+      ],
+      "event_types": [
+        "state_row.recorded"
+      ],
+      "allowed_operations": [
+        "insert"
+      ],
+      "binding_source": "row",
+      "row_versioned": false,
+      "blob_ref_paths": [
+        "success_evidence_refs_json[*]"
+      ],
+      "payload_blob_paths": [],
+      "derived_reducer": null,
+      "document": null,
+      "allocation": null,
+      "schema_artifact": "schemas/ledger/task-outcome.schema.json",
+      "columns": [
+        {
+          "name": "outcome_id",
+          "type": "string"
+        },
+        {
+          "name": "task_id",
+          "type": "string"
+        },
+        {
+          "name": "branch_id",
+          "type": "string"
+        },
+        {
+          "name": "revision",
+          "type": "number"
+        },
+        {
+          "name": "outcome",
+          "type": "string"
+        },
+        {
+          "name": "success_evidence_refs_json",
+          "type": "string",
+          "json_text": true
+        },
+        {
+          "name": "uncovered_requirement_ids_json",
+          "type": "string",
+          "json_text": true
+        },
+        {
+          "name": "pending_work_json",
+          "type": "string",
+          "json_text": true
+        },
+        {
+          "name": "reason_code",
+          "type": "string"
+        },
+        {
+          "name": "boundary_event_id",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "version_binding_json",
+          "type": "string",
+          "json_text": true
+        },
+        {
+          "name": "decided_at",
+          "type": "number"
+        },
+        {
+          "name": "outcome_hash",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "row_schema": "rsi.adapter_install_approval_row/1",
+      "owner_domain": "fnd",
+      "table": "adapter_install_approval",
+      "ts_type": "AdapterInstallApprovalRow",
+      "primary_key": [
+        "approval_id"
+      ],
+      "unique_keys": [
+        [
+          "idempotency_key"
+        ]
+      ],
+      "event_types": [
+        "install.approval_recorded",
+        "install.approval_transition"
+      ],
+      "allowed_operations": [
+        "insert",
+        "transition"
+      ],
+      "binding_source": "none",
+      "row_versioned": true,
+      "blob_ref_paths": [
+        "evidence_ref"
+      ],
+      "payload_blob_paths": [],
+      "derived_reducer": null,
+      "document": null,
+      "allocation": null,
+      "schema_artifact": "schemas/auth/adapter-install-approval-row.schema.json",
+      "columns": [
+        {
+          "name": "schema_version",
+          "type": "string",
+          "const": "rsi.adapter_install_approval_row/1"
+        },
+        {
+          "name": "approval_id",
+          "type": "string"
+        },
+        {
+          "name": "idempotency_key",
+          "type": "string"
+        },
+        {
+          "name": "request_hash",
+          "type": "string"
+        },
+        {
+          "name": "subject_json",
+          "type": "string",
+          "json_text": true
+        },
+        {
+          "name": "subject_hash",
+          "type": "string"
+        },
+        {
+          "name": "state",
+          "type": "string"
+        },
+        {
+          "name": "bootstrap_state",
+          "type": "string"
+        },
+        {
+          "name": "evidence_ref",
+          "type": "string"
+        },
+        {
+          "name": "issued_at",
+          "type": "number"
+        },
+        {
+          "name": "expires_at",
+          "type": "number"
+        },
+        {
+          "name": "consumed_at",
+          "type": "number",
+          "nullable": true
+        },
+        {
+          "name": "consumed_registration_hash",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "revoked_at",
+          "type": "number",
+          "nullable": true
+        },
+        {
+          "name": "revoke_reason",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "approval_hash",
+          "type": "string"
+        },
+        {
+          "name": "row_version",
+          "type": "number"
+        }
+      ]
+    },
+    {
+      "row_schema": "rsi.root_registration_row/1",
+      "owner_domain": "fnd",
+      "table": "root_registration",
+      "ts_type": "RootRegistrationRow",
+      "primary_key": [
+        "root_id"
+      ],
+      "unique_keys": [],
+      "event_types": [
+        "root.registration_recorded",
+        "root.registration_updated"
+      ],
+      "allowed_operations": [
+        "insert",
+        "update"
+      ],
+      "binding_source": "none",
+      "row_versioned": true,
+      "blob_ref_paths": [
+        "native_root_ref"
+      ],
+      "payload_blob_paths": [],
+      "derived_reducer": null,
+      "document": null,
+      "allocation": null,
+      "schema_artifact": "schemas/auth/root-registration-row.schema.json",
+      "columns": [
+        {
+          "name": "schema_version",
+          "type": "string",
+          "const": "rsi.root_registration_row/1"
+        },
+        {
+          "name": "root_id",
+          "type": "string"
+        },
+        {
+          "name": "registration_hash",
+          "type": "string"
+        },
+        {
+          "name": "host_id",
+          "type": "string"
+        },
+        {
+          "name": "mode",
+          "type": "string"
+        },
+        {
+          "name": "config_space",
+          "type": "string"
+        },
+        {
+          "name": "adapter_id",
+          "type": "string"
+        },
+        {
+          "name": "native_root_ref",
+          "type": "string"
+        },
+        {
+          "name": "identity_kind",
+          "type": "string"
+        },
+        {
+          "name": "device_id",
+          "type": "string"
+        },
+        {
+          "name": "file_id",
+          "type": "string"
+        },
+        {
+          "name": "registered_at",
+          "type": "number"
+        },
+        {
+          "name": "row_version",
+          "type": "number"
+        }
+      ]
+    },
+    {
+      "row_schema": "rsi.object_document_row/1",
+      "owner_domain": "fnd",
+      "table": "object_document",
+      "ts_type": "ObjectDocumentRow",
+      "primary_key": [
+        "document_id"
+      ],
+      "unique_keys": [
+        [
+          "object_id",
+          "revision"
+        ],
+        [
+          "owner",
+          "object_type",
+          "object_id",
+          "revision"
+        ]
+      ],
+      "event_types": [
+        "state_row.recorded"
+      ],
+      "allowed_operations": [
+        "insert"
+      ],
+      "binding_source": "batch",
+      "row_versioned": false,
+      "blob_ref_paths": [],
+      "payload_blob_paths": [],
+      "derived_reducer": null,
+      "document": null,
+      "allocation": null,
+      "schema_artifact": "schemas/storage/object-document.schema.json",
+      "columns": [
+        {
+          "name": "document_id",
+          "type": "string"
+        },
+        {
+          "name": "object_id",
+          "type": "string"
+        },
+        {
+          "name": "owner",
+          "type": "string"
+        },
+        {
+          "name": "object_type",
+          "type": "string"
+        },
+        {
+          "name": "schema_version",
+          "type": "string"
+        },
+        {
+          "name": "revision",
+          "type": "number"
+        },
+        {
+          "name": "state",
+          "type": "string"
+        },
+        {
+          "name": "task_id",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "branch_id",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "input_epoch",
+          "type": "number",
+          "nullable": true
+        },
+        {
+          "name": "goal_version",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "config_version",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "watermark",
+          "type": "number",
+          "nullable": true
+        },
+        {
+          "name": "content_hash",
+          "type": "string"
+        },
+        {
+          "name": "canonical_json",
+          "type": "string"
+        },
+        {
+          "name": "created_at",
+          "type": "number"
+        }
+      ]
+    },
+    {
+      "row_schema": "rsi.object_head_row/1",
+      "owner_domain": "fnd",
+      "table": "object_head",
+      "ts_type": "ObjectHeadRow",
+      "primary_key": [
+        "object_id"
+      ],
+      "unique_keys": [
+        [
+          "owner",
+          "object_type",
+          "object_id"
+        ]
+      ],
+      "event_types": [
+        "state_row.recorded"
+      ],
+      "allowed_operations": [
+        "insert",
+        "transition"
+      ],
+      "binding_source": "batch",
+      "row_versioned": true,
+      "blob_ref_paths": [],
+      "payload_blob_paths": [],
+      "derived_reducer": null,
+      "document": null,
+      "allocation": null,
+      "schema_artifact": "schemas/storage/object-head.schema.json",
+      "columns": [
+        {
+          "name": "object_id",
+          "type": "string"
+        },
+        {
+          "name": "owner",
+          "type": "string"
+        },
+        {
+          "name": "object_type",
+          "type": "string"
+        },
+        {
+          "name": "revision",
+          "type": "number"
+        },
+        {
+          "name": "document_id",
+          "type": "string"
+        },
+        {
+          "name": "state",
+          "type": "string"
+        },
+        {
+          "name": "content_hash",
+          "type": "string"
+        },
+        {
+          "name": "row_version",
+          "type": "number"
+        },
+        {
+          "name": "updated_at",
+          "type": "number"
+        }
+      ]
+    },
+    {
+      "row_schema": "rsi.adapter_registration_row/1",
+      "owner_domain": "host",
+      "table": "adapter_registration",
+      "ts_type": "AdapterRegistrationPhysicalRow",
+      "primary_key": [
+        "registration_hash"
+      ],
+      "unique_keys": [],
+      "event_types": [
+        "state_row.recorded"
+      ],
+      "allowed_operations": [
+        "insert",
+        "transition"
+      ],
+      "binding_source": "none",
+      "row_versioned": true,
+      "blob_ref_paths": [
+        "/artifact_ref",
+        "/approval_consumption_ref"
+      ],
+      "payload_blob_paths": [],
+      "derived_reducer": null,
+      "document": null,
+      "allocation": null,
+      "schema_artifact": "schemas/domains/host/adapter_registration_row.schema.json",
+      "columns": [
+        {
+          "name": "registration_hash",
+          "type": "string"
+        },
+        {
+          "name": "adapter_id",
+          "type": "string"
+        },
+        {
+          "name": "host_id",
+          "type": "string"
+        },
+        {
+          "name": "mode",
+          "type": "string"
+        },
+        {
+          "name": "config_space",
+          "type": "string"
+        },
+        {
+          "name": "target_id",
+          "type": "string"
+        },
+        {
+          "name": "adapter_version",
+          "type": "string"
+        },
+        {
+          "name": "implementation_hash",
+          "type": "string"
+        },
+        {
+          "name": "descriptor_hash",
+          "type": "string"
+        },
+        {
+          "name": "artifact_ref",
+          "type": "string"
+        },
+        {
+          "name": "artifact_hash",
+          "type": "string"
+        },
+        {
+          "name": "expected_previous_hash",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "approval_id",
+          "type": "string"
+        },
+        {
+          "name": "approval_hash",
+          "type": "string"
+        },
+        {
+          "name": "approval_subject_hash",
+          "type": "string"
+        },
+        {
+          "name": "approval_consumption_ref",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "state",
+          "type": "string"
+        },
+        {
+          "name": "written_hash",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "failure_code",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "created_at",
+          "type": "number"
+        },
+        {
+          "name": "applied_at",
+          "type": "number",
+          "nullable": true
+        },
+        {
+          "name": "updated_at",
+          "type": "number"
+        },
+        {
+          "name": "row_version",
+          "type": "number"
+        }
+      ]
+    },
+    {
+      "row_schema": "rsi.adapter_descriptor_snapshot_row/1",
+      "owner_domain": "host",
+      "table": "adapter_descriptor_snapshot",
+      "ts_type": "AdapterDescriptorSnapshotPhysicalRow",
+      "primary_key": [
+        "registration_hash"
+      ],
+      "unique_keys": [],
+      "event_types": [
+        "state_row.recorded"
+      ],
+      "allowed_operations": [
+        "insert"
+      ],
+      "binding_source": "none",
+      "row_versioned": false,
+      "blob_ref_paths": [],
+      "payload_blob_paths": [],
+      "derived_reducer": null,
+      "document": null,
+      "allocation": null,
+      "schema_artifact": "schemas/domains/host/adapter_descriptor_snapshot_row.schema.json",
+      "columns": [
+        {
+          "name": "registration_hash",
+          "type": "string"
+        },
+        {
+          "name": "descriptor_hash",
+          "type": "string"
+        },
+        {
+          "name": "descriptor_json",
+          "type": "string",
+          "json_text": true
+        },
+        {
+          "name": "created_at",
+          "type": "number"
+        }
+      ]
+    },
+    {
+      "row_schema": "rsi.host_probe_row/1",
+      "owner_domain": "host",
+      "table": "host_probe",
+      "ts_type": "HostProbePhysicalRow",
+      "primary_key": [
+        "probe_id"
+      ],
+      "unique_keys": [],
+      "event_types": [
+        "state_row.recorded"
+      ],
+      "allowed_operations": [
+        "insert",
+        "transition"
+      ],
+      "binding_source": "none",
+      "row_versioned": true,
+      "blob_ref_paths": [
+        "/fixture_ref",
+        "/assertions_json#/[*]/observed_ref",
+        "/capability_results_json#/[*]/proposed_details_ref",
+        "/capability_results_json#/[*]/evidence_refs/[*]",
+        "/blocker_json#/detail_ref",
+        "/evidence_refs_json#/[*]"
+      ],
+      "payload_blob_paths": [],
+      "derived_reducer": null,
+      "document": null,
+      "allocation": null,
+      "schema_artifact": "schemas/domains/host/host_probe_row.schema.json",
+      "columns": [
+        {
+          "name": "probe_id",
+          "type": "string"
+        },
+        {
+          "name": "binding_key",
+          "type": "string"
+        },
+        {
+          "name": "binding_json",
+          "type": "string",
+          "json_text": true
+        },
+        {
+          "name": "subject",
+          "type": "string"
+        },
+        {
+          "name": "target_kind",
+          "type": "string"
+        },
+        {
+          "name": "probe_contract_version",
+          "type": "string"
+        },
+        {
+          "name": "probe_mode",
+          "type": "string"
+        },
+        {
+          "name": "fixture_ref",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "probe_action",
+          "type": "string"
+        },
+        {
+          "name": "assertions_json",
+          "type": "string",
+          "json_text": true
+        },
+        {
+          "name": "capability_results_json",
+          "type": "string",
+          "json_text": true
+        },
+        {
+          "name": "result",
+          "type": "string"
+        },
+        {
+          "name": "blocker_json",
+          "type": "string",
+          "nullable": true,
+          "json_text": true
+        },
+        {
+          "name": "expected",
+          "type": "string"
+        },
+        {
+          "name": "observed",
+          "type": "string"
+        },
+        {
+          "name": "evidence_refs_json",
+          "type": "string",
+          "json_text": true
+        },
+        {
+          "name": "duration_ms",
+          "type": "number"
+        },
+        {
+          "name": "checked_at",
+          "type": "number"
+        },
+        {
+          "name": "row_version",
+          "type": "number"
+        }
+      ]
+    },
+    {
+      "row_schema": "rsi.capability_record_row/1",
+      "owner_domain": "host",
+      "table": "capability_record",
+      "ts_type": "CapabilityRecordPhysicalRow",
+      "primary_key": [
+        "capability_id"
+      ],
+      "unique_keys": [
+        [
+          "binding_key",
+          "name"
+        ]
+      ],
+      "event_types": [
+        "state_row.recorded"
+      ],
+      "allowed_operations": [
+        "insert",
+        "transition"
+      ],
+      "binding_source": "none",
+      "row_versioned": true,
+      "blob_ref_paths": [
+        "/evidence_refs_json#/[*]",
+        "/details_json#/hard_block_evidence_ref",
+        "/details_json#/mapping_ref",
+        "/details_json#/stable_predicate_ref",
+        "/details_json#/isolation/evidence_refs/[*]"
+      ],
+      "payload_blob_paths": [],
+      "derived_reducer": null,
+      "document": null,
+      "allocation": null,
+      "schema_artifact": "schemas/domains/host/capability_record_row.schema.json",
+      "columns": [
+        {
+          "name": "capability_id",
+          "type": "string"
+        },
+        {
+          "name": "binding_key",
+          "type": "string"
+        },
+        {
+          "name": "binding_json",
+          "type": "string",
+          "json_text": true
+        },
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "status",
+          "type": "string"
+        },
+        {
+          "name": "evidence_stage",
+          "type": "string"
+        },
+        {
+          "name": "evidence_refs_json",
+          "type": "string",
+          "json_text": true
+        },
+        {
+          "name": "probe_ref",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "probe_result",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "blocker_code",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "failure_code",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "checked_at",
+          "type": "number"
+        },
+        {
+          "name": "verified_at",
+          "type": "number",
+          "nullable": true
+        },
+        {
+          "name": "last_verified_at",
+          "type": "number",
+          "nullable": true
+        },
+        {
+          "name": "details_json",
+          "type": "string",
+          "json_text": true
+        },
+        {
+          "name": "legacy_json",
+          "type": "string",
+          "nullable": true,
+          "json_text": true
+        },
+        {
+          "name": "row_version",
+          "type": "number"
+        }
+      ]
+    },
+    {
+      "row_schema": "rsi.host_human_confirmation_row/1",
+      "owner_domain": "host",
+      "table": "host_human_confirmation",
+      "ts_type": "HostHumanConfirmationPhysicalRow",
+      "primary_key": [
+        "confirmation_id"
+      ],
+      "unique_keys": [
+        [
+          "binding_key",
+          "event_identity_key",
+          "challenge_nonce"
+        ],
+        [
+          "probe_id"
+        ]
+      ],
+      "event_types": [
+        "state_row.recorded"
+      ],
+      "allowed_operations": [
+        "insert",
+        "transition"
+      ],
+      "binding_source": "none",
+      "row_versioned": true,
+      "blob_ref_paths": [
+        "/evidence_ref"
+      ],
+      "payload_blob_paths": [],
+      "derived_reducer": null,
+      "document": null,
+      "allocation": null,
+      "schema_artifact": "schemas/domains/host/host_human_confirmation_row.schema.json",
+      "columns": [
+        {
+          "name": "confirmation_id",
+          "type": "string"
+        },
+        {
+          "name": "binding_key",
+          "type": "string"
+        },
+        {
+          "name": "binding_json",
+          "type": "string",
+          "json_text": true
+        },
+        {
+          "name": "host_binding_json",
+          "type": "string",
+          "json_text": true
+        },
+        {
+          "name": "event_identity_key",
+          "type": "string"
+        },
+        {
+          "name": "challenge_nonce",
+          "type": "string"
+        },
+        {
+          "name": "probe_id",
+          "type": "string"
+        },
+        {
+          "name": "state",
+          "type": "string"
+        },
+        {
+          "name": "evidence_ref",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "created_at",
+          "type": "number"
+        },
+        {
+          "name": "confirmed_at",
+          "type": "number",
+          "nullable": true
+        },
+        {
+          "name": "updated_at",
+          "type": "number"
+        },
+        {
+          "name": "row_version",
+          "type": "number"
+        }
+      ]
+    },
+    {
+      "row_schema": "rsi.review_snapshot/1",
+      "owner_domain": "rev",
+      "table": "review_snapshots",
+      "ts_type": "ReviewSnapshotRow",
+      "primary_key": [
+        "snapshot_id"
+      ],
+      "unique_keys": [],
+      "event_types": [
+        "state_row.recorded"
+      ],
+      "allowed_operations": [
+        "insert"
+      ],
+      "binding_source": "batch",
+      "row_versioned": false,
+      "blob_ref_paths": [],
+      "payload_blob_paths": [],
+      "derived_reducer": null,
+      "document": null,
+      "allocation": null,
+      "schema_artifact": "schemas/domains/review/review_snapshot.schema.json",
+      "columns": [
+        {
+          "name": "snapshot_id",
+          "type": "string"
+        },
+        {
+          "name": "schema_version",
+          "type": "string"
+        },
+        {
+          "name": "snapshot_key",
+          "type": "string"
+        },
+        {
+          "name": "snapshot_hash",
+          "type": "string"
+        },
+        {
+          "name": "version_binding_json",
+          "type": "string"
+        },
+        {
+          "name": "snapshot_scope",
+          "type": "string"
+        },
+        {
+          "name": "task_id",
+          "type": "string"
+        },
+        {
+          "name": "branch_id",
+          "type": "string"
+        },
+        {
+          "name": "input_epoch",
+          "type": "number"
+        },
+        {
+          "name": "goal_version",
+          "type": "string"
+        },
+        {
+          "name": "config_version",
+          "type": "string"
+        },
+        {
+          "name": "watermark",
+          "type": "number"
+        },
+        {
+          "name": "host_id",
+          "type": "string"
+        },
+        {
+          "name": "config_space",
+          "type": "string"
+        },
+        {
+          "name": "mode",
+          "type": "string"
+        },
+        {
+          "name": "trigger_event_id",
+          "type": "string"
+        },
+        {
+          "name": "trigger_kind",
+          "type": "string"
+        },
+        {
+          "name": "review_kind",
+          "type": "string"
+        },
+        {
+          "name": "review_scope_key",
+          "type": "string"
+        },
+        {
+          "name": "boundary_key",
+          "type": "string"
+        },
+        {
+          "name": "signal_digest",
+          "type": "string"
+        },
+        {
+          "name": "trigger_dedupe_key",
+          "type": "string"
+        },
+        {
+          "name": "policy_version",
+          "type": "string"
+        },
+        {
+          "name": "authorization_ref",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "body_blob",
+          "type": "string"
+        },
+        {
+          "name": "created_at",
+          "type": "number"
+        }
+      ]
+    },
+    {
+      "row_schema": "rsi.review_enqueue_request_row/1",
+      "owner_domain": "rev",
+      "table": "review_enqueue_requests",
+      "ts_type": "ReviewEnqueueRequestRow",
+      "primary_key": [
+        "request_id"
+      ],
+      "unique_keys": [],
+      "event_types": [
+        "state_row.recorded"
+      ],
+      "allowed_operations": [
+        "insert"
+      ],
+      "binding_source": "batch",
+      "row_versioned": false,
+      "blob_ref_paths": [],
+      "payload_blob_paths": [],
+      "derived_reducer": null,
+      "document": null,
+      "allocation": null,
+      "schema_artifact": "schemas/domains/review/review_enqueue_request.schema.json",
+      "columns": [
+        {
+          "name": "request_id",
+          "type": "string"
+        },
+        {
+          "name": "schema_version",
+          "type": "string"
+        },
+        {
+          "name": "request_hash",
+          "type": "string"
+        },
+        {
+          "name": "trigger_event_id",
+          "type": "string"
+        },
+        {
+          "name": "trigger_kind",
+          "type": "string"
+        },
+        {
+          "name": "trigger_dedupe_key",
+          "type": "string"
+        },
+        {
+          "name": "version_binding_json",
+          "type": "string"
+        },
+        {
+          "name": "stable_evidence_ref",
+          "type": "string"
+        },
+        {
+          "name": "request_json",
+          "type": "string"
+        },
+        {
+          "name": "result_json",
+          "type": "string"
+        },
+        {
+          "name": "review_job_id",
+          "type": "string"
+        },
+        {
+          "name": "created_at",
+          "type": "number"
+        }
+      ]
+    },
+    {
+      "row_schema": "rsi.review_job/2",
+      "owner_domain": "rev",
+      "table": "review_jobs",
+      "ts_type": "ReviewJobRow",
+      "primary_key": [
+        "job_id"
+      ],
+      "unique_keys": [],
+      "event_types": [
+        "state_row.recorded"
+      ],
+      "allowed_operations": [
+        "insert",
+        "transition"
+      ],
+      "binding_source": "batch",
+      "row_versioned": true,
+      "blob_ref_paths": [],
+      "payload_blob_paths": [],
+      "derived_reducer": null,
+      "document": null,
+      "allocation": null,
+      "schema_artifact": "schemas/domains/review/review_job.schema.json",
+      "columns": [
+        {
+          "name": "job_id",
+          "type": "string"
+        },
+        {
+          "name": "request_id",
+          "type": "string"
+        },
+        {
+          "name": "task_id",
+          "type": "string"
+        },
+        {
+          "name": "branch_id",
+          "type": "string"
+        },
+        {
+          "name": "snapshot_id",
+          "type": "string"
+        },
+        {
+          "name": "snapshot_hash",
+          "type": "string"
+        },
+        {
+          "name": "trigger_event_id",
+          "type": "string"
+        },
+        {
+          "name": "trigger_kind",
+          "type": "string"
+        },
+        {
+          "name": "review_kind",
+          "type": "string"
+        },
+        {
+          "name": "review_scope_key",
+          "type": "string"
+        },
+        {
+          "name": "boundary_key",
+          "type": "string"
+        },
+        {
+          "name": "trigger_dedupe_key",
+          "type": "string"
+        },
+        {
+          "name": "signal_digest",
+          "type": "string"
+        },
+        {
+          "name": "stable_event_ids_json",
+          "type": "string"
+        },
+        {
+          "name": "stable_watermark",
+          "type": "number"
+        },
+        {
+          "name": "stable",
+          "type": "number"
+        },
+        {
+          "name": "stable_evidence_ref",
+          "type": "string"
+        },
+        {
+          "name": "pending_state",
+          "type": "string"
+        },
+        {
+          "name": "pending_work_refs_json",
+          "type": "string"
+        },
+        {
+          "name": "scope_json",
+          "type": "string"
+        },
+        {
+          "name": "origin_json",
+          "type": "string"
+        },
+        {
+          "name": "policy_ref",
+          "type": "string"
+        },
+        {
+          "name": "policy_version",
+          "type": "string"
+        },
+        {
+          "name": "policy_hash",
+          "type": "string"
+        },
+        {
+          "name": "capability_snapshot_hash",
+          "type": "string"
+        },
+        {
+          "name": "budget_policy_ref",
+          "type": "string"
+        },
+        {
+          "name": "budget_policy_hash",
+          "type": "string"
+        },
+        {
+          "name": "authorization_ref",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "input_epoch",
+          "type": "number"
+        },
+        {
+          "name": "goal_version",
+          "type": "string"
+        },
+        {
+          "name": "config_version",
+          "type": "string"
+        },
+        {
+          "name": "state",
+          "type": "string"
+        },
+        {
+          "name": "stage",
+          "type": "string"
+        },
+        {
+          "name": "block_reason",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "backend_json",
+          "type": "string"
+        },
+        {
+          "name": "active_attempt_id",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "current_fencing_token",
+          "type": "number"
+        },
+        {
+          "name": "attempt_count",
+          "type": "number"
+        },
+        {
+          "name": "proposal_ids_json",
+          "type": "string"
+        },
+        {
+          "name": "handoff_id",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "handoff_body_ref",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "supersedes_job_id",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "superseded_by_job_id",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "supersession_depth",
+          "type": "number"
+        },
+        {
+          "name": "allowance_charge_json",
+          "type": "string"
+        },
+        {
+          "name": "provider_usage_json",
+          "type": "string"
+        },
+        {
+          "name": "last_error_json",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "retry_after_at",
+          "type": "number",
+          "nullable": true
+        },
+        {
+          "name": "terminal_reason",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "version",
+          "type": "number"
+        },
+        {
+          "name": "created_at",
+          "type": "number"
+        },
+        {
+          "name": "updated_at",
+          "type": "number"
+        },
+        {
+          "name": "terminal_at",
+          "type": "number",
+          "nullable": true
+        }
+      ]
+    },
+    {
+      "row_schema": "rsi.review_attempt/1",
+      "owner_domain": "rev",
+      "table": "review_attempts",
+      "ts_type": "ReviewAttemptRow",
+      "primary_key": [
+        "attempt_id"
+      ],
+      "unique_keys": [],
+      "event_types": [
+        "state_row.recorded"
+      ],
+      "allowed_operations": [
+        "insert",
+        "transition"
+      ],
+      "binding_source": "batch",
+      "row_versioned": true,
+      "blob_ref_paths": [],
+      "payload_blob_paths": [],
+      "derived_reducer": null,
+      "document": null,
+      "allocation": null,
+      "schema_artifact": "schemas/domains/review/review_attempt.schema.json",
+      "columns": [
+        {
+          "name": "attempt_id",
+          "type": "string"
+        },
+        {
+          "name": "attempt_key",
+          "type": "string"
+        },
+        {
+          "name": "job_id",
+          "type": "string"
+        },
+        {
+          "name": "ordinal",
+          "type": "number"
+        },
+        {
+          "name": "state",
+          "type": "string"
+        },
+        {
+          "name": "backend_json",
+          "type": "string"
+        },
+        {
+          "name": "model_id",
+          "type": "string"
+        },
+        {
+          "name": "protocol_version",
+          "type": "string"
+        },
+        {
+          "name": "host_run_json",
+          "type": "string"
+        },
+        {
+          "name": "isolation_json",
+          "type": "string"
+        },
+        {
+          "name": "input_manifest_ref",
+          "type": "string"
+        },
+        {
+          "name": "input_manifest_hash",
+          "type": "string"
+        },
+        {
+          "name": "output_ref",
+          "type": "string"
+        },
+        {
+          "name": "output_hash",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "budget_json",
+          "type": "string"
+        },
+        {
+          "name": "deadline_at",
+          "type": "number",
+          "nullable": true
+        },
+        {
+          "name": "lease_json",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "cancel_json",
+          "type": "string"
+        },
+        {
+          "name": "output_json",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "completion_evidence_ref",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "allowance_charge_json",
+          "type": "string"
+        },
+        {
+          "name": "provider_usage_json",
+          "type": "string"
+        },
+        {
+          "name": "generator_reported_usage_json",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "exit_json",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "last_error_json",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "started_at",
+          "type": "number",
+          "nullable": true
+        },
+        {
+          "name": "ended_at",
+          "type": "number",
+          "nullable": true
+        },
+        {
+          "name": "row_version",
+          "type": "number"
+        },
+        {
+          "name": "created_at",
+          "type": "number"
+        },
+        {
+          "name": "updated_at",
+          "type": "number"
+        }
+      ]
+    },
+    {
+      "row_schema": "rsi.review_output_acceptance_row/1",
+      "owner_domain": "rev",
+      "table": "review_output_acceptances",
+      "ts_type": "ReviewOutputAcceptanceRow",
+      "primary_key": [
+        "attempt_id"
+      ],
+      "unique_keys": [],
+      "event_types": [
+        "state_row.recorded"
+      ],
+      "allowed_operations": [
+        "insert"
+      ],
+      "binding_source": "batch",
+      "row_versioned": true,
+      "blob_ref_paths": [],
+      "payload_blob_paths": [],
+      "derived_reducer": null,
+      "document": null,
+      "allocation": null,
+      "schema_artifact": "schemas/domains/review/review_output_acceptance.schema.json",
+      "columns": [
+        {
+          "name": "attempt_id",
+          "type": "string"
+        },
+        {
+          "name": "job_id",
+          "type": "string"
+        },
+        {
+          "name": "output_ref",
+          "type": "string"
+        },
+        {
+          "name": "output_hash",
+          "type": "string"
+        },
+        {
+          "name": "candidate_count",
+          "type": "number"
+        },
+        {
+          "name": "attempt_version_before",
+          "type": "number"
+        },
+        {
+          "name": "attempt_version_after",
+          "type": "number"
+        },
+        {
+          "name": "job_version_before",
+          "type": "number"
+        },
+        {
+          "name": "job_version_after",
+          "type": "number"
+        },
+        {
+          "name": "job_stage_after",
+          "type": "string"
+        },
+        {
+          "name": "fencing_token",
+          "type": "number"
+        },
+        {
+          "name": "accepted_at",
+          "type": "number"
+        },
+        {
+          "name": "row_version",
+          "type": "number"
+        }
+      ]
+    },
+    {
+      "row_schema": "rsi.proposal_candidate_row/1",
+      "owner_domain": "rev",
+      "table": "proposal_candidates",
+      "ts_type": "ProposalCandidateRow",
+      "primary_key": [
+        "candidate_key"
+      ],
+      "unique_keys": [],
+      "event_types": [
+        "state_row.recorded"
+      ],
+      "allowed_operations": [
+        "insert"
+      ],
+      "binding_source": "batch",
+      "row_versioned": true,
+      "blob_ref_paths": [],
+      "payload_blob_paths": [],
+      "derived_reducer": null,
+      "document": null,
+      "allocation": null,
+      "schema_artifact": "schemas/domains/review/proposal_candidate.schema.json",
+      "columns": [
+        {
+          "name": "candidate_key",
+          "type": "string"
+        },
+        {
+          "name": "job_id",
+          "type": "string"
+        },
+        {
+          "name": "attempt_id",
+          "type": "string"
+        },
+        {
+          "name": "ordinal",
+          "type": "number"
+        },
+        {
+          "name": "version_binding_json",
+          "type": "string"
+        },
+        {
+          "name": "output_ref",
+          "type": "string"
+        },
+        {
+          "name": "output_hash",
+          "type": "string"
+        },
+        {
+          "name": "candidate_ref",
+          "type": "string"
+        },
+        {
+          "name": "candidate_json_hash",
+          "type": "string"
+        },
+        {
+          "name": "generator_json",
+          "type": "string"
+        },
+        {
+          "name": "state",
+          "type": "string"
+        },
+        {
+          "name": "failure_code",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "failure_step",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "diagnostic_ref",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "proposal_id",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "proposal_hash",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "experience_id",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "experience_version",
+          "type": "number",
+          "nullable": true
+        },
+        {
+          "name": "accepted_bundle_ref",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "row_version",
+          "type": "number"
+        },
+        {
+          "name": "created_at",
+          "type": "number"
+        },
+        {
+          "name": "checked_at",
+          "type": "number",
+          "nullable": true
+        }
+      ]
+    },
+    {
+      "row_schema": "rsi.proposal_row/2",
+      "owner_domain": "rev",
+      "table": "proposals",
+      "ts_type": "ProposalRow",
+      "primary_key": [
+        "proposal_id"
+      ],
+      "unique_keys": [],
+      "event_types": [
+        "state_row.recorded"
+      ],
+      "allowed_operations": [
+        "insert",
+        "update",
+        "transition"
+      ],
+      "binding_source": "batch",
+      "row_versioned": true,
+      "blob_ref_paths": [],
+      "payload_blob_paths": [],
+      "derived_reducer": null,
+      "document": null,
+      "allocation": null,
+      "schema_artifact": "schemas/domains/review/proposal.schema.json",
+      "columns": [
+        {
+          "name": "proposal_id",
+          "type": "string"
+        },
+        {
+          "name": "proposal_hash",
+          "type": "string"
+        },
+        {
+          "name": "job_id",
+          "type": "string"
+        },
+        {
+          "name": "attempt_id",
+          "type": "string"
+        },
+        {
+          "name": "ordinal",
+          "type": "number"
+        },
+        {
+          "name": "question_key",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "state",
+          "type": "string"
+        },
+        {
+          "name": "change_kind",
+          "type": "string"
+        },
+        {
+          "name": "expected_file_hash",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "expected_block_hash",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "base_ref",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "create_policy",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "candidate_hash",
+          "type": "string"
+        },
+        {
+          "name": "candidate_file_hash",
+          "type": "string"
+        },
+        {
+          "name": "candidate_block_hash",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "experience_type",
+          "type": "string"
+        },
+        {
+          "name": "handoff_id",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "adoption_ref",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "stale_reason",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "created_at",
+          "type": "number"
+        },
+        {
+          "name": "updated_at",
+          "type": "number"
+        },
+        {
+          "name": "version",
+          "type": "number"
+        },
+        {
+          "name": "target_json",
+          "type": "string"
+        },
+        {
+          "name": "diff_json",
+          "type": "string"
+        },
+        {
+          "name": "experience_json",
+          "type": "string"
+        },
+        {
+          "name": "normalization_json",
+          "type": "string"
+        },
+        {
+          "name": "evidence_refs_json",
+          "type": "string"
+        },
+        {
+          "name": "egress_decision_ref",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "generator_json",
+          "type": "string"
+        },
+        {
+          "name": "static_check_json",
+          "type": "string"
+        },
+        {
+          "name": "match_judge_json",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "row_schema": "rsi.experience_row/1",
+      "owner_domain": "rev",
+      "table": "experiences",
+      "ts_type": "ExperienceJournalRow",
+      "primary_key": [
+        "experience_id",
+        "version"
+      ],
+      "unique_keys": [],
+      "event_types": [
+        "state_row.recorded"
+      ],
+      "allowed_operations": [
+        "insert",
+        "transition"
+      ],
+      "binding_source": "batch",
+      "row_versioned": true,
+      "blob_ref_paths": [],
+      "payload_blob_paths": [],
+      "derived_reducer": null,
+      "document": null,
+      "allocation": null,
+      "schema_artifact": "schemas/domains/review/experience.schema.json",
+      "columns": [
+        {
+          "name": "experience_id",
+          "type": "string"
+        },
+        {
+          "name": "version",
+          "type": "number"
+        },
+        {
+          "name": "type",
+          "type": "string"
+        },
+        {
+          "name": "title",
+          "type": "string"
+        },
+        {
+          "name": "summary",
+          "type": "string"
+        },
+        {
+          "name": "validation_plan_id",
+          "type": "string"
+        },
+        {
+          "name": "validation_plan_hash",
+          "type": "string"
+        },
+        {
+          "name": "body_ref",
+          "type": "string"
+        },
+        {
+          "name": "risk",
+          "type": "string"
+        },
+        {
+          "name": "content_hash",
+          "type": "string"
+        },
+        {
+          "name": "created_at",
+          "type": "number"
+        },
+        {
+          "name": "superseded_by_version",
+          "type": "number",
+          "nullable": true
+        },
+        {
+          "name": "lineage_json",
+          "type": "string"
+        },
+        {
+          "name": "trigger_json",
+          "type": "string"
+        },
+        {
+          "name": "scope_json",
+          "type": "string"
+        },
+        {
+          "name": "preconditions_json",
+          "type": "string"
+        },
+        {
+          "name": "steps_json",
+          "type": "string"
+        },
+        {
+          "name": "expected_effects_json",
+          "type": "string"
+        },
+        {
+          "name": "completion_check_json",
+          "type": "string"
+        },
+        {
+          "name": "failure_branches_json",
+          "type": "string"
+        },
+        {
+          "name": "counterexamples_json",
+          "type": "string"
+        },
+        {
+          "name": "expiry_policy_json",
+          "type": "string"
+        },
+        {
+          "name": "evidence_refs_json",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "row_schema": "rsi.validation_plan_row/1",
+      "owner_domain": "rev",
+      "table": "validation_plans",
+      "ts_type": "ValidationPlanRow",
+      "primary_key": [
+        "validation_plan_id"
+      ],
+      "unique_keys": [],
+      "event_types": [
+        "state_row.recorded"
+      ],
+      "allowed_operations": [
+        "insert"
+      ],
+      "binding_source": "batch",
+      "row_versioned": false,
+      "blob_ref_paths": [],
+      "payload_blob_paths": [],
+      "derived_reducer": null,
+      "document": null,
+      "allocation": null,
+      "schema_artifact": "schemas/domains/review/validation_plan.schema.json",
+      "columns": [
+        {
+          "name": "validation_plan_id",
+          "type": "string"
+        },
+        {
+          "name": "experience_id",
+          "type": "string"
+        },
+        {
+          "name": "experience_version",
+          "type": "number"
+        },
+        {
+          "name": "expected_behavior",
+          "type": "string"
+        },
+        {
+          "name": "plan_hash",
+          "type": "string"
+        },
+        {
+          "name": "created_at",
+          "type": "number"
+        },
+        {
+          "name": "source_requirement_refs_json",
+          "type": "string"
+        },
+        {
+          "name": "required_loading_evidence_json",
+          "type": "string"
+        },
+        {
+          "name": "verifier_json",
+          "type": "string"
+        },
+        {
+          "name": "observation_window_json",
+          "type": "string"
+        },
+        {
+          "name": "retention_rule_json",
+          "type": "string"
+        },
+        {
+          "name": "stop_conditions_json",
+          "type": "string"
+        },
+        {
+          "name": "replay_json",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "row_schema": "rsi.usage_verification_row/1",
+      "owner_domain": "rev",
+      "table": "usage_verification_records",
+      "ts_type": "UsageVerificationRecordRow",
+      "primary_key": [
+        "usage_id"
+      ],
+      "unique_keys": [],
+      "event_types": [
+        "state_row.recorded"
+      ],
+      "allowed_operations": [
+        "insert"
+      ],
+      "binding_source": "batch",
+      "row_versioned": false,
+      "blob_ref_paths": [],
+      "payload_blob_paths": [],
+      "derived_reducer": null,
+      "document": null,
+      "allocation": null,
+      "schema_artifact": "schemas/domains/review/usage_verification.schema.json",
+      "columns": [
+        {
+          "name": "usage_id",
+          "type": "string"
+        },
+        {
+          "name": "schema_version",
+          "type": "string"
+        },
+        {
+          "name": "usage_key",
+          "type": "string"
+        },
+        {
+          "name": "projection_id",
+          "type": "string"
+        },
+        {
+          "name": "experience_id",
+          "type": "string"
+        },
+        {
+          "name": "experience_version",
+          "type": "number"
+        },
+        {
+          "name": "experience_content_hash",
+          "type": "string"
+        },
+        {
+          "name": "validation_plan_id",
+          "type": "string"
+        },
+        {
+          "name": "validation_plan_hash",
+          "type": "string"
+        },
+        {
+          "name": "version_binding_json",
+          "type": "string"
+        },
+        {
+          "name": "task_family_id",
+          "type": "string"
+        },
+        {
+          "name": "trigger_result",
+          "type": "string"
+        },
+        {
+          "name": "loading_json",
+          "type": "string"
+        },
+        {
+          "name": "behavior_json",
+          "type": "string"
+        },
+        {
+          "name": "verification_json",
+          "type": "string"
+        },
+        {
+          "name": "outcome_ref",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "other_change_refs_json",
+          "type": "string"
+        },
+        {
+          "name": "attribution",
+          "type": "string"
+        },
+        {
+          "name": "result",
+          "type": "string"
+        },
+        {
+          "name": "evidence_hash",
+          "type": "string"
+        },
+        {
+          "name": "causal_supported",
+          "type": "number"
+        },
+        {
+          "name": "observed_at",
+          "type": "number"
+        },
+        {
+          "name": "window_index",
+          "type": "number"
+        }
+      ]
+    },
+    {
+      "row_schema": "rsi.experience_lifecycle_event_row/1",
+      "owner_domain": "rev",
+      "table": "experience_lifecycle_events",
+      "ts_type": "ExperienceLifecycleEventRow",
+      "primary_key": [
+        "event_id"
+      ],
+      "unique_keys": [],
+      "event_types": [
+        "state_row.recorded"
+      ],
+      "allowed_operations": [
+        "insert"
+      ],
+      "binding_source": "batch",
+      "row_versioned": true,
+      "blob_ref_paths": [],
+      "payload_blob_paths": [],
+      "derived_reducer": null,
+      "document": null,
+      "allocation": null,
+      "schema_artifact": "schemas/domains/review/experience_lifecycle_event.schema.json",
+      "columns": [
+        {
+          "name": "event_id",
+          "type": "string"
+        },
+        {
+          "name": "schema_version",
+          "type": "string"
+        },
+        {
+          "name": "projection_id",
+          "type": "string"
+        },
+        {
+          "name": "experience_id",
+          "type": "string"
+        },
+        {
+          "name": "experience_version",
+          "type": "number"
+        },
+        {
+          "name": "experience_content_hash",
+          "type": "string"
+        },
+        {
+          "name": "adoption_binding_hash",
+          "type": "string"
+        },
+        {
+          "name": "sequence",
+          "type": "number"
+        },
+        {
+          "name": "from_lifecycle",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "to_lifecycle",
+          "type": "string"
+        },
+        {
+          "name": "reason",
+          "type": "string"
+        },
+        {
+          "name": "trigger_kind",
+          "type": "string"
+        },
+        {
+          "name": "trigger_ref",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "trigger_usage_ids_json",
+          "type": "string"
+        },
+        {
+          "name": "write_id",
+          "type": "string"
+        },
+        {
+          "name": "version_binding_json",
+          "type": "string"
+        },
+        {
+          "name": "projection_before_hash",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "projection_after_hash",
+          "type": "string"
+        },
+        {
+          "name": "projection_after_json",
+          "type": "string"
+        },
+        {
+          "name": "row_version_before",
+          "type": "number"
+        },
+        {
+          "name": "row_version_after",
+          "type": "number"
+        },
+        {
+          "name": "recorded_at",
+          "type": "number"
+        },
+        {
+          "name": "event_hash",
+          "type": "string"
+        },
+        {
+          "name": "event_blob",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "row_schema": "rsi.progress_checkpoint_row/1",
+      "owner_domain": "host",
+      "table": "progress_checkpoint",
+      "ts_type": "ProgressCheckpointPhysicalRow",
+      "primary_key": [
+        "checkpoint_id"
+      ],
+      "unique_keys": [
+        [
+          "trigger_event_id",
+          "checkpoint_kind"
+        ]
+      ],
+      "event_types": [
+        "state_row.recorded"
+      ],
+      "allowed_operations": [
+        "insert"
+      ],
+      "binding_source": "row",
+      "row_versioned": false,
+      "blob_ref_paths": [
+        "/source_event_ref",
+        "/source_refs_json#/[*]"
+      ],
+      "payload_blob_paths": [],
+      "derived_reducer": null,
+      "document": null,
+      "allocation": null,
+      "schema_artifact": "schemas/domains/host/progress_checkpoint_row.schema.json",
+      "columns": [
+        {
+          "name": "checkpoint_id",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "owner",
+          "type": "string"
+        },
+        {
+          "name": "object_type",
+          "type": "string"
+        },
+        {
+          "name": "revision",
+          "type": "number"
+        },
+        {
+          "name": "state",
+          "type": "string"
+        },
+        {
+          "name": "checkpoint_kind",
+          "type": "string"
+        },
+        {
+          "name": "task_id",
+          "type": "string"
+        },
+        {
+          "name": "branch_id",
+          "type": "string"
+        },
+        {
+          "name": "input_epoch",
+          "type": "number"
+        },
+        {
+          "name": "goal_version",
+          "type": "string"
+        },
+        {
+          "name": "config_version",
+          "type": "string"
+        },
+        {
+          "name": "watermark",
+          "type": "number"
+        },
+        {
+          "name": "trigger_event_id",
+          "type": "string"
+        },
+        {
+          "name": "source_event_ref",
+          "type": "string"
+        },
+        {
+          "name": "source_refs_json",
+          "type": "string"
+        },
+        {
+          "name": "content_hash",
+          "type": "string"
+        },
+        {
+          "name": "created_at",
+          "type": "number"
+        }
+      ]
+    },
+    {
+      "row_schema": "rsi.trigger_event_row/1",
+      "owner_domain": "host",
+      "table": "trigger_event",
+      "ts_type": "TriggerEventPhysicalRow",
+      "primary_key": [
+        "trigger_event_id"
+      ],
+      "unique_keys": [],
+      "event_types": [
+        "state_row.recorded"
+      ],
+      "allowed_operations": [
+        "insert"
+      ],
+      "binding_source": "row",
+      "row_versioned": false,
+      "blob_ref_paths": [
+        "/source_event_ref",
+        "/source_refs_json#/[*]"
+      ],
+      "payload_blob_paths": [],
+      "derived_reducer": null,
+      "document": null,
+      "allocation": null,
+      "schema_artifact": "schemas/domains/host/trigger_event_row.schema.json",
+      "columns": [
+        {
+          "name": "trigger_event_id",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "owner",
+          "type": "string"
+        },
+        {
+          "name": "object_type",
+          "type": "string"
+        },
+        {
+          "name": "revision",
+          "type": "number"
+        },
+        {
+          "name": "state",
+          "type": "string"
+        },
+        {
+          "name": "trigger_kind",
+          "type": "string"
+        },
+        {
+          "name": "decision",
+          "type": "string"
+        },
+        {
+          "name": "decision_reason",
+          "type": "string"
+        },
+        {
+          "name": "trigger_dedupe_key",
+          "type": "string"
+        },
+        {
+          "name": "source_event_key",
+          "type": "string"
+        },
+        {
+          "name": "boundary_key",
+          "type": "string"
+        },
+        {
+          "name": "signal_digest",
+          "type": "string"
+        },
+        {
+          "name": "task_id",
+          "type": "string"
+        },
+        {
+          "name": "branch_id",
+          "type": "string"
+        },
+        {
+          "name": "input_epoch",
+          "type": "number"
+        },
+        {
+          "name": "goal_version",
+          "type": "string"
+        },
+        {
+          "name": "config_version",
+          "type": "string"
+        },
+        {
+          "name": "watermark",
+          "type": "number"
+        },
+        {
+          "name": "source_event_ref",
+          "type": "string"
+        },
+        {
+          "name": "source_refs_json",
+          "type": "string"
+        },
+        {
+          "name": "content_hash",
+          "type": "string"
+        },
+        {
+          "name": "decided_at",
+          "type": "number"
+        }
+      ]
+    },
+    {
+      "row_schema": "rsi.pending_entry_row/1",
+      "owner_domain": "host",
+      "table": "pending_entry",
+      "ts_type": "PendingEntryPhysicalRow",
+      "primary_key": [
+        "pending_id"
+      ],
+      "unique_keys": [
+        [
+          "pending_key"
+        ]
+      ],
+      "event_types": [
+        "state_row.recorded"
+      ],
+      "allowed_operations": [
+        "insert",
+        "transition"
+      ],
+      "binding_source": "row",
+      "row_versioned": true,
+      "blob_ref_paths": [
+        "/source_refs_json#/[*]"
+      ],
+      "payload_blob_paths": [],
+      "derived_reducer": null,
+      "document": null,
+      "allocation": null,
+      "schema_artifact": "schemas/domains/host/pending_entry_row.schema.json",
+      "columns": [
+        {
+          "name": "pending_id",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "owner",
+          "type": "string"
+        },
+        {
+          "name": "object_type",
+          "type": "string"
+        },
+        {
+          "name": "row_version",
+          "type": "number"
+        },
+        {
+          "name": "record_state",
+          "type": "string"
+        },
+        {
+          "name": "pending_key",
+          "type": "string"
+        },
+        {
+          "name": "kind",
+          "type": "string"
+        },
+        {
+          "name": "pending_state",
+          "type": "string"
+        },
+        {
+          "name": "task_id",
+          "type": "string"
+        },
+        {
+          "name": "branch_id",
+          "type": "string"
+        },
+        {
+          "name": "input_epoch",
+          "type": "number"
+        },
+        {
+          "name": "goal_version",
+          "type": "string"
+        },
+        {
+          "name": "config_version",
+          "type": "string"
+        },
+        {
+          "name": "watermark",
+          "type": "number"
+        },
+        {
+          "name": "host_id",
+          "type": "string"
+        },
+        {
+          "name": "mode",
+          "type": "string"
+        },
+        {
+          "name": "config_space",
+          "type": "string"
+        },
+        {
+          "name": "trigger_event_id",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "deadline_at",
+          "type": "number",
+          "nullable": true
+        },
+        {
+          "name": "attempt",
+          "type": "number"
+        },
+        {
+          "name": "created_at",
+          "type": "number"
+        },
+        {
+          "name": "updated_at",
+          "type": "number"
+        },
+        {
+          "name": "session_ref",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "boundary_event_ref",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "delivery_target_hash",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "boundary_key",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "review_job_id",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "source_refs_json",
+          "type": "string"
+        },
+        {
+          "name": "content_hash",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "row_schema": "rsi.evidence_supplement_record/1",
+      "owner_domain": "fnd",
+      "table": "evidence_supplement_record",
+      "ts_type": "EvidenceSupplementRow",
+      "primary_key": [
+        "supplement_id"
+      ],
+      "unique_keys": [],
+      "event_types": [
+        "state_row.recorded"
+      ],
+      "allowed_operations": [
+        "insert"
+      ],
+      "binding_source": "row",
+      "row_versioned": false,
+      "blob_ref_paths": [],
+      "payload_blob_paths": [],
+      "derived_reducer": null,
+      "document": null,
+      "allocation": null,
+      "schema_artifact": "schemas/w4/evidence-supplement-record.schema.json",
+      "columns": [
+        {
+          "name": "schema_version",
+          "type": "string",
+          "const": "rsi.evidence_supplement_record/1"
+        },
+        {
+          "name": "supplement_id",
+          "type": "string"
+        },
+        {
+          "name": "task_id",
+          "type": "string"
+        },
+        {
+          "name": "branch_id",
+          "type": "string"
+        },
+        {
+          "name": "input_epoch",
+          "type": "number"
+        },
+        {
+          "name": "goal_version",
+          "type": "string"
+        },
+        {
+          "name": "config_version",
+          "type": "string"
+        },
+        {
+          "name": "watermark",
+          "type": "number"
+        },
+        {
+          "name": "issue_id",
+          "type": "string"
+        },
+        {
+          "name": "plan_id",
+          "type": "string"
+        },
+        {
+          "name": "plan_hash",
+          "type": "string"
+        },
+        {
+          "name": "pack_id",
+          "type": "string"
+        },
+        {
+          "name": "pack_key",
+          "type": "string"
+        },
+        {
+          "name": "pack_hash",
+          "type": "string"
+        },
+        {
+          "name": "aggregate_id",
+          "type": "string"
+        },
+        {
+          "name": "aggregate_hash",
+          "type": "string"
+        },
+        {
+          "name": "rounds_json",
+          "type": "string",
+          "json_text": true
+        },
+        {
+          "name": "read_manifest_json",
+          "type": "string",
+          "json_text": true
+        },
+        {
+          "name": "pruned_json",
+          "type": "string",
+          "json_text": true
+        },
+        {
+          "name": "gap_codes_json",
+          "type": "string",
+          "json_text": true
+        },
+        {
+          "name": "decision_json",
+          "type": "string",
+          "json_text": true
+        },
+        {
+          "name": "outcome",
+          "type": "string"
+        },
+        {
+          "name": "budget_cap",
+          "type": "number"
+        },
+        {
+          "name": "stop_reason",
+          "type": "string"
+        },
+        {
+          "name": "requires_repack",
+          "type": "number"
+        },
+        {
+          "name": "record_hash",
+          "type": "string"
+        },
+        {
+          "name": "created_at",
+          "type": "number"
+        },
+        {
+          "name": "row_version",
+          "type": "number"
+        }
+      ]
+    },
+    {
+      "row_schema": "rsi.workspace_read_record/1",
+      "owner_domain": "fnd",
+      "table": "workspace_read_record",
+      "ts_type": "WorkspaceReadRow",
+      "primary_key": [
+        "read_id"
+      ],
+      "unique_keys": [],
+      "event_types": [
+        "state_row.recorded"
+      ],
+      "allowed_operations": [
+        "insert"
+      ],
+      "binding_source": "row",
+      "row_versioned": false,
+      "blob_ref_paths": [],
+      "payload_blob_paths": [],
+      "derived_reducer": null,
+      "document": null,
+      "allocation": null,
+      "schema_artifact": "schemas/w4/workspace-read-record.schema.json",
+      "columns": [
+        {
+          "name": "schema_version",
+          "type": "string",
+          "const": "rsi.workspace_read_record/1"
+        },
+        {
+          "name": "read_id",
+          "type": "string"
+        },
+        {
+          "name": "task_id",
+          "type": "string"
+        },
+        {
+          "name": "branch_id",
+          "type": "string"
+        },
+        {
+          "name": "input_epoch",
+          "type": "number"
+        },
+        {
+          "name": "goal_version",
+          "type": "string"
+        },
+        {
+          "name": "config_version",
+          "type": "string"
+        },
+        {
+          "name": "watermark",
+          "type": "number"
+        },
+        {
+          "name": "supplement_id",
+          "type": "string"
+        },
+        {
+          "name": "action",
+          "type": "string"
+        },
+        {
+          "name": "root_id",
+          "type": "string"
+        },
+        {
+          "name": "path_rel",
+          "type": "string"
+        },
+        {
+          "name": "path_hash",
+          "type": "string"
+        },
+        {
+          "name": "content_hash",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "byte_length",
+          "type": "number"
+        },
+        {
+          "name": "range_start",
+          "type": "number",
+          "nullable": true
+        },
+        {
+          "name": "range_end",
+          "type": "number",
+          "nullable": true
+        },
+        {
+          "name": "binary",
+          "type": "number"
+        },
+        {
+          "name": "status",
+          "type": "string"
+        },
+        {
+          "name": "reason_code",
+          "type": "string",
+          "nullable": true
+        },
+        {
+          "name": "observed_at",
+          "type": "number"
+        },
+        {
+          "name": "row_version",
+          "type": "number"
+        }
+      ]
+    }
+  ]
+}

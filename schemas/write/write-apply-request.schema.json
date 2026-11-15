@@ -1,0 +1,880 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:write_apply_request:1",
+  "title": "WriteApplyRequest",
+  "description": "Managed write request, intent, snapshot and result (DD-FND-091). object_type=config is rejected before any intent is created.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "deadline_ms",
+    "grant_id",
+    "action",
+    "object_type",
+    "candidate_id",
+    "candidate_hash",
+    "binding",
+    "scope_ref",
+    "root_id",
+    "target_path",
+    "write_mode",
+    "block_action",
+    "block_selector",
+    "expected_file_hash",
+    "expected_block_hash",
+    "new_content",
+    "new_content_hash",
+    "rollback_of_write_id",
+    "target_snapshot_id",
+    "target_snapshot_hash",
+    "unattended_policy"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "rsi.write_apply/1"
+    },
+    "deadline_ms": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 600000
+    },
+    "grant_id": {
+      "type": "string",
+      "pattern": "^grant:[0-9A-HJKMNP-TV-Z]{26}$"
+    },
+    "action": {
+      "enum": [
+        "create",
+        "update",
+        "disable",
+        "rollback"
+      ]
+    },
+    "object_type": {
+      "enum": [
+        "skill",
+        "memory",
+        "instructions",
+        "config"
+      ]
+    },
+    "candidate_id": {
+      "type": "string",
+      "pattern": "^(prop|ctr):[0-9A-HJKMNP-TV-Z]{26}$"
+    },
+    "candidate_hash": {
+      "$ref": "#/$defs/Hash"
+    },
+    "binding": {
+      "$ref": "#/$defs/VersionBinding"
+    },
+    "scope_ref": {
+      "$ref": "#/$defs/WriteScopeRef"
+    },
+    "root_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "target_path": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096
+    },
+    "write_mode": {
+      "enum": [
+        "whole_file",
+        "managed_block"
+      ]
+    },
+    "block_action": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "update",
+        "attach",
+        "detach",
+        null
+      ]
+    },
+    "block_selector": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 128
+    },
+    "expected_file_hash": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "expected_block_hash": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "new_content": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/ContentUpload"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "new_content_hash": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "rollback_of_write_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^wi:[0-9A-HJKMNP-TV-Z]{26}$"
+    },
+    "target_snapshot_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^wsnap:[0-9A-HJKMNP-TV-Z]{26}$"
+    },
+    "target_snapshot_hash": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "unattended_policy": {
+      "enum": [
+        "auto_allowed",
+        "pending_approval",
+        "rsi_managed_file_only"
+      ]
+    }
+  },
+  "$defs": {
+    "Hash": {
+      "title": "Hash",
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "SourceRef": {
+      "title": "SourceRef",
+      "oneOf": [
+        {
+          "type": "string",
+          "pattern": "^journal://ev:[0-9A-HJKMNP-TV-Z]{26}#bytes=(0|[1-9][0-9]*)-(0|[1-9][0-9]*)$"
+        },
+        {
+          "type": "string",
+          "pattern": "^blob://sha256:[0-9a-f]{64}#bytes=(0|[1-9][0-9]*)-(0|[1-9][0-9]*)$"
+        }
+      ]
+    },
+    "VersionBinding": {
+      "title": "VersionBinding",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "task_id",
+        "branch_id",
+        "input_epoch",
+        "goal_version",
+        "config_version",
+        "watermark"
+      ],
+      "properties": {
+        "task_id": {
+          "type": "string"
+        },
+        "branch_id": {
+          "type": "string"
+        },
+        "input_epoch": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "goal_version": {
+          "type": "string"
+        },
+        "config_version": {
+          "type": "string"
+        },
+        "watermark": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "ContentUpload": {
+      "title": "ContentUpload",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "media_type",
+        "encoding",
+        "data",
+        "byte_length"
+      ],
+      "properties": {
+        "media_type": {
+          "enum": [
+            "text/plain;charset=utf-8",
+            "application/json",
+            "application/octet-stream"
+          ]
+        },
+        "encoding": {
+          "enum": [
+            "utf8",
+            "base64"
+          ]
+        },
+        "data": {
+          "type": "string"
+        },
+        "byte_length": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 8388608
+        }
+      }
+    },
+    "WriteScopeRef": {
+      "title": "WriteScopeRef",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/TaskWriteScope"
+        },
+        {
+          "$ref": "#/$defs/SessionWriteScope"
+        }
+      ]
+    },
+    "TaskWriteScope": {
+      "title": "TaskWriteScope",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "task_id"
+      ],
+      "properties": {
+        "kind": {
+          "const": "task"
+        },
+        "task_id": {
+          "type": "string",
+          "pattern": "^task:[0-9A-HJKMNP-TV-Z]{26}$"
+        }
+      }
+    },
+    "SessionWriteScope": {
+      "title": "SessionWriteScope",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "session_id"
+      ],
+      "properties": {
+        "kind": {
+          "const": "session"
+        },
+        "session_id": {
+          "type": "string",
+          "pattern": "^sess:[0-9A-HJKMNP-TV-Z]{26}$"
+        }
+      }
+    },
+    "RootIdentityPin": {
+      "title": "RootIdentityPin",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "root_id",
+        "identity_kind",
+        "device_id",
+        "file_id"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "rsi.root_identity/1"
+        },
+        "root_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "identity_kind": {
+          "enum": [
+            "dev_inode",
+            "file_id"
+          ]
+        },
+        "device_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "file_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        }
+      }
+    },
+    "WriteIntent": {
+      "title": "WriteIntent",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "write_id",
+        "idempotency_key",
+        "grant_id",
+        "action",
+        "object_type",
+        "candidate_id",
+        "candidate_hash",
+        "binding",
+        "scope_kind",
+        "scope_ref_id",
+        "project_id",
+        "config_space_id",
+        "scope_hash",
+        "root_id",
+        "root_identity_pin",
+        "root_registration_hash",
+        "target_path",
+        "target_ownership",
+        "write_mode",
+        "block_action",
+        "block_selector",
+        "expected_file_hash",
+        "expected_block_hash",
+        "snapshot_id",
+        "rollback_of_write_id",
+        "target_snapshot_id",
+        "target_snapshot_hash",
+        "atomicity",
+        "exclusion",
+        "unattended_policy",
+        "state",
+        "attempt",
+        "last_error_code",
+        "row_version",
+        "created_at",
+        "updated_at"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "rsi.write_intent/2"
+        },
+        "write_id": {
+          "type": "string",
+          "pattern": "^wi:[0-9A-HJKMNP-TV-Z]{26}$"
+        },
+        "idempotency_key": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9._:-]{8,128}$"
+        },
+        "grant_id": {
+          "type": "string"
+        },
+        "action": {
+          "enum": [
+            "create",
+            "update",
+            "disable",
+            "rollback"
+          ]
+        },
+        "object_type": {
+          "enum": [
+            "skill",
+            "memory",
+            "instructions"
+          ]
+        },
+        "candidate_id": {
+          "type": "string"
+        },
+        "candidate_hash": {
+          "$ref": "#/$defs/Hash"
+        },
+        "binding": {
+          "$ref": "#/$defs/VersionBinding"
+        },
+        "scope_kind": {
+          "enum": [
+            "task",
+            "session"
+          ]
+        },
+        "scope_ref_id": {
+          "type": "string"
+        },
+        "project_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "config_space_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "scope_hash": {
+          "$ref": "#/$defs/Hash"
+        },
+        "root_id": {
+          "type": "string"
+        },
+        "root_identity_pin": {
+          "$ref": "#/$defs/RootIdentityPin"
+        },
+        "root_registration_hash": {
+          "$ref": "#/$defs/Hash"
+        },
+        "target_path": {
+          "type": "string"
+        },
+        "target_ownership": {
+          "enum": [
+            "native_managed",
+            "rsi_managed",
+            "shared_handwritten"
+          ]
+        },
+        "write_mode": {
+          "enum": [
+            "whole_file",
+            "managed_block"
+          ]
+        },
+        "block_action": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "block_selector": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "expected_file_hash": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "expected_block_hash": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "snapshot_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "rollback_of_write_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "target_snapshot_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "target_snapshot_hash": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "atomicity": {
+          "enum": [
+            "native_atomic",
+            "single_file_atomic",
+            "none"
+          ]
+        },
+        "exclusion": {
+          "enum": [
+            "native_cooperative",
+            "rsi_advisory",
+            "none"
+          ]
+        },
+        "unattended_policy": {
+          "enum": [
+            "auto_allowed",
+            "pending_approval",
+            "rsi_managed_file_only"
+          ]
+        },
+        "state": {
+          "$ref": "#/$defs/WriteIntentState"
+        },
+        "attempt": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "last_error_code": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "row_version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "created_at": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "updated_at": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "WriteIntentState": {
+      "title": "WriteIntentState",
+      "enum": [
+        "intent_recorded",
+        "snapshot_written",
+        "temp_written",
+        "renamed",
+        "dir_synced",
+        "verified",
+        "pending_approval",
+        "conflict",
+        "path_rejected",
+        "write_failed",
+        "partial",
+        "recovery_required"
+      ]
+    },
+    "WriteSnapshot": {
+      "title": "WriteSnapshot",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "snapshot_id",
+        "write_id",
+        "path",
+        "write_mode",
+        "file_hash",
+        "file_byte_length",
+        "block_action",
+        "block_selector",
+        "block_start",
+        "block_byte_length",
+        "block_content_hash",
+        "block_hash",
+        "content_ref",
+        "snapshot_hash",
+        "created_at"
+      ],
+      "properties": {
+        "snapshot_id": {
+          "type": "string",
+          "pattern": "^wsnap:[0-9A-HJKMNP-TV-Z]{26}$"
+        },
+        "write_id": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "write_mode": {
+          "enum": [
+            "whole_file",
+            "managed_block"
+          ]
+        },
+        "file_hash": {
+          "$ref": "#/$defs/Hash"
+        },
+        "file_byte_length": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "block_action": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "block_selector": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "block_start": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "block_byte_length": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "block_content_hash": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "block_hash": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "content_ref": {
+          "$ref": "#/$defs/SourceRef"
+        },
+        "snapshot_hash": {
+          "$ref": "#/$defs/Hash"
+        },
+        "created_at": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "WriteResult": {
+      "title": "WriteResult",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "write_id",
+        "attempt",
+        "state",
+        "root_id",
+        "path",
+        "new_file_hash",
+        "new_block_hash",
+        "snapshot_id",
+        "target_snapshot_id",
+        "target_snapshot_hash",
+        "three_way_diff_ref",
+        "readback_verified",
+        "atomicity",
+        "exclusion",
+        "unattended_policy",
+        "error_code",
+        "completed_at"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "rsi.write_result/2"
+        },
+        "write_id": {
+          "type": "string"
+        },
+        "attempt": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "state": {
+          "$ref": "#/$defs/WriteIntentState"
+        },
+        "root_id": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "new_file_hash": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "new_block_hash": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "snapshot_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "target_snapshot_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "target_snapshot_hash": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "three_way_diff_ref": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/SourceRef"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "readback_verified": {
+          "type": "boolean"
+        },
+        "atomicity": {
+          "enum": [
+            "native_atomic",
+            "single_file_atomic",
+            "none"
+          ]
+        },
+        "exclusion": {
+          "enum": [
+            "native_cooperative",
+            "rsi_advisory",
+            "none"
+          ]
+        },
+        "unattended_policy": {
+          "enum": [
+            "auto_allowed",
+            "pending_approval",
+            "rsi_managed_file_only"
+          ]
+        },
+        "error_code": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "completed_at": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        }
+      }
+    },
+    "WriteAdoptionView": {
+      "title": "WriteAdoptionView",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "intent",
+        "result"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "rsi.write_adoption_view/1"
+        },
+        "intent": {
+          "$ref": "#/$defs/WriteIntent"
+        },
+        "result": {
+          "$ref": "#/$defs/WriteResult"
+        }
+      }
+    }
+  },
+  "x-evoplug-ddl": {
+    "table": "write_intent",
+    "enums": {
+      "action": [
+        "create",
+        "update",
+        "disable",
+        "rollback"
+      ],
+      "object_type": [
+        "skill",
+        "memory",
+        "instructions"
+      ],
+      "target_ownership": [
+        "native_managed",
+        "rsi_managed",
+        "shared_handwritten"
+      ],
+      "write_mode": [
+        "whole_file",
+        "managed_block"
+      ],
+      "atomicity": [
+        "native_atomic",
+        "single_file_atomic",
+        "none"
+      ],
+      "exclusion": [
+        "native_cooperative",
+        "rsi_advisory",
+        "none"
+      ],
+      "unattended_policy": [
+        "auto_allowed",
+        "pending_approval",
+        "rsi_managed_file_only"
+      ],
+      "state": [
+        "intent_recorded",
+        "snapshot_written",
+        "temp_written",
+        "renamed",
+        "dir_synced",
+        "verified",
+        "pending_approval",
+        "conflict",
+        "path_rejected",
+        "write_failed",
+        "partial",
+        "recovery_required"
+      ]
+    }
+  }
+}

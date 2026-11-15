@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:closure_input:1",
+  "title": "ClosureInput",
+  "description": "DD-EVD-026 closure input.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "plan_id",
+    "plan_hash",
+    "pack_key",
+    "required_question_keys",
+    "optional_question_keys",
+    "units",
+    "limits"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "rsi.closure_input/1"
+    },
+    "plan_id": {
+      "type": "string"
+    },
+    "plan_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "pack_key": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "required_question_keys": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "optional_question_keys": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "units": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "limits": {
+      "type": "object"
+    }
+  }
+}

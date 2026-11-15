@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:validation_plans:1",
+  "title": "ValidationPlanRow",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "validation_plan_id",
+    "experience_id",
+    "experience_version",
+    "expected_behavior",
+    "plan_hash",
+    "created_at",
+    "source_requirement_refs_json",
+    "required_loading_evidence_json",
+    "verifier_json",
+    "observation_window_json",
+    "retention_rule_json",
+    "stop_conditions_json",
+    "replay_json"
+  ],
+  "properties": {
+    "validation_plan_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "experience_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "experience_version": {
+      "type": "integer"
+    },
+    "expected_behavior": {
+      "type": "string",
+      "minLength": 1
+    },
+    "plan_hash": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "created_at": {
+      "type": "integer"
+    },
+    "source_requirement_refs_json": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Canonical JSON text."
+    },
+    "required_loading_evidence_json": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Canonical JSON text."
+    },
+    "verifier_json": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Canonical JSON text."
+    },
+    "observation_window_json": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Canonical JSON text."
+    },
+    "retention_rule_json": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Canonical JSON text."
+    },
+    "stop_conditions_json": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Canonical JSON text."
+    },
+    "replay_json": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Canonical JSON text."
+    }
+  }
+}

@@ -1,0 +1,707 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:error_envelope:1",
+  "title": "ErrorEnvelope",
+  "description": "Structured failure envelope (DD-FND-034/035). message_key is an i18n key; logical branching reads code only.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "code", "category", "retryable", "side_effect", "message_key", "details", "stage", "trace_id"],
+  "properties": {
+    "schema_version": { "const": "rsi.error/1" },
+    "code": { "type": "string", "pattern": "^E_[A-Z0-9_]+$" },
+    "category": { "$ref": "#/$defs/ErrorCategory" },
+    "retryable": { "type": "boolean" },
+    "side_effect": { "enum": ["none", "committed", "partial", "unknown"] },
+    "message_key": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "details": { "$ref": "#/$defs/ErrorDetails" },
+    "stage": { "type": "string", "pattern": "^[a-z][a-z0-9_.-]{0,63}$" },
+    "detail_ref": { "$ref": "#/$defs/SourceRef" },
+    "retry_after_ms": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+    "trace_id": { "type": "string", "pattern": "^ipc:[0-9A-HJKMNP-TV-Z]{26}$" }
+  },
+  "$defs": {
+    "ErrorCategory": {
+      "title": "ErrorCategory",
+      "enum": ["usage", "schema", "version", "not_found", "policy", "authorization", "budget", "deadline", "source", "conflict", "storage", "ipc", "capacity", "external", "internal"]
+    },
+    "SourceRef": {
+      "title": "SourceRef",
+      "oneOf": [
+        { "type": "string", "pattern": "^journal://ev:[0-9A-HJKMNP-TV-Z]{26}#bytes=(0|[1-9][0-9]*)-(0|[1-9][0-9]*)$" },
+        { "type": "string", "pattern": "^blob://sha256:[0-9a-f]{64}#bytes=(0|[1-9][0-9]*)-(0|[1-9][0-9]*)$" }
+      ]
+    },
+    "ErrorDetails": {
+      "title": "ErrorDetails",
+      "oneOf": [
+        { "$ref": "#/$defs/NoneDetails" },
+        { "$ref": "#/$defs/FieldDetails" },
+        { "$ref": "#/$defs/VersionDetails" },
+        { "$ref": "#/$defs/SourceDetails" },
+        { "$ref": "#/$defs/SourceUnretrievableDetails" },
+        { "$ref": "#/$defs/SourceConflictDetails" },
+        { "$ref": "#/$defs/IdempotencyDetails" },
+        { "$ref": "#/$defs/ConflictDetails" },
+        { "$ref": "#/$defs/BudgetDetails" },
+        { "$ref": "#/$defs/AuthorizationDetails" },
+        { "$ref": "#/$defs/EgressDetails" },
+        { "$ref": "#/$defs/ReplayDetails" },
+        { "$ref": "#/$defs/ConfigWriteDetails" },
+        { "$ref": "#/$defs/IpcDetails" },
+        { "$ref": "#/$defs/CapacityDetails" },
+        { "$ref": "#/$defs/ResourceDetails" },
+        { "$ref": "#/$defs/StorageDetails" },
+        { "$ref": "#/$defs/ExternalDetails" },
+        { "$ref": "#/$defs/InternalDetails" },
+        { "$ref": "#/$defs/RegistryDetails" }
+      ]
+    },
+    "NoneDetails": {
+      "title": "NoneDetails",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind"],
+      "properties": { "kind": { "const": "none" } }
+    },
+    "FieldDetails": {
+      "title": "FieldDetails",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "path", "rule"],
+      "properties": {
+        "kind": { "const": "field" },
+        "path": { "type": "string", "minLength": 1, "maxLength": 512 },
+        "rule": { "type": "string", "minLength": 1, "maxLength": 128 }
+      }
+    },
+    "VersionDetails": {
+      "title": "VersionDetails",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "expected", "actual"],
+      "properties": {
+        "kind": { "const": "version" },
+        "expected": { "type": "string" },
+        "actual": { "type": "string" }
+      }
+    },
+    "SourceDetails": {
+      "title": "SourceDetails",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "source_ref", "reason"],
+      "properties": {
+        "kind": { "const": "source" },
+        "source_ref": { "type": "string" },
+        "reason": { "enum": ["missing", "tombstoned", "hash_mismatch", "out_of_range", "not_utf8", "too_large"] }
+      }
+    },
+    "SourceUnretrievableDetails": {
+      "title": "SourceUnretrievableDetails",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "source_ref", "upstream_code"],
+      "properties": {
+        "kind": { "const": "source_unretrievable" },
+        "source_ref": { "type": "string" },
+        "upstream_code": { "type": "string", "pattern": "^E_[A-Z0-9_]+$" }
+      }
+    },
+    "SourceConflictDetails": {
+      "title": "SourceConflictDetails",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "source_ref", "expected", "actual"],
+      "properties": {
+        "kind": { "const": "source_conflict" },
+        "source_ref": { "type": "string" },
+        "expected": { "type": "string" },
+        "actual": { "type": "string" }
+      }
+    },
+    "IdempotencyDetails": {
+      "title": "IdempotencyDetails",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "key", "existing_hash", "incoming_hash"],
+      "properties": {
+        "kind": { "const": "idempotency" },
+        "key": { "type": "string" },
+        "existing_hash": { "$ref": "#/$defs/Hash" },
+        "incoming_hash": { "$ref": "#/$defs/Hash" }
+      }
+    },
+    "ConflictDetails": {
+      "title": "ConflictDetails",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "current_hash", "expected_hash"],
+      "properties": {
+        "kind": { "const": "conflict" },
+        "current_hash": { "$ref": "#/$defs/Hash" },
+        "expected_hash": { "$ref": "#/$defs/Hash" },
+        "diff_ref": { "$ref": "#/$defs/SourceRef" }
+      }
+    },
+    "BudgetDetails": {
+      "title": "BudgetDetails",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "scope_key", "policy_version", "budget_kind", "remaining"],
+      "properties": {
+        "kind": { "const": "budget" },
+        "scope_key": { "type": "string" },
+        "policy_version": { "type": "string" },
+        "budget_kind": { "enum": ["token", "cost", "attempt", "rate", "deadline"] },
+        "remaining": { "type": ["number", "null"] }
+      }
+    },
+    "AuthorizationDetails": {
+      "title": "AuthorizationDetails",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "object_type", "denied_dimension"],
+      "properties": {
+        "kind": { "const": "authorization" },
+        "grant_id": { "type": "string", "pattern": "^grant:[0-9A-HJKMNP-TV-Z]{26}$" },
+        "object_type": { "type": "string", "minLength": 1, "maxLength": 64 },
+        "denied_dimension": { "enum": ["object", "project", "config_space", "path", "block", "action", "mode", "expiry", "scope_empty"] }
+      }
+    },
+    "EgressDetails": {
+      "title": "EgressDetails",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "policy_version", "denied_dimension", "refs"],
+      "properties": {
+        "kind": { "const": "egress" },
+        "policy_version": { "type": "string" },
+        "denied_dimension": { "enum": ["endpoint", "model", "data_class", "project_exclusion", "byte_limit", "approval"] },
+        "refs": { "type": "array", "items": { "$ref": "#/$defs/SourceRef" } }
+      }
+    },
+    "ReplayDetails": {
+      "title": "ReplayDetails",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "reason"],
+      "properties": {
+        "kind": { "const": "replay" },
+        "replay_plan_id": { "type": "string", "pattern": "^rpl:[0-9A-HJKMNP-TV-Z]{26}$" },
+        "reason": {
+          "enum": ["needs_approval", "network_scope_mismatch", "isolation_unverified", "classifier_unknown", "approval_not_found", "approval_mismatch", "approval_consumed", "approval_expired", "approval_revoked", "approval_state", "plan_not_found", "plan_mismatch", "plan_state", "execution_reconcile_required", "execution_in_progress", "execution_unknown", "reconcile_conflict", "attestation_unverified"]
+        }
+      }
+    },
+    "ConfigWriteDetails": {
+      "title": "ConfigWriteDetails",
+      "oneOf": [
+        { "$ref": "#/$defs/ConfigWriteApplyDetails" },
+        { "$ref": "#/$defs/ConfigWriteStaleDetails" }
+      ]
+    },
+    "ConfigWriteApplyDetails": {
+      "title": "ConfigWriteApplyDetails",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "apply_reason"],
+      "properties": {
+        "kind": { "const": "config_write" },
+        "apply_reason": { "enum": ["expected_field_mismatch", "candidate_mismatch", "protected_subtree_mismatch", "parser_failed", "serializer_failed", "forbidden_field", "unsupported_field", "path_invalid"] },
+        "field_id": { "type": "string", "pattern": "^fld:[0-9A-HJKMNP-TV-Z]{26}$" },
+        "path": { "type": "string", "minLength": 1, "maxLength": 1024 }
+      }
+    },
+    "ConfigWriteStaleDetails": {
+      "title": "ConfigWriteStaleDetails",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "stale_reason"],
+      "properties": {
+        "kind": { "const": "config_write" },
+        "stale_reason": { "enum": ["base_changed", "lock_expired", "fencing", "connection"] }
+      }
+    },
+    "IpcDetails": {
+      "title": "IpcDetails",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "method", "connection_id", "frame_kind"],
+      "properties": {
+        "kind": { "const": "ipc" },
+        "method": { "type": "string" },
+        "connection_id": { "type": "string" },
+        "frame_kind": { "type": "string" }
+      }
+    },
+    "CapacityDetails": {
+      "title": "CapacityDetails",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "policy_version", "queue_depth", "queue_capacity", "inflight", "max_inflight"],
+      "properties": {
+        "kind": { "const": "capacity" },
+        "policy_version": { "type": "string" },
+        "queue_depth": { "type": "integer", "minimum": 0 },
+        "queue_capacity": { "type": "integer", "minimum": 0 },
+        "inflight": { "type": "integer", "minimum": 0 },
+        "max_inflight": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "ResourceDetails": {
+      "title": "ResourceDetails",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "resource", "limit", "observed"],
+      "properties": {
+        "kind": { "const": "resource" },
+        "resource": { "enum": ["fd", "memory", "child_process"] },
+        "limit": { "type": "number" },
+        "observed": { "type": "number" }
+      }
+    },
+    "StorageDetails": {
+      "title": "StorageDetails",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "operation"],
+      "properties": {
+        "kind": { "const": "storage" },
+        "operation": { "type": "string" },
+        "sqlite_code": { "type": "string" },
+        "journal_offset": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "ExternalDetails": {
+      "title": "ExternalDetails",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "provider"],
+      "properties": {
+        "kind": { "const": "external" },
+        "provider": { "type": "string" },
+        "http_status": { "type": "integer", "minimum": 100, "maximum": 599 },
+        "provider_code": { "type": "string" }
+      }
+    },
+    "InternalDetails": {
+      "title": "InternalDetails",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "incident_id"],
+      "properties": {
+        "kind": { "const": "internal" },
+        "incident_id": { "type": "string", "minLength": 1, "maxLength": 128 }
+      }
+    },
+    "RegistryDetails": {
+      "title": "RegistryDetails",
+      "description": "Closed registry detail branch for the 81 EVD-owned codes (DD-EVD-024). Key sets are frozen in the evd.json fragment.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "code",
+        "details"
+      ],
+      "properties": {
+        "kind": {
+          "const": "registry"
+        },
+        "code": {
+          "type": "string",
+          "pattern": "^E_[A-Z0-9_]+$",
+          "enum": [
+            "E_INDEX_REQUEST_INVALID",
+            "E_INDEX_BINDING_INVALID",
+            "E_INDEX_WATERMARK_INVALID",
+            "E_INDEX_WINDOW_INVALID",
+            "E_INDEX_REVIEW_SNAPSHOT_INVALID",
+            "E_INDEX_REVIEW_SNAPSHOT_MISSING",
+            "E_INDEX_UPSTREAM_UNAVAILABLE",
+            "E_INDEX_PROGRESS_UNSUPPORTED",
+            "E_INDEX_SOURCE_UNRETRIEVABLE",
+            "E_INDEX_SOURCE_UTF8_INVALID",
+            "E_INDEX_SOURCE_HASH_MISMATCH",
+            "E_INDEX_SOURCE_CONFLICT",
+            "E_INDEX_SOURCE_TOO_LARGE",
+            "E_INDEX_LIMIT_EXCEEDED",
+            "E_INDEX_VERSION_CONFLICT",
+            "E_INDEX_DERIVATION_FAILED",
+            "E_INDEX_ABORTED",
+            "E_INDEX_SCOPE_MISMATCH",
+            "E_INDEX_SNAPSHOT_ID_MISMATCH",
+            "E_INDEX_NOT_LOADED",
+            "E_INDEX_DEADLINE_EXCEEDED",
+            "E_EVIDENCE_PACK_V1_READ_ONLY",
+            "E_BINDING_V1_READ_ONLY",
+            "E_EVIDENCE_PACK_STALE",
+            "E_EVIDENCE_CLOSURE_INCOMPLETE",
+            "E_EVIDENCE_INSEPARABLE_SPLIT",
+            "E_EVIDENCE_EXCEEDS_BUDGET",
+            "E_EVIDENCE_OMISSION_BINDING",
+            "E_EVIDENCE_LIMITS_UNKNOWN",
+            "E_EVIDENCE_PLAN_NOT_DISPATCHABLE",
+            "E_EVIDENCE_MANIFEST_MISMATCH",
+            "E_BUDGET_RESERVE_INCONSISTENT",
+            "E_PROJECTION_VIEW_MISSING",
+            "E_PROJECTION_SOURCE_MISSING",
+            "E_PROJECTION_OMISSION_BLOCKING",
+            "E_STATE_LOCAL_URI",
+            "E_STATE_VOLATILE_FIELD",
+            "E_STATE_WHOLE_TASK_SCOPE",
+            "E_STATE_VERSION_UNSUPPORTED",
+            "E_JUDGE_STATE_V1_READ_ONLY",
+            "E_WIRE_INVALID",
+            "E_ANSWER_SET",
+            "E_TYPE",
+            "E_NON_FINITE",
+            "E_PROBABILITY_KEYS",
+            "E_PROBABILITY_RANGE",
+            "E_PROBABILITY_SUM",
+            "E_CHOICE_OUT_OF_SET",
+            "E_UNKNOWN_OPTION",
+            "E_OPTION_COUNT",
+            "E_SCORE_LEVELS",
+            "E_CONFIDENCE_MISMATCH",
+            "E_MODEL_MISMATCH",
+            "E_UNSUPPORTED_QUESTION_TYPE",
+            "E_SERVICE_PROFILE_UNKNOWN",
+            "E_SERVICE_PROFILE_BLOCKED",
+            "E_SERVICE_PROFILE_MISMATCH",
+            "E_SEMANTIC_BACKEND_UNKNOWN",
+            "E_SEMANTIC_SCOPE_UNSUPPORTED",
+            "E_SEMANTIC_CONTRACT_UNSUPPORTED",
+            "E_SEMANTIC_OUTPUT_INVALID",
+            "E_SERVICE_UNAVAILABLE",
+            "E_RATE_LIMITED",
+            "E_HTTP_5XX",
+            "E_HTTP_4XX",
+            "E_OUTCOME_UNKNOWN",
+            "E_USAGE_ESTIMATE_UNDERFLOW",
+            "E_ATTEMPT_IN_FLIGHT",
+            "E_AGGREGATE_BINDING_INCOMPLETE",
+            "E_AGGREGATE_SNAPSHOT_MISMATCH",
+            "E_AGGREGATE_NO_PROPOSITIONS",
+            "E_HARD_FACT_KEY_MISMATCH",
+            "E_PLAN_AGGREGATION_BINDING",
+            "E_AGGREGATE_NOT_FOUND",
+            "E_AGGREGATE_NOT_ACCEPTED",
+            "E_AGGREGATE_HASH_MISMATCH",
+            "E_EVD_OBJECT_TOO_LARGE",
+            "E_CONTENT_HASH_MISMATCH",
+            "E_VALIDATOR_BINDING_MISSING",
+            "E_VALIDATOR_POLICY_MISMATCH",
+            "E_SERVICE_STATE_INCONSISTENT"
+          ]
+        },
+        "details": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "actual": true,
+            "aggregate_id": {
+              "type": "string"
+            },
+            "aggregate_output_reserve_tokens": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "attempt_id": {
+              "type": "string"
+            },
+            "backend_key": {
+              "type": "string",
+              "pattern": "^sha256:[0-9a-f]{64}$"
+            },
+            "binding": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "binding_schema_version": {
+              "type": "string"
+            },
+            "choice": {
+              "type": "string"
+            },
+            "conflict_type": {
+              "type": "string"
+            },
+            "content_ref": {
+              "type": "string"
+            },
+            "contract": {
+              "type": "string"
+            },
+            "current_version": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "deadline_ms": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "dimension": {
+              "type": "string"
+            },
+            "display_id": {
+              "type": "string"
+            },
+            "estimate": {
+              "type": "number"
+            },
+            "expected": true,
+            "expected_previous_version": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "extra_question_keys": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "fact_id": {
+              "type": "string"
+            },
+            "field": {
+              "type": "string"
+            },
+            "final_state": {
+              "enum": [
+                "consistent",
+                "inconsistent",
+                "unknown",
+                "abstain",
+                "needs_evidence"
+              ]
+            },
+            "from_watermark": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "gate": {
+              "type": "string"
+            },
+            "host_code": {
+              "type": "string"
+            },
+            "http_status": {
+              "type": "integer",
+              "minimum": 100,
+              "maximum": 599
+            },
+            "impact": {
+              "type": "string"
+            },
+            "inseparable_group_key": {
+              "type": "string"
+            },
+            "lease_expires_at": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "limit": {
+              "type": "number"
+            },
+            "limiting_question_key": {
+              "type": "string"
+            },
+            "logical_id": {
+              "type": "string"
+            },
+            "max": {
+              "type": "number"
+            },
+            "method": {
+              "type": "string"
+            },
+            "min": {
+              "type": "number"
+            },
+            "missing_fields": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "missing_question_keys": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "object_id": {
+              "type": "string"
+            },
+            "object_type": {
+              "type": "string"
+            },
+            "observed": {
+              "type": ["number", "string"]
+            },
+            "offending_question_key": {
+              "type": "string"
+            },
+            "omission_keys": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "option": {
+              "type": "string"
+            },
+            "pack_hash": {
+              "type": "string",
+              "pattern": "^sha256:[0-9a-f]{64}$"
+            },
+            "profile_key": {
+              "type": "string",
+              "pattern": "^sha256:[0-9a-f]{64}$"
+            },
+            "profile_version": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "question_key": {
+              "type": "string"
+            },
+            "question_keys": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "reason": {
+              "type": "string"
+            },
+            "recomputed": {
+              "type": "number"
+            },
+            "reported": {
+              "type": "number"
+            },
+            "requested_model": {
+              "type": "string"
+            },
+            "required_order": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "retry_after_ms": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "returned_model": {
+              "type": "string"
+            },
+            "review_snapshot_id": {
+              "type": "string"
+            },
+            "schema_version": {
+              "type": "string"
+            },
+            "scope": {
+              "type": "string"
+            },
+            "scope_field": {
+              "type": "string"
+            },
+            "shard_key": {
+              "type": "string"
+            },
+            "shard_plan_key": {
+              "type": "string"
+            },
+            "source_id": {
+              "type": "string"
+            },
+            "source_ref": {
+              "type": "string"
+            },
+            "stage": {
+              "type": "string"
+            },
+            "sum": {
+              "type": "number"
+            },
+            "supported": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "to_watermark": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "tolerance": {
+              "type": "number"
+            },
+            "type": {
+              "type": "string"
+            },
+            "upstream_code": {
+              "type": "string"
+            },
+            "upstream_unknown": {
+              "$ref": "#/$defs/UpstreamUnknown"
+            },
+            "validator_binding_key": {
+              "type": "string",
+              "pattern": "^sha256:[0-9a-f]{64}$"
+            },
+            "value": {
+              "type": "number"
+            },
+            "view_id": {
+              "type": "string"
+            },
+            "watermark": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        }
+      }
+    },
+    "UpstreamUnknown": {
+      "title": "UpstreamUnknown",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "request_dispatched",
+        "attempt_status",
+        "retryable"
+      ],
+      "properties": {
+        "request_dispatched": {
+          "type": "boolean"
+        },
+        "attempt_status": {
+          "enum": [
+            "transport_error",
+            "outcome_unknown"
+          ]
+        },
+        "retryable": {
+          "type": "boolean"
+        },
+        "upstream_code": {
+          "type": "string",
+          "pattern": "^E_[A-Z0-9_]+$"
+        }
+      }
+    },
+    "Hash": {
+      "title": "Hash",
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    }
+  }
+}

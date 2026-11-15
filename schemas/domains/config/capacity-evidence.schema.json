@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:capacity_evidence:1",
+  "title": "CapacityEvidence",
+  "description": "Sealed window-capacity evidence from HOST (DD-CFG-072).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "config_space_id", "capability_binding_key", "model",
+    "model_scope_key", "scope", "window_tokens", "unit", "source_kind",
+    "evidence_ref", "evidence_hash", "observed_at"
+  ],
+  "properties": {
+    "schema_version": { "const": "rsi.capacity_evidence/1" },
+    "config_space_id": { "$ref": "#/$defs/Hash" },
+    "capability_binding_key": { "$ref": "#/$defs/Hash" },
+    "model": { "$ref": "#/$defs/ModelRef" },
+    "model_scope_key": { "type": "string", "minLength": 1, "maxLength": 512 },
+    "scope": { "const": "window_tokens" },
+    "window_tokens": { "type": "integer", "minimum": 1, "maximum": 9007199254740991 },
+    "unit": { "const": "tokens" },
+    "source_kind": { "enum": ["host_capability_readback", "model_catalog"] },
+    "evidence_ref": { "$ref": "#/$defs/SourceRef" },
+    "evidence_hash": { "$ref": "#/$defs/Hash" },
+    "observed_at": { "type": "integer", "minimum": 0 }
+  },
+  "$defs": {
+    "Hash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "SourceRef": { "type": "string", "pattern": "^(journal://[^#]+|blob://sha256:[0-9a-f]{64})#bytes=(0|[1-9][0-9]*)-(0|[1-9][0-9]*)$" },
+    "ModelRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["provider", "model_id", "variant", "resolution_source"],
+      "properties": {
+        "provider": { "type": "string", "minLength": 1 },
+        "model_id": { "type": "string", "minLength": 1 },
+        "variant": { "oneOf": [{ "type": "null" }, { "type": "string" }] },
+        "resolution_source": { "enum": ["host_readback", "explicit"] }
+      }
+    }
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:semantic_budget_input:1",
+  "title": "SemanticBudgetInput",
+  "description": "DD-EVD-026 semantic budget input.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "shard",
+    "capability",
+    "request",
+    "estimator"
+  ],
+  "properties": {
+    "shard": {
+      "type": "object"
+    },
+    "capability": {
+      "type": "object"
+    },
+    "request": {
+      "type": "object"
+    },
+    "estimator": {
+      "type": "object",
+      "required": [
+        "name",
+        "version"
+      ],
+      "properties": {
+        "name": {
+          "const": "utf8-bytes"
+        },
+        "version": {
+          "const": "1"
+        }
+      }
+    }
+  }
+}

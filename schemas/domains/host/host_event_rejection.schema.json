@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:host_event_rejection:1",
+  "title": "HostEventRejection",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "rejection_id", "phase", "raw_event_ref", "host_binding", "reason", "field", "detail_ref", "created_at"],
+  "properties": {
+    "schema_version": { "const": "rsi.host_event_rejection/1" },
+    "rejection_id": { "type": "string", "minLength": 1 },
+    "phase": { "enum": ["A", "B"] },
+    "raw_event_ref": { "type": ["string", "null"] },
+    "host_binding": { "type": ["object", "null"] },
+    "reason": {
+      "enum": [
+        "E_EVENT_ADAPTER_UNBOUND", "E_EVENT_CONFIG_SPACE_UNBOUND", "E_EVENT_CONTRACT_VIOLATION",
+        "E_EVENT_POST_NORMALIZE_MISMATCH", "E_EVENT_IDENTITY_MISMATCH", "E_EVENT_SCOPE_UNBOUND",
+        "E_EVENT_SCOPE_FORBIDDEN", "E_FIELD_MISSING", "E_ENUM_UNKNOWN", "E_IDENTITY_MISSING",
+        "E_ORIGIN_UNRESOLVED", "E_VERSION_UNMAPPED"
+      ]
+    },
+    "field": { "type": "string", "minLength": 1 },
+    "detail_ref": { "type": ["string", "null"] },
+    "created_at": { "type": "integer", "minimum": 0 }
+  }
+}

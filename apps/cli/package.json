@@ -1,0 +1,28 @@
+{
+  "name": "@evoplug/cli",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./testing": {
+      "types": "./dist/testing/index.d.ts",
+      "import": "./dist/testing/index.js"
+    },
+    "./schemas/*": "./dist/schemas/*.json"
+  },
+  "files": [
+    "dist",
+    "schemas"
+  ],
+  "dependencies": {
+    "@evoplug/core": "workspace:*",
+    "@evoplug/ipc": "workspace:*"
+  },
+  "bin": {
+    "evolve": "./dist/main.js"
+  }
+}

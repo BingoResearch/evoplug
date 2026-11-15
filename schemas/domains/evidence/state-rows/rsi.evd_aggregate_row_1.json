@@ -1,0 +1,129 @@
+{
+  "$id": "urn:evoplug:schema:evd_aggregate_row:1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Physical row of evd_aggregate (DD-EVD-024); values are the frozen row_json columns.",
+  "properties": {
+    "aggregate_hash": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "aggregate_id": {
+      "type": "string"
+    },
+    "aggregate_key": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "branch_id": {
+      "type": "string"
+    },
+    "config_version": {
+      "type": "string"
+    },
+    "content_bytes": {
+      "maximum": 33554432,
+      "minimum": 1,
+      "type": "integer"
+    },
+    "content_hash": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "content_ref": {
+      "pattern": "^blob://",
+      "type": "string"
+    },
+    "coverage_complete": {
+      "enum": [
+        0,
+        1
+      ],
+      "type": "integer"
+    },
+    "created_at": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "final_basis": {
+      "enum": [
+        "hard_fact",
+        "semantic_shadow",
+        "mixed",
+        null
+      ],
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "final_state": {
+      "enum": [
+        "consistent",
+        "inconsistent",
+        "unknown",
+        "abstain",
+        "needs_evidence"
+      ],
+      "type": "string"
+    },
+    "goal_version": {
+      "type": "string"
+    },
+    "input_epoch": {
+      "minimum": 1,
+      "type": "integer"
+    },
+    "plan_hash": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "row_version": {
+      "const": 0,
+      "type": "integer"
+    },
+    "shard_plan_key": {
+      "type": "string"
+    },
+    "source_blob_refs": {
+      "description": "JCS text; JSON array",
+      "type": "string"
+    },
+    "supersedes_aggregate_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "task_id": {
+      "type": "string"
+    },
+    "watermark": {
+      "minimum": 0,
+      "type": "integer"
+    }
+  },
+  "required": [
+    "aggregate_id",
+    "aggregate_key",
+    "aggregate_hash",
+    "plan_hash",
+    "shard_plan_key",
+    "final_state",
+    "coverage_complete",
+    "content_hash",
+    "content_ref",
+    "content_bytes",
+    "source_blob_refs",
+    "row_version",
+    "created_at",
+    "task_id",
+    "branch_id",
+    "input_epoch",
+    "goal_version",
+    "config_version",
+    "watermark"
+  ],
+  "title": "EvdAggregateRow",
+  "type": "object"
+}

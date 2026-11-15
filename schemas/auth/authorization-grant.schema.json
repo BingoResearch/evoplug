@@ -1,0 +1,601 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:authorization_grant:1",
+  "title": "AuthorizationGrant",
+  "description": "Write authorization grant and issue/revoke requests (DD-FND-090). A grant never authorizes network egress.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "grant_id",
+    "issued_by",
+    "human_attestation",
+    "subject",
+    "object_type",
+    "scope",
+    "actions",
+    "mode",
+    "candidate_id",
+    "candidate_hash",
+    "policy_version",
+    "issued_at",
+    "expires_at",
+    "revoked_at",
+    "grant_hash"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "rsi.authorization_grant/1"
+    },
+    "grant_id": {
+      "type": "string",
+      "pattern": "^grant:[0-9A-HJKMNP-TV-Z]{26}$"
+    },
+    "issued_by": {
+      "enum": [
+        "human",
+        "preconfigured_policy"
+      ]
+    },
+    "human_attestation": {
+      "$ref": "#/$defs/HumanAttestation"
+    },
+    "subject": {
+      "const": "rsi"
+    },
+    "object_type": {
+      "$ref": "#/$defs/GrantObjectType"
+    },
+    "scope": {
+      "$ref": "#/$defs/GrantScope"
+    },
+    "actions": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/GrantAction"
+      }
+    },
+    "mode": {
+      "enum": [
+        "once",
+        "standing"
+      ]
+    },
+    "candidate_id": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/CandidateId"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "candidate_hash": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "policy_version": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "issued_at": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "expires_at": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "revoked_at": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "grant_hash": {
+      "$ref": "#/$defs/Hash"
+    }
+  },
+  "$defs": {
+    "Hash": {
+      "title": "Hash",
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "SourceRef": {
+      "title": "SourceRef",
+      "oneOf": [
+        {
+          "type": "string",
+          "pattern": "^journal://ev:[0-9A-HJKMNP-TV-Z]{26}#bytes=(0|[1-9][0-9]*)-(0|[1-9][0-9]*)$"
+        },
+        {
+          "type": "string",
+          "pattern": "^blob://sha256:[0-9a-f]{64}#bytes=(0|[1-9][0-9]*)-(0|[1-9][0-9]*)$"
+        }
+      ]
+    },
+    "HumanAttestation": {
+      "title": "HumanAttestation",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "capability_id",
+        "evidence_ref",
+        "confirmed_at"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "host_verified_interactive_user",
+            "control_plane_explicit_confirmation"
+          ]
+        },
+        "capability_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "evidence_ref": {
+          "$ref": "#/$defs/SourceRef"
+        },
+        "confirmed_at": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "GrantObjectType": {
+      "title": "GrantObjectType",
+      "enum": [
+        "skill",
+        "memory",
+        "instructions",
+        "config"
+      ]
+    },
+    "GrantAction": {
+      "title": "GrantAction",
+      "enum": [
+        "create",
+        "update",
+        "disable",
+        "rollback"
+      ]
+    },
+    "CandidateId": {
+      "title": "CandidateId",
+      "type": "string",
+      "pattern": "^(prop|ctr):[0-9A-HJKMNP-TV-Z]{26}$"
+    },
+    "ConfigGrantScope": {
+      "title": "ConfigGrantScope",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "field_ids",
+        "source_layer_ids",
+        "model_scope_keys"
+      ],
+      "properties": {
+        "field_ids": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "pattern": "^fld:[0-9A-HJKMNP-TV-Z]{26}$"
+          }
+        },
+        "source_layer_ids": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "model_scope_keys": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "GrantScope": {
+      "title": "GrantScope",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "project_ids",
+        "config_spaces",
+        "path_globs",
+        "object_ids"
+      ],
+      "properties": {
+        "project_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "config_spaces": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "path_globs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "object_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "config_scope": {
+          "$ref": "#/$defs/ConfigGrantScope"
+        }
+      }
+    },
+    "GrantIssueRequest": {
+      "title": "GrantIssueRequest",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "issued_by",
+        "human_attestation",
+        "object_type",
+        "scope",
+        "actions",
+        "mode",
+        "candidate_id",
+        "candidate_hash",
+        "policy_version",
+        "expires_at"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "rsi.grant_issue/1"
+        },
+        "issued_by": {
+          "const": "human"
+        },
+        "human_attestation": {
+          "$ref": "#/$defs/HumanAttestation"
+        },
+        "object_type": {
+          "$ref": "#/$defs/GrantObjectType"
+        },
+        "scope": {
+          "$ref": "#/$defs/GrantScope"
+        },
+        "actions": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/GrantAction"
+          }
+        },
+        "mode": {
+          "enum": [
+            "once",
+            "standing"
+          ]
+        },
+        "candidate_id": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/CandidateId"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "candidate_hash": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "policy_version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "expires_at": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        }
+      }
+    },
+    "GrantRevokeRequest": {
+      "title": "GrantRevokeRequest",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "grant_id",
+        "expected_grant_hash",
+        "human_attestation",
+        "reason"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "rsi.grant_revoke/1"
+        },
+        "grant_id": {
+          "type": "string",
+          "pattern": "^grant:[0-9A-HJKMNP-TV-Z]{26}$"
+        },
+        "expected_grant_hash": {
+          "$ref": "#/$defs/Hash"
+        },
+        "human_attestation": {
+          "$ref": "#/$defs/HumanAttestation"
+        },
+        "reason": {
+          "enum": [
+            "human_revoked",
+            "policy_replaced"
+          ]
+        }
+      }
+    },
+    "GrantPublicView": {
+      "title": "GrantPublicView",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "grant_id",
+        "issued_by",
+        "subject",
+        "object_type",
+        "scope",
+        "actions",
+        "mode",
+        "candidate_id",
+        "candidate_hash",
+        "policy_version",
+        "issued_at",
+        "expires_at",
+        "revoked_at",
+        "grant_hash"
+      ],
+      "properties": {
+        "grant_id": {
+          "type": "string"
+        },
+        "issued_by": {
+          "enum": [
+            "human",
+            "preconfigured_policy"
+          ]
+        },
+        "subject": {
+          "const": "rsi"
+        },
+        "object_type": {
+          "$ref": "#/$defs/GrantObjectType"
+        },
+        "scope": {
+          "$ref": "#/$defs/GrantScope"
+        },
+        "actions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/GrantAction"
+          }
+        },
+        "mode": {
+          "enum": [
+            "once",
+            "standing"
+          ]
+        },
+        "candidate_id": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/CandidateId"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "candidate_hash": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "policy_version": {
+          "type": "string"
+        },
+        "issued_at": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "expires_at": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "revoked_at": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "grant_hash": {
+          "$ref": "#/$defs/Hash"
+        }
+      }
+    },
+    "GrantView": {
+      "title": "GrantView",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "grant",
+        "consumed_write_id",
+        "consumed_config_write_id"
+      ],
+      "properties": {
+        "grant": {
+          "$ref": "#/$defs/GrantPublicView"
+        },
+        "consumed_write_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^wi:[0-9A-HJKMNP-TV-Z]{26}$"
+        },
+        "consumed_config_write_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^cwi:[0-9A-HJKMNP-TV-Z]{26}$"
+        }
+      }
+    },
+    "WriteDecision": {
+      "title": "WriteDecision",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/WriteDecisionAllowed"
+        },
+        {
+          "$ref": "#/$defs/WriteDecisionDenied"
+        }
+      ]
+    },
+    "WriteDecisionAllowed": {
+      "title": "WriteDecisionAllowed",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "allowed",
+        "grant_id",
+        "matched_action",
+        "requires_approval",
+        "consumed"
+      ],
+      "properties": {
+        "allowed": {
+          "const": true
+        },
+        "grant_id": {
+          "type": "string",
+          "pattern": "^grant:[0-9A-HJKMNP-TV-Z]{26}$"
+        },
+        "matched_action": {
+          "$ref": "#/$defs/GrantAction"
+        },
+        "requires_approval": {
+          "const": false
+        },
+        "consumed": {
+          "type": "boolean"
+        }
+      }
+    },
+    "WriteDecisionDenied": {
+      "title": "WriteDecisionDenied",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "allowed",
+        "grant_id",
+        "reason_code"
+      ],
+      "properties": {
+        "allowed": {
+          "const": false
+        },
+        "grant_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^grant:[0-9A-HJKMNP-TV-Z]{26}$"
+        },
+        "reason_code": {
+          "enum": [
+            "no_grant",
+            "revoked",
+            "expired",
+            "subject_mismatch",
+            "object_type_mismatch",
+            "action_not_granted",
+            "project_out_of_scope",
+            "config_space_out_of_scope",
+            "path_out_of_scope",
+            "object_out_of_scope",
+            "candidate_mismatch",
+            "mode_consumed",
+            "grant_scope_empty",
+            "config_scope_missing",
+            "config_field_out_of_scope",
+            "config_layer_out_of_scope",
+            "config_model_scope_out_of_scope",
+            "config_space_not_exact",
+            "target_unmanaged",
+            "approval_required"
+          ]
+        }
+      }
+    }
+  },
+  "x-evoplug-ddl": {
+    "table": "authorization_grant",
+    "enums": {
+      "issued_by": [
+        "human",
+        "preconfigured_policy"
+      ],
+      "object_type": [
+        "skill",
+        "memory",
+        "instructions",
+        "config"
+      ],
+      "mode": [
+        "once",
+        "standing"
+      ]
+    }
+  }
+}

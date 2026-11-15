@@ -1,0 +1,609 @@
+{
+  "schema_version": "rsi.id_prefix_registry/1",
+  "prefixes": [
+    {
+      "prefix": "ev",
+      "owner": "fnd",
+      "object": "event",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    },
+    {
+      "prefix": "ipc",
+      "owner": "fnd",
+      "object": "ipc_request",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    },
+    {
+      "prefix": "corr",
+      "owner": "fnd",
+      "object": "correlation",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    },
+    {
+      "prefix": "task",
+      "owner": "fnd",
+      "object": "task",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    },
+    {
+      "prefix": "br",
+      "owner": "fnd",
+      "object": "branch",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    },
+    {
+      "prefix": "sess",
+      "owner": "fnd",
+      "object": "session",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    },
+    {
+      "prefix": "input",
+      "owner": "fnd",
+      "object": "input_epoch",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    },
+    {
+      "prefix": "run",
+      "owner": "fnd",
+      "object": "run",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    },
+    {
+      "prefix": "req",
+      "owner": "fnd",
+      "object": "requirement",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    },
+    {
+      "prefix": "reqop",
+      "owner": "fnd",
+      "object": "requirement_op",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    },
+    {
+      "prefix": "fact",
+      "owner": "fnd",
+      "object": "fact",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    },
+    {
+      "prefix": "fb",
+      "owner": "fnd",
+      "object": "feedback",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    },
+    {
+      "prefix": "uc",
+      "owner": "fnd",
+      "object": "user_constraint",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    },
+    {
+      "prefix": "lcor",
+      "owner": "fnd",
+      "object": "correction",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    },
+    {
+      "prefix": "gsnap",
+      "owner": "fnd",
+      "object": "goal_snapshot",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    },
+    {
+      "prefix": "nmap",
+      "owner": "fnd",
+      "object": "native_mapping",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    },
+    {
+      "prefix": "sev",
+      "owner": "fnd",
+      "object": "success_evidence",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    },
+    {
+      "prefix": "dec",
+      "owner": "fnd",
+      "object": "decision_record",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    },
+    {
+      "prefix": "del",
+      "owner": "fnd",
+      "object": "delivery",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    },
+    {
+      "prefix": "grant",
+      "owner": "fnd",
+      "object": "authorization_grant",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    },
+    {
+      "prefix": "wi",
+      "owner": "fnd",
+      "object": "write_intent",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    },
+    {
+      "prefix": "wsnap",
+      "owner": "fnd",
+      "object": "write_snapshot",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    },
+    {
+      "prefix": "cwi",
+      "owner": "fnd",
+      "object": "config_write_intent",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    },
+    {
+      "prefix": "resv",
+      "owner": "fnd",
+      "object": "budget_reservation",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    },
+    {
+      "prefix": "chg",
+      "owner": "fnd",
+      "object": "allowance_charge",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    },
+    {
+      "prefix": "puse",
+      "owner": "fnd",
+      "object": "provider_usage",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    },
+    {
+      "prefix": "egr",
+      "owner": "fnd",
+      "object": "egress_approval",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    },
+    {
+      "prefix": "rpl",
+      "owner": "fnd",
+      "object": "replay_plan",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    },
+    {
+      "prefix": "rpa",
+      "owner": "fnd",
+      "object": "replay_approval",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    },
+    {
+      "prefix": "rex",
+      "owner": "fnd",
+      "object": "replay_execution",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    },
+    {
+      "prefix": "cfgp",
+      "owner": "fnd",
+      "object": "config_profile",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    },
+    {
+      "prefix": "out",
+      "owner": "fnd",
+      "object": "task_outcome_record",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    },
+    {
+      "prefix": "ob",
+      "owner": "fnd",
+      "object": "outbox_entry",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    },
+    {
+      "prefix": "bud",
+      "owner": "fnd",
+      "object": "run_budget",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    },
+    {
+      "prefix": "mnt",
+      "owner": "fnd",
+      "object": "maintenance_run",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    },
+    {
+      "prefix": "issue",
+      "owner": "qp",
+      "object": "issue",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    },
+    {
+      "prefix": "plan",
+      "owner": "qp",
+      "object": "question_plan",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    },
+    {
+      "prefix": "judg",
+      "owner": "qp",
+      "object": "issue_judgment",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    },
+    {
+      "prefix": "unit",
+      "owner": "evd",
+      "object": "evidence_unit",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    },
+    {
+      "prefix": "splan",
+      "owner": "evd",
+      "object": "shard_plan",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    },
+    {
+      "prefix": "shard",
+      "owner": "evd",
+      "object": "evidence_shard",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    },
+    {
+      "prefix": "pack",
+      "owner": "evd",
+      "object": "evidence_pack",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    },
+    {
+      "prefix": "omis",
+      "owner": "evd",
+      "object": "evidence_omission",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    },
+    {
+      "prefix": "best",
+      "owner": "evd",
+      "object": "evidence_estimate",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    },
+    {
+      "prefix": "svcp",
+      "owner": "evd",
+      "object": "service_profile",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    },
+    {
+      "prefix": "bind",
+      "owner": "evd",
+      "object": "judge_attempt",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    },
+    {
+      "prefix": "env",
+      "owner": "evd",
+      "object": "judge_envelope",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    },
+    {
+      "prefix": "agg",
+      "owner": "evd",
+      "object": "answer_aggregate",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    },
+    {
+      "prefix": "jreq",
+      "owner": "evd",
+      "object": "judge_request",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    },
+    {
+      "prefix": "snap",
+      "owner": "rev",
+      "object": "review_snapshot",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    },
+    {
+      "prefix": "job",
+      "owner": "rev",
+      "object": "review_job",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    },
+    {
+      "prefix": "rat",
+      "owner": "rev",
+      "object": "review_rationale",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    },
+    {
+      "prefix": "prop",
+      "owner": "rev",
+      "object": "proposal",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    },
+    {
+      "prefix": "hand",
+      "owner": "rev",
+      "object": "review_handoff",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    },
+    {
+      "prefix": "exp",
+      "owner": "rev",
+      "object": "experience_projection",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    },
+    {
+      "prefix": "vp",
+      "owner": "rev",
+      "object": "validation_plan",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    },
+    {
+      "prefix": "prj",
+      "owner": "rev",
+      "object": "proposal_projection",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    },
+    {
+      "prefix": "usg",
+      "owner": "rev",
+      "object": "experience_usage",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    },
+    {
+      "prefix": "lif",
+      "owner": "rev",
+      "object": "experience_lifecycle",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    },
+    {
+      "prefix": "pol",
+      "owner": "host",
+      "object": "trigger_policy",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    },
+    {
+      "prefix": "trg",
+      "owner": "host",
+      "object": "trigger_event",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    },
+    {
+      "prefix": "nev",
+      "owner": "host",
+      "object": "native_event",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    },
+    {
+      "prefix": "pen",
+      "owner": "host",
+      "object": "pending_registry_entry",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    },
+    {
+      "prefix": "chk",
+      "owner": "host",
+      "object": "progress_checkpoint",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    },
+    {
+      "prefix": "cap",
+      "owner": "host",
+      "object": "capability_record",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    },
+    {
+      "prefix": "prb",
+      "owner": "host",
+      "object": "host_probe_record",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    },
+    {
+      "prefix": "adp",
+      "owner": "host",
+      "object": "adapter",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    },
+    {
+      "prefix": "rts",
+      "owner": "host",
+      "object": "host_runtime_session",
+      "format": "ulid",
+      "since": "2026-10-23",
+      "state": "active"
+    },
+    {
+      "prefix": "iap",
+      "owner": "fnd",
+      "object": "adapter_install_approval",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    },
+    {
+      "prefix": "trial",
+      "owner": "cfg",
+      "object": "trial_plan",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    },
+    {
+      "prefix": "ctr",
+      "owner": "cfg",
+      "object": "config_trial",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    },
+    {
+      "prefix": "fld",
+      "owner": "cfg",
+      "object": "field_spec",
+      "format": "ulid",
+      "since": "2026-10-21",
+      "state": "active"
+    }
+  ],
+  "content_key_prefixes": [
+    {
+      "prefix": "propo",
+      "owner": "qp",
+      "object": "proposition",
+      "format": "sha256",
+      "since": "2026-10-21",
+      "state": "active"
+    }
+  ],
+  "hash_id_prefixes": [
+    {
+      "prefix": "sup",
+      "owner": "fnd",
+      "object": "evidence_supplement",
+      "format": "sha256",
+      "since": "2026-10-26",
+      "state": "active"
+    },
+    {
+      "prefix": "wrd",
+      "owner": "fnd",
+      "object": "workspace_read",
+      "format": "sha256",
+      "since": "2026-10-26",
+      "state": "active"
+    }
+  ]
+}

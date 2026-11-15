@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:ledger_event:1",
+  "title": "LedgerEvent",
+  "description": "Ledger event carried by the shared journal (DD-FND-070). row_json is the complete canonical after-image for row_schema.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "event_id", "event_key", "event_type", "entity_type", "entity_id", "operation", "binding", "before_hash", "after_hash", "row_schema", "row_json", "payload_hash", "recorded_at"],
+  "properties": {
+    "schema_version": { "const": "rsi.ledger_event/1" },
+    "event_id": { "type": "string", "pattern": "^ev:[0-9A-HJKMNP-TV-Z]{26}$" },
+    "event_key": { "$ref": "#/$defs/Hash" },
+    "event_type": { "$ref": "#/$defs/LedgerEventType" },
+    "entity_type": { "$ref": "#/$defs/LedgerEntityType" },
+    "entity_id": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "operation": { "enum": ["insert", "update", "transition"] },
+    "binding": {
+      "oneOf": [
+        { "$ref": "#/$defs/VersionBinding" },
+        { "type": "null" }
+      ]
+    },
+    "before_hash": { "type": ["string", "null"], "pattern": "^sha256:[0-9a-f]{64}$" },
+    "after_hash": { "$ref": "#/$defs/Hash" },
+    "row_schema": { "type": "string", "pattern": "^rsi\\.[a-z0-9_]+/[0-9]+$" },
+    "row_json": { "type": "string", "minLength": 2, "maxLength": 8388608 },
+    "payload_hash": { "$ref": "#/$defs/Hash" },
+    "recorded_at": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 }
+  },
+  "$defs": {
+    "Hash": { "title": "Hash", "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "VersionBinding": {
+      "title": "VersionBinding",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["task_id", "branch_id", "input_epoch", "goal_version", "config_version", "watermark"],
+      "properties": {
+        "task_id": { "type": "string", "pattern": "^task:[0-9A-HJKMNP-TV-Z]{26}$" },
+        "branch_id": { "type": "string", "pattern": "^br:[0-9A-HJKMNP-TV-Z]{26}$" },
+        "input_epoch": { "type": "integer", "minimum": 1 },
+        "goal_version": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,255}$" },
+        "config_version": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,127}$" },
+        "watermark": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "LedgerEventType": {
+      "title": "LedgerEventType",
+      "enum": [
+        "grant.issued", "grant.revoked", "grant.consumed",
+        "budget.reserved", "budget.claimed", "budget.settled", "budget.released",
+        "budget.expired", "budget.unsettled", "allowance.charged", "provider_usage.recorded",
+        "write.intent_recorded", "write.transition", "write.snapshot_recorded", "write.result_recorded",
+        "config_write.intent_recorded", "config_write.transition", "config_write.snapshot_recorded", "config_write.result_recorded",
+        "outbox.enqueued", "outbox.leased", "outbox.completed", "outbox.failed", "outbox.uncertain",
+        "outbox.reconciled", "outbox.attempt_started", "outbox.attempt_finished",
+        "delivery.recorded",
+        "replay.plan_recorded", "replay.plan_transition", "replay.approval_recorded", "replay.approval_transition",
+        "replay.execution_recorded", "replay.execution_transition",
+        "egress.approval_recorded", "egress.approval_transition",
+        "ipc_idempotency.started", "ipc_idempotency.finished", "ipc_idempotency.uncertain",
+        "rate_limit.updated", "rate_limit.cleared",
+        "install.approval_recorded", "install.approval_transition",
+        "root.registration_recorded", "root.registration_updated",
+        "state_row.recorded", "object_document.recorded", "object_head.transition",
+        "decision.recorded"
+      ]
+    },
+    "LedgerEntityType": {
+      "title": "LedgerEntityType",
+      "enum": [
+        "authorization_grant", "grant_consumption",
+        "budget_reservation", "allowance_charge", "provider_usage",
+        "write_intent", "write_snapshot", "write_result",
+        "config_write_intent", "config_write_snapshot", "config_write_result",
+        "outbox", "outbox_attempt",
+        "delivery", "replay_plan", "replay_approval", "replay_execution",
+        "egress_approval", "ipc_idempotency", "rate_limit_state",
+        "adapter_install_approval", "root_registration",
+        "state_row", "object_document", "object_head",
+        "decision_record"
+      ]
+    }
+  }
+}

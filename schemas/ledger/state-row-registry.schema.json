@@ -1,0 +1,264 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:state_row_registry:1",
+  "title": "StateRowRegistry",
+  "description": "Machine source for StateRowTypeMap, StateRowKeyMap and the ledger CHECK list (DD-FND-059.1).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "rows"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "rsi.state_row_registry/1"
+    },
+    "rows": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/StateRowEntry"
+      }
+    }
+  },
+  "$defs": {
+    "StateRowEntry": {
+      "title": "StateRowEntry",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "row_schema",
+        "owner_domain",
+        "table",
+        "ts_type",
+        "primary_key",
+        "unique_keys",
+        "event_types",
+        "allowed_operations",
+        "binding_source",
+        "row_versioned",
+        "blob_ref_paths",
+        "payload_blob_paths",
+        "schema_artifact",
+        "columns"
+      ],
+      "properties": {
+        "row_schema": {
+          "type": "string",
+          "pattern": "^rsi\\.[a-z0-9_]+(_row)?/[0-9]+$"
+        },
+        "owner_domain": {
+          "enum": [
+            "fnd",
+            "evd",
+            "rev",
+            "host",
+            "cfg",
+            "qp"
+          ]
+        },
+        "table": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]*$"
+        },
+        "ts_type": {
+          "type": "string",
+          "pattern": "^[A-Z][A-Za-z0-9]*$"
+        },
+        "primary_key": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "unique_keys": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "event_types": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "allowed_operations": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "enum": [
+              "insert",
+              "update",
+              "transition"
+            ]
+          }
+        },
+        "binding_source": {
+          "enum": [
+            "row",
+            "batch",
+            "none"
+          ]
+        },
+        "row_versioned": {
+          "type": "boolean"
+        },
+        "blob_ref_paths": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "payload_blob_paths": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "derived_reducer": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "document": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/DocumentRegistration"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "allocation": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/AllocationRegistration"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "schema_artifact": {
+          "type": "string",
+          "minLength": 1
+        },
+        "columns": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/ColumnEntry"
+          }
+        }
+      }
+    },
+    "ColumnEntry": {
+      "title": "ColumnEntry",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "type"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]*$"
+        },
+        "type": {
+          "enum": [
+            "string",
+            "number",
+            "boolean",
+            "json",
+            "array",
+            "union"
+          ]
+        },
+        "nullable": {
+          "type": "boolean"
+        },
+        "optional": {
+          "type": "boolean"
+        },
+        "enum": {
+          "type": "array",
+          "minItems": 1,
+          "items": {}
+        },
+        "const": {},
+        "items": {
+          "enum": [
+            "string",
+            "number"
+          ]
+        },
+        "types": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "DocumentRegistration": {
+      "title": "DocumentRegistration",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "owner",
+        "object_type",
+        "object_id_field",
+        "revision_field"
+      ],
+      "properties": {
+        "owner": {
+          "enum": [
+            "evd",
+            "rev",
+            "host",
+            "cfg",
+            "qp"
+          ]
+        },
+        "object_type": {
+          "type": "string"
+        },
+        "object_id_field": {
+          "type": "string"
+        },
+        "revision_field": {
+          "type": "string"
+        }
+      }
+    },
+    "AllocationRegistration": {
+      "title": "AllocationRegistration",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "field",
+        "scope_fields"
+      ],
+      "properties": {
+        "field": {
+          "type": "string"
+        },
+        "scope_fields": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

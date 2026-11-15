@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:blob_record:1",
+  "title": "BlobRecord",
+  "description": "Content-addressed blob, blob reference and quarantine rows (DD-FND-051).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["blob_hash", "byte_length", "relative_path", "state", "verified_at", "created_at", "deleted_at", "deletion_reason"],
+  "properties": {
+    "blob_hash": { "$ref": "#/$defs/Hash" },
+    "byte_length": { "type": "integer", "minimum": 0 },
+    "relative_path": { "type": "string" },
+    "state": { "enum": ["present", "deleted", "tombstoned"] },
+    "verified_at": { "type": "integer", "minimum": 0 },
+    "created_at": { "type": "integer", "minimum": 0 },
+    "deleted_at": { "type": ["integer", "null"], "minimum": 0 },
+    "deletion_reason": { "type": ["string", "null"], "enum": ["explicit", "retention", "corruption", "missing_source", null] }
+  },
+  "$defs": {
+    "Hash": { "title": "Hash", "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "BlobRefRecord": {
+      "title": "BlobRefRecord",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["blob_hash", "owner_type", "owner_id", "source_ref", "created_at"],
+      "properties": {
+        "blob_hash": { "$ref": "#/$defs/Hash" },
+        "owner_type": { "enum": ["event", "requirement", "fact", "feedback", "evidence", "review", "delivery", "write", "experience", "maintenance", "journal", "document"] },
+        "owner_id": { "type": "string" },
+        "source_ref": { "type": ["string", "null"] },
+        "created_at": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "QuarantineRecord": {
+      "title": "QuarantineRecord",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["quarantine_id", "scope", "journal_id", "byte_offset", "commit_seq", "reason_code", "payload_hash", "bytes_ref", "discovered_at", "resolved_at"],
+      "properties": {
+        "quarantine_id": { "type": "string" },
+        "scope": { "enum": ["journal", "event", "transition", "idempotency"] },
+        "journal_id": { "type": ["string", "null"] },
+        "byte_offset": { "type": ["integer", "null"], "minimum": 0 },
+        "commit_seq": { "type": ["integer", "null"], "minimum": 1 },
+        "reason_code": { "type": "string" },
+        "payload_hash": { "type": ["string", "null"] },
+        "bytes_ref": { "type": ["string", "null"] },
+        "discovered_at": { "type": "integer", "minimum": 0 },
+        "resolved_at": { "type": ["integer", "null"], "minimum": 0 }
+      }
+    }
+  }
+}

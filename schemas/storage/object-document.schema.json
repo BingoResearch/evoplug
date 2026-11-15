@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:object_document:1",
+  "title": "ObjectDocument",
+  "description": "Immutable canonical domain document shared by EVD, REV, HOST, CFG and QP (DD-FND-058).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["document_id", "object_id", "owner", "object_type", "schema_version", "revision", "state", "task_id", "branch_id", "input_epoch", "goal_version", "config_version", "watermark", "content_hash", "canonical_json", "created_at"],
+  "properties": {
+    "document_id": { "$ref": "#/$defs/Hash" },
+    "object_id": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "owner": { "enum": ["evd", "rev", "host", "cfg", "qp"] },
+    "object_type": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "schema_version": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "revision": { "type": "integer", "minimum": 1 },
+    "state": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "task_id": { "type": ["string", "null"] },
+    "branch_id": { "type": ["string", "null"] },
+    "input_epoch": { "type": ["integer", "null"], "minimum": 1 },
+    "goal_version": { "type": ["string", "null"] },
+    "config_version": { "type": ["string", "null"] },
+    "watermark": { "type": ["integer", "null"], "minimum": 0 },
+    "content_hash": { "$ref": "#/$defs/Hash" },
+    "canonical_json": { "type": "string", "minLength": 2, "maxLength": 1048576 },
+    "created_at": { "type": "integer", "minimum": 0 }
+  },
+  "$defs": {
+    "Hash": { "title": "Hash", "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" }
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:host_adapter_registration_row:1",
+  "title": "AdapterRegistrationPhysicalRow",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "registration_hash", "adapter_id", "host_id", "mode", "config_space", "target_id",
+    "adapter_version", "implementation_hash", "descriptor_hash", "artifact_ref",
+    "artifact_hash", "expected_previous_hash", "approval_id", "approval_hash",
+    "approval_subject_hash", "approval_consumption_ref", "state", "written_hash",
+    "failure_code", "created_at", "applied_at", "updated_at", "row_version"
+  ],
+  "properties": {
+    "registration_hash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "adapter_id": { "type": "string", "pattern": "^adp:" },
+    "host_id": { "enum": ["pi", "oh-my-pi", "step-code", "codex", "opencode", "openhands-sdk", "claude-code"] },
+    "mode": { "enum": ["interactive", "print", "rpc", "acp", "sdk", "sdk_stdio", "exec", "app-server", "server", "local_conversation", "remote_conversation"] },
+    "config_space": { "type": "string", "pattern": "^[a-z][a-z0-9_]{0,63}$" },
+    "target_id": { "type": "string", "minLength": 1 },
+    "adapter_version": { "type": "string", "minLength": 1 },
+    "implementation_hash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "descriptor_hash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "artifact_ref": { "type": "string" },
+    "artifact_hash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "expected_previous_hash": { "type": ["string", "null"] },
+    "approval_id": { "type": "string", "pattern": "^iap:" },
+    "approval_hash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "approval_subject_hash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "approval_consumption_ref": { "type": ["string", "null"] },
+    "state": { "enum": ["intent", "applying", "applied", "failed", "unknown", "superseded", "detached"] },
+    "written_hash": { "type": ["string", "null"] },
+    "failure_code": { "type": ["string", "null"] },
+    "created_at": { "type": "integer", "minimum": 0 },
+    "applied_at": { "type": ["integer", "null"] },
+    "updated_at": { "type": "integer", "minimum": 0 },
+    "row_version": { "type": "integer", "minimum": 1 }
+  }
+}

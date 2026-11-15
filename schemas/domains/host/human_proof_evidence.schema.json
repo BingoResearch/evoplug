@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:host_human_proof_evidence:1",
+  "title": "HumanProofEvidence",
+  "oneOf": [
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "capability_id", "proof_kind", "host_id", "host_version", "mode", "config_space", "subject", "confirmed_at", "nonce"],
+      "properties": {
+        "schema_version": { "const": "rsi.human_proof_evidence/1" },
+        "capability_id": { "type": "string", "pattern": "^cap:" },
+        "proof_kind": { "const": "host_native_confirmation" },
+        "host_id": { "enum": ["pi", "oh-my-pi", "step-code", "codex", "opencode", "openhands-sdk", "claude-code"] },
+        "host_version": { "type": "string", "minLength": 1 },
+        "mode": { "enum": ["interactive", "print", "rpc", "acp", "sdk", "sdk_stdio", "exec", "app-server", "server", "local_conversation", "remote_conversation"] },
+        "config_space": { "type": "string", "pattern": "^[a-z][a-z0-9_]{0,63}$" },
+        "subject": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "event_key", "native_session_id"],
+          "properties": {
+            "kind": { "const": "event_key" },
+            "event_key": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+            "native_session_id": { "type": "string", "minLength": 1 }
+          }
+        },
+        "confirmed_at": { "type": "integer", "minimum": 0 },
+        "nonce": { "type": "string", "minLength": 1, "maxLength": 128 }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "capability_id", "proof_kind", "subject", "confirmed_at", "nonce"],
+      "properties": {
+        "schema_version": { "const": "rsi.human_proof_evidence/1" },
+        "capability_id": { "type": "string", "pattern": "^cap:" },
+        "proof_kind": { "const": "control_plane_explicit_confirmation" },
+        "subject": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "purpose", "subject_hash"],
+          "properties": {
+            "kind": { "const": "control_plane" },
+            "purpose": { "enum": ["replay_approve", "replay_revoke", "replay_reject", "replay_reconcile", "egress_approve", "grant_issue", "grant_revoke", "adapter_install"] },
+            "subject_hash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" }
+          }
+        },
+        "confirmed_at": { "type": "integer", "minimum": 0 },
+        "nonce": { "type": "string", "minLength": 1, "maxLength": 128 }
+      }
+    }
+  ]
+}

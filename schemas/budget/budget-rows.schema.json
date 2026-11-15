@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:budget_reservation_row:1",
+  "title": "BudgetReservationRow",
+  "description": "Physical budget ledger rows (DD-FND-055). Allowance charges and provider usage are separate ledgers.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["reservation_id", "reservation_key", "policy_version", "task_id", "branch_id", "input_epoch", "goal_version", "config_version", "watermark", "purpose", "scope_key", "service_profile_id", "service_profile_hash", "state", "attempt_allowance", "input_token_allowance", "output_token_allowance", "cost_allowance_micros", "cost_status", "wall_allowance_ms", "non_refundable", "created_at", "expires_at", "settled_at"],
+  "properties": {
+    "reservation_id": { "type": "string", "pattern": "^resv:[0-9A-HJKMNP-TV-Z]{26}$" },
+    "reservation_key": { "type": "string", "minLength": 1, "maxLength": 256 },
+    "policy_version": { "type": "string" },
+    "task_id": { "type": "string" },
+    "branch_id": { "type": "string" },
+    "input_epoch": { "type": "integer", "minimum": 1 },
+    "goal_version": { "type": "string" },
+    "config_version": { "type": "string" },
+    "watermark": { "type": "integer", "minimum": 0 },
+    "purpose": { "enum": ["judge", "review_generate", "review_match", "verifier", "egress_other"] },
+    "scope_key": { "type": "string" },
+    "service_profile_id": { "type": "string" },
+    "service_profile_hash": { "$ref": "#/$defs/Hash" },
+    "state": { "enum": ["reserved", "claimed", "settled", "released", "expired", "unsettled"] },
+    "attempt_allowance": { "type": "integer", "minimum": 0 },
+    "input_token_allowance": { "type": "integer", "minimum": 0 },
+    "output_token_allowance": { "type": "integer", "minimum": 0 },
+    "cost_allowance_micros": { "type": ["integer", "null"], "minimum": 0 },
+    "cost_status": { "enum": ["known", "unknown", "not_applicable"] },
+    "wall_allowance_ms": { "type": "integer", "minimum": 0 },
+    "non_refundable": { "type": "integer", "enum": [0, 1] },
+    "created_at": { "type": "integer", "minimum": 0 },
+    "expires_at": { "type": "integer", "minimum": 0 },
+    "settled_at": { "type": ["integer", "null"], "minimum": 0 }
+  },
+  "$defs": {
+    "Hash": { "title": "Hash", "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "AllowanceChargeRow": {
+      "title": "AllowanceChargeRow",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["charge_id", "charge_key", "reservation_id", "kind", "amount", "non_refundable", "reason", "charged_at"],
+      "properties": {
+        "charge_id": { "type": "string", "pattern": "^chg:[0-9A-HJKMNP-TV-Z]{26}$" },
+        "charge_key": { "type": "string" },
+        "reservation_id": { "type": "string" },
+        "kind": { "enum": ["attempt", "input_token", "output_token", "cost_micros", "wall_ms"] },
+        "amount": { "type": "integer", "minimum": 0 },
+        "non_refundable": { "type": "integer", "enum": [0, 1] },
+        "reason": { "enum": ["claim", "retry", "usage_actual", "overage", "expiry_hold"] },
+        "charged_at": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "ProviderUsageRow": {
+      "title": "ProviderUsageRow",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["usage_id", "reservation_id", "usage_key", "attempt_ref", "provider_request_id", "input_tokens", "output_tokens", "cost_micros", "cost_status", "source", "receipt_ref", "recorded_at"],
+      "properties": {
+        "usage_id": { "type": "string", "pattern": "^puse:[0-9A-HJKMNP-TV-Z]{26}$" },
+        "reservation_id": { "type": "string" },
+        "usage_key": { "type": "string" },
+        "attempt_ref": { "type": ["string", "null"] },
+        "provider_request_id": { "type": ["string", "null"] },
+        "input_tokens": { "type": ["integer", "null"], "minimum": 0 },
+        "output_tokens": { "type": ["integer", "null"], "minimum": 0 },
+        "cost_micros": { "type": ["integer", "null"], "minimum": 0 },
+        "cost_status": { "enum": ["known", "unknown", "not_applicable"] },
+        "source": { "enum": ["provider_receipt", "host_reported", "none"] },
+        "receipt_ref": { "type": ["string", "null"] },
+        "recorded_at": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "RateLimitStateRow": {
+      "title": "RateLimitStateRow",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scope_key", "cooldown_until", "last_error_code", "reason_code", "row_version", "updated_at"],
+      "properties": {
+        "scope_key": { "type": "string" },
+        "cooldown_until": { "type": ["integer", "null"], "minimum": 0 },
+        "last_error_code": { "type": ["string", "null"] },
+        "reason_code": { "enum": ["provider_429", "provider_error", "manual", "recovery_unknown_fence", "cleared"] },
+        "row_version": { "type": "integer", "minimum": 1 },
+        "updated_at": { "type": "integer", "minimum": 0 }
+      }
+    }
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:host_service_profile_evidence:1",
+  "title": "ServiceProfileEvidence",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "provider_scope", "backend_id", "host_id", "mode", "config_space", "request_max_tokens", "question_max_tokens", "max_output_tokens", "rpm", "concurrency", "pricing", "profile_hash", "observed_at"],
+  "properties": {
+    "schema_version": { "const": "rsi.service_profile_evidence/1" },
+    "provider_scope": { "type": "string", "minLength": 1 },
+    "backend_id": { "type": "string", "minLength": 1 },
+    "host_id": { "enum": ["pi", "oh-my-pi", "step-code", "codex", "opencode", "openhands-sdk", "claude-code"] },
+    "mode": { "enum": ["interactive", "print", "rpc", "acp", "sdk", "sdk_stdio", "exec", "app-server", "server", "local_conversation", "remote_conversation"] },
+    "config_space": { "type": "string", "pattern": "^[a-z][a-z0-9_]{0,63}$" },
+    "request_max_tokens": { "type": "integer", "minimum": 1 },
+    "question_max_tokens": { "type": "integer", "minimum": 1 },
+    "max_output_tokens": { "type": "integer", "minimum": 1 },
+    "rpm": { "type": ["integer", "null"], "minimum": 1 },
+    "concurrency": { "type": ["integer", "null"], "minimum": 1 },
+    "pricing": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["status", "input_micros_per_million", "output_micros_per_million", "fixed_micros"],
+          "properties": {
+            "status": { "const": "known" },
+            "input_micros_per_million": { "type": "integer", "minimum": 0 },
+            "output_micros_per_million": { "type": "integer", "minimum": 0 },
+            "fixed_micros": { "type": "integer", "minimum": 0 }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["status"],
+          "properties": { "status": { "const": "unknown" } }
+        }
+      ]
+    },
+    "profile_hash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "observed_at": { "type": "integer", "minimum": 0 }
+  }
+}

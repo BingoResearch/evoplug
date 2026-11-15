@@ -1,0 +1,46 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist",
+    "tsBuildInfoFile": "dist/.tsbuildinfo"
+  },
+  "include": [
+    "src/**/*.ts"
+  ],
+  "references": [
+    {
+      "path": "../../packages/core"
+    },
+    {
+      "path": "../../packages/storage"
+    },
+    {
+      "path": "../../packages/ipc"
+    },
+    {
+      "path": "../../packages/kernel"
+    },
+    {
+      "path": "../../adapters/claude-code"
+    },
+    {
+      "path": "../../adapters/codex"
+    },
+    {
+      "path": "../../adapters/oh-my-pi"
+    },
+    {
+      "path": "../../adapters/opencode"
+    },
+    {
+      "path": "../../adapters/openhands-sdk"
+    },
+    {
+      "path": "../../adapters/pi"
+    },
+    {
+      "path": "../../adapters/step-code"
+    }
+  ]
+}

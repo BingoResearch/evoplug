@@ -1,0 +1,171 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:evidence_supplement_record:1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "supplement_id",
+    "task_id",
+    "branch_id",
+    "input_epoch",
+    "goal_version",
+    "config_version",
+    "watermark",
+    "issue_id",
+    "plan_id",
+    "plan_hash",
+    "pack_id",
+    "pack_key",
+    "pack_hash",
+    "aggregate_id",
+    "aggregate_hash",
+    "rounds_json",
+    "read_manifest_json",
+    "pruned_json",
+    "gap_codes_json",
+    "decision_json",
+    "outcome",
+    "budget_cap",
+    "stop_reason",
+    "requires_repack",
+    "record_hash",
+    "created_at",
+    "row_version"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "rsi.evidence_supplement_record/1"
+    },
+    "supplement_id": {
+      "type": "string",
+      "pattern": "^sup:[0-9a-f]{64}$"
+    },
+    "task_id": {
+      "type": "string"
+    },
+    "branch_id": {
+      "type": "string"
+    },
+    "input_epoch": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "goal_version": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "config_version": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "watermark": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "issue_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "plan_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "plan_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "pack_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "pack_key": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "pack_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "aggregate_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "aggregate_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "rounds_json": {
+      "type": "string"
+    },
+    "read_manifest_json": {
+      "type": "string"
+    },
+    "pruned_json": {
+      "type": "string"
+    },
+    "gap_codes_json": {
+      "type": "string"
+    },
+    "decision_json": {
+      "type": "string"
+    },
+    "outcome": {
+      "enum": [
+        "resolved",
+        "insufficient",
+        "disabled"
+      ]
+    },
+    "budget_cap": {
+      "enum": [
+        0,
+        1
+      ]
+    },
+    "stop_reason": {
+      "type": "string",
+      "minLength": 1
+    },
+    "requires_repack": {
+      "enum": [
+        0,
+        1
+      ]
+    },
+    "record_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "created_at": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "row_version": {
+      "type": "integer",
+      "minimum": 1
+    }
+  },
+  "title": "EvidenceSupplementRecord",
+  "description": "Physical state row of evidence_supplement_record; insert-only audit row written through StateRowLiveCommitPort.commitLiveGated. Absolute root paths and file bytes are not stored.",
+  "x-evoplug-ddl": {
+    "table": "evidence_supplement_record",
+    "enums": {
+      "outcome": [
+        "resolved",
+        "insufficient",
+        "disabled"
+      ],
+      "budget_cap": [
+        0,
+        1
+      ],
+      "requires_repack": [
+        0,
+        1
+      ]
+    }
+  }
+}

@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:outbox_row:1",
+  "title": "OutboxRow",
+  "description": "Physical outbox, outbox attempt and delivery history rows (DD-FND-057/061).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["outbox_id", "effect_kind", "effect_key", "payload_json", "state", "priority", "attempts", "max_attempts", "next_attempt_at", "lease_owner", "lease_token", "lease_expires_at", "reconcile_required", "last_error_code", "result_ref", "created_at", "updated_at"],
+  "properties": {
+    "outbox_id": { "type": "string", "pattern": "^ob:[0-9A-HJKMNP-TV-Z]{26}$" },
+    "effect_kind": { "enum": ["delivery.dispatch", "review.enqueue", "maintenance.gc", "delivery.expire"] },
+    "effect_key": { "type": "string", "minLength": 1, "maxLength": 256 },
+    "payload_json": { "type": "string", "minLength": 2, "maxLength": 65536 },
+    "state": { "enum": ["pending", "leased", "done", "failed", "uncertain", "cancelled"] },
+    "priority": { "type": "integer", "minimum": 0, "maximum": 9 },
+    "attempts": { "type": "integer", "minimum": 0 },
+    "max_attempts": { "type": "integer", "minimum": 1, "maximum": 16 },
+    "next_attempt_at": { "type": "integer", "minimum": 0 },
+    "lease_owner": { "type": ["string", "null"] },
+    "lease_token": { "type": ["string", "null"] },
+    "lease_expires_at": { "type": ["integer", "null"], "minimum": 0 },
+    "reconcile_required": { "type": "integer", "enum": [0, 1] },
+    "last_error_code": { "type": ["string", "null"] },
+    "result_ref": { "type": ["string", "null"] },
+    "created_at": { "type": "integer", "minimum": 0 },
+    "updated_at": { "type": "integer", "minimum": 0 }
+  },
+  "$defs": {
+    "OutboxAttemptRow": {
+      "title": "OutboxAttemptRow",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["outbox_attempt_id", "outbox_id", "attempt", "state", "error_code", "started_at", "ended_at"],
+      "properties": {
+        "outbox_attempt_id": { "type": "string" },
+        "outbox_id": { "type": "string" },
+        "attempt": { "type": "integer", "minimum": 1 },
+        "state": { "enum": ["started", "succeeded", "retryable_failed", "terminal_failed", "uncertain", "cancelled"] },
+        "error_code": { "type": ["string", "null"] },
+        "started_at": { "type": "integer", "minimum": 0 },
+        "ended_at": { "type": ["integer", "null"], "minimum": 0 }
+      }
+    },
+    "DeliveryHistoryRow": {
+      "title": "DeliveryHistoryRow",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["history_id", "delivery_id", "event_id", "at", "state", "inclusion_evidence", "adoption", "evidence_ref", "terminal_reason", "note_code"],
+      "properties": {
+        "history_id": { "type": "integer", "minimum": 1 },
+        "delivery_id": { "type": "string" },
+        "event_id": { "type": ["string", "null"] },
+        "at": { "type": "integer", "minimum": 0 },
+        "state": { "enum": ["pending", "submitted", "expired", "failed"] },
+        "inclusion_evidence": { "enum": ["unknown", "context_projection", "provider_payload", "transport_body", "host_confirmed"] },
+        "adoption": { "enum": ["unknown", "observed", "verified"] },
+        "evidence_ref": { "type": ["string", "null"] },
+        "terminal_reason": { "type": ["string", "null"] },
+        "note_code": { "enum": ["created", "submitted", "failed", "expired", "late_ack", "inclusion_evidence", "adoption_evidence"] }
+      }
+    },
+    "IpcIdempotencyRow": {
+      "title": "IpcIdempotencyRow",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["client_id", "method", "idempotency_key", "request_hash", "state", "response_json", "lease_owner", "lease_expires_at", "created_at", "expires_at"],
+      "properties": {
+        "client_id": { "type": "string" },
+        "method": { "type": "string" },
+        "idempotency_key": { "type": "string" },
+        "request_hash": { "type": "string" },
+        "state": { "enum": ["in_progress", "succeeded", "failed", "uncertain"] },
+        "response_json": { "type": ["string", "null"] },
+        "lease_owner": { "type": ["string", "null"] },
+        "lease_expires_at": { "type": ["integer", "null"] },
+        "created_at": { "type": "integer", "minimum": 0 },
+        "expires_at": { "type": "integer", "minimum": 0 }
+      }
+    }
+  }
+}

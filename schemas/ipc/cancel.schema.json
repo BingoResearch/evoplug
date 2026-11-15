@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:ipc-cancel:1",
+  "title": "IpcCancelFrame",
+  "description": "Cancel frame body. DD-FND-041 fixes the frame kind and the request_id correlation but does not name a body schema; this is the minimal envelope carrying that request_id.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "request_id"],
+  "properties": {
+    "schema_version": { "const": "rsi.ipc_cancel/1" },
+    "request_id": {
+      "type": "string",
+      "pattern": "^ipc:[0-9A-HJKMNP-TV-Z]{26}$"
+    }
+  }
+}

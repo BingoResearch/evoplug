@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:planning_input:1",
+  "title": "PlanningInput",
+  "description": "QP planning entry shape (DD-QP-14/DD-QP-19). A whole-task verdict request is a schema-valid boolean that planning rejects with E_WHOLE_TASK_SCOPE_NOT_ALLOWED.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "binding",
+    "issue",
+    "registry",
+    "policy_version"
+  ],
+  "properties": {
+    "binding": {
+      "type": "object"
+    },
+    "issue": {
+      "type": "object"
+    },
+    "registry": {
+      "type": "object"
+    },
+    "policy_version": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64
+    },
+    "whole_task_verdict_requested": {
+      "type": "boolean"
+    }
+  }
+}

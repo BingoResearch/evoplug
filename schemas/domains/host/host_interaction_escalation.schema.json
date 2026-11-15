@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:host_interaction_escalation:1",
+  "title": "HostInteractionEscalation",
+  "oneOf": [
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "source", "kind", "reason_code", "action", "action_ref", "request_id", "binding", "host_id", "mode", "config_space", "authorization_ref", "required", "missing"],
+      "properties": {
+        "schema_version": { "const": "rsi.host_interaction_escalation/1" },
+        "source": { "const": "host.necessity_gate" },
+        "kind": { "const": "clarification" },
+        "reason_code": { "const": "execution_blocking_clarification" },
+        "action": { "const": "review.explicit" },
+        "action_ref": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+        "request_id": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "binding": { "type": "object" },
+        "host_id": { "type": "string" },
+        "mode": { "type": "string" },
+        "config_space": { "const": null },
+        "authorization_ref": { "const": null },
+        "required": { "const": true },
+        "missing": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["field", "state", "candidates"],
+            "properties": {
+              "field": { "const": "config_space" },
+              "state": { "enum": ["absent", "ambiguous"] },
+              "candidates": {
+                "type": "array",
+                "uniqueItems": true,
+                "items": { "type": "string", "pattern": "^[a-z][a-z0-9_]{0,63}$" }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "source", "kind", "reason_code", "action", "action_ref", "request_id", "binding", "host_id", "mode", "config_space", "authorization_ref", "required", "denial"],
+      "properties": {
+        "schema_version": { "const": "rsi.host_interaction_escalation/1" },
+        "source": { "const": "fnd.authorization_gate" },
+        "kind": { "const": "authorization" },
+        "reason_code": { "const": "authorization_required" },
+        "action": { "const": "review.explicit" },
+        "action_ref": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+        "request_id": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "binding": { "type": "object" },
+        "host_id": { "type": "string" },
+        "mode": { "type": "string" },
+        "config_space": { "type": "string", "pattern": "^[a-z][a-z0-9_]{0,63}$" },
+        "authorization_ref": { "type": ["string", "null"] },
+        "required": { "const": true },
+        "denial": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["code", "stage", "retryable", "object_type", "denied_dimension"],
+          "properties": {
+            "code": { "const": "E_AUTH_DENIED" },
+            "stage": { "const": "authorize" },
+            "retryable": { "const": false },
+            "object_type": { "type": "string", "minLength": 1 },
+            "denied_dimension": { "enum": ["object", "project", "config_space", "path", "block", "action", "mode", "expiry", "scope_empty"] },
+            "grant_id": { "type": "string", "pattern": "^grant:" }
+          }
+        }
+      }
+    }
+  ]
+}

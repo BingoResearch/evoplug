@@ -1,0 +1,495 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:trial_plan:2",
+  "title": "TrialPlan",
+  "description": "Immutable config trial plan, schema rsi.trial_plan/2 (DD-CFG-110).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "plan_id", "created_at", "task_binding", "host",
+    "config_space_selector", "registry_pin", "factor", "capacity_evidence",
+    "patch_preview", "selected_apply_boundary", "baseline_capture",
+    "primary_metric", "guardrails", "observation_window", "stop_rule",
+    "experiment_budget", "rollback_plan", "authorization_requirement", "plan_hash"
+  ],
+  "properties": {
+    "schema_version": { "const": "rsi.trial_plan/2" },
+    "plan_id": { "type": "string", "pattern": "^trial:[0-9A-HJKMNP-TV-Z]{26}$" },
+    "created_at": { "type": "integer", "minimum": 0 },
+    "task_binding": { "$ref": "#/$defs/VersionBinding" },
+    "host": { "$ref": "#/$defs/HostBinding" },
+    "config_space_selector": { "$ref": "#/$defs/ConfigSpaceSelector" },
+    "registry_pin": { "$ref": "#/$defs/RegistryPin" },
+    "factor": { "$ref": "#/$defs/TrialFactor" },
+    "capacity_evidence": { "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/CapacityEvidence" }] },
+    "patch_preview": {
+      "type": "object", "additionalProperties": false,
+      "required": ["write", "rollback"],
+      "properties": {
+        "write": { "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/ConfigWritePatch" }] },
+        "rollback": { "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/ConfigWritePatch" }] }
+      }
+    },
+    "selected_apply_boundary": { "$ref": "#/$defs/ApplyBoundary" },
+    "baseline_capture": { "$ref": "#/$defs/BaselineCapture" },
+    "primary_metric": { "$ref": "#/$defs/MetricSpec" },
+    "guardrails": { "type": "array", "items": { "$ref": "#/$defs/GuardrailSpec" } },
+    "observation_window": { "$ref": "#/$defs/ObservationWindowSpec" },
+    "stop_rule": { "$ref": "#/$defs/StopRule" },
+    "experiment_budget": { "$ref": "#/$defs/ExperimentBudget" },
+    "rollback_plan": { "$ref": "#/$defs/RollbackPlan" },
+    "authorization_requirement": { "$ref": "#/$defs/AuthorizationRequirement" },
+    "plan_hash": { "$ref": "#/$defs/Hash" }
+  },
+  "$defs": {
+    "Hash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "SourceRef": { "type": "string", "pattern": "^(journal://[^#]+|blob://sha256:[0-9a-f]{64})#bytes=(0|[1-9][0-9]*)-(0|[1-9][0-9]*)$" },
+    "FieldId": { "type": "string", "pattern": "^fld:[0-9A-HJKMNP-TV-Z]{26}$" },
+    "ConfigScalar": { "type": ["string", "number", "boolean", "null"] },
+    "ApplyBoundary": { "enum": ["next_request", "next_session", "conversation_start", "reload", "config_watch", "process_restart", "setter_immediate", "app_server_thread"] },
+    "VersionBinding": {
+      "type": "object", "additionalProperties": false,
+      "required": ["task_id", "branch_id", "input_epoch", "goal_version", "config_version", "watermark"],
+      "properties": {
+        "task_id": { "type": "string", "pattern": "^task:[0-9A-HJKMNP-TV-Z]{26}$" },
+        "branch_id": { "type": "string", "pattern": "^br:[0-9A-HJKMNP-TV-Z]{26}$" },
+        "input_epoch": { "type": "integer", "minimum": 1, "maximum": 9007199254740991 },
+        "goal_version": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,255}$" },
+        "config_version": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,127}$" },
+        "watermark": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 }
+      }
+    },
+    "SourcePin": {
+      "type": "object", "additionalProperties": false,
+      "required": ["host_version", "host_version_kind", "source_commit"],
+      "properties": {
+        "host_version": { "type": "string", "minLength": 1 },
+        "host_version_kind": { "enum": ["release", "source_commit", "binary_hash"] },
+        "source_commit": { "oneOf": [{ "type": "null" }, { "type": "string", "minLength": 1 }] }
+      }
+    },
+    "BinaryPin": {
+      "type": "object", "additionalProperties": false,
+      "required": ["binary_version", "binary_hash"],
+      "properties": {
+        "binary_version": { "oneOf": [{ "type": "null" }, { "type": "string", "minLength": 1 }] },
+        "binary_hash": { "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/Hash" }] }
+      }
+    },
+    "ModelRef": {
+      "type": "object", "additionalProperties": false,
+      "required": ["provider", "model_id", "variant", "resolution_source"],
+      "properties": {
+        "provider": { "type": "string", "minLength": 1 },
+        "model_id": { "type": "string", "minLength": 1 },
+        "variant": { "oneOf": [{ "type": "null" }, { "type": "string" }] },
+        "resolution_source": { "enum": ["host_readback", "explicit"] }
+      }
+    },
+    "HostBinding": {
+      "type": "object", "additionalProperties": false,
+      "required": ["host_id", "source_pin", "binary_pin", "adapter_version", "subject", "mode", "config_space", "root_id", "execution_environment", "mapping", "capability_binding_key", "capability_snapshot_hash", "model", "construction_path"],
+      "properties": {
+        "host_id": { "enum": ["pi", "oh-my-pi", "step-code", "codex", "opencode", "openhands-sdk", "claude-code"] },
+        "source_pin": { "$ref": "#/$defs/SourcePin" },
+        "binary_pin": { "$ref": "#/$defs/BinaryPin" },
+        "adapter_version": { "type": "string", "minLength": 1 },
+        "subject": { "const": "product_adapter" },
+        "mode": { "enum": ["interactive", "print", "rpc", "acp", "sdk", "sdk_stdio", "exec", "app-server", "server", "local_conversation", "remote_conversation"] },
+        "config_space": { "type": "string", "pattern": "^[a-z][a-z0-9_]{0,63}$" },
+        "root_id": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "execution_environment": { "type": "object", "additionalProperties": false, "required": ["os", "arch", "isolation"], "properties": { "os": { "type": "string", "minLength": 1 }, "arch": { "type": "string", "minLength": 1 }, "isolation": { "enum": ["local", "container", "remote"] } } },
+        "mapping": { "enum": ["exact", "partial", "unmapped"] },
+        "capability_binding_key": { "$ref": "#/$defs/Hash" },
+        "capability_snapshot_hash": { "$ref": "#/$defs/Hash" },
+        "model": { "$ref": "#/$defs/ModelRef" },
+        "construction_path": { "enum": ["cli", "sdk", "rpc", "app_server", "acp", "sdk_stdio", "server", "server_settings", "direct_agent", "preset_agent", "subagent_factory"] }
+      }
+    },
+    "ConfigSpaceSelector": {
+      "type": "object", "additionalProperties": false,
+      "required": ["config_space_id", "config_space", "source_layer_id", "source_layer_set_hash", "root_id", "trust_evidence_ref", "capability_binding_key", "capability_snapshot_hash"],
+      "properties": {
+        "config_space_id": { "$ref": "#/$defs/Hash" },
+        "config_space": { "type": "string", "pattern": "^[a-z][a-z0-9_]{0,63}$" },
+        "source_layer_id": { "type": "string", "minLength": 1 },
+        "source_layer_set_hash": { "$ref": "#/$defs/Hash" },
+        "root_id": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "trust_evidence_ref": { "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/SourceRef" }] },
+        "capability_binding_key": { "$ref": "#/$defs/Hash" },
+        "capability_snapshot_hash": { "$ref": "#/$defs/Hash" }
+      }
+    },
+    "RegistryPin": {
+      "type": "object", "additionalProperties": false,
+      "required": ["snapshot_hash", "registry_version", "specs"],
+      "properties": {
+        "snapshot_hash": { "$ref": "#/$defs/Hash" },
+        "registry_version": { "type": "string", "minLength": 1 },
+        "specs": {
+          "type": "array",
+          "items": { "type": "object", "additionalProperties": false, "required": ["field_id", "spec_hash"], "properties": { "field_id": { "$ref": "#/$defs/FieldId" }, "spec_hash": { "$ref": "#/$defs/Hash" } } }
+        }
+      }
+    },
+    "AssignmentValue": {
+      "oneOf": [
+        { "type": "object", "additionalProperties": false, "required": ["presence", "value"], "properties": { "presence": { "const": "present" }, "value": { "$ref": "#/$defs/ConfigScalar" } } },
+        { "type": "object", "additionalProperties": false, "required": ["presence"], "properties": { "presence": { "const": "absent" } } }
+      ]
+    },
+    "TrialFieldChange": {
+      "type": "object", "additionalProperties": false,
+      "required": ["field_id", "field_key", "baseline", "candidate"],
+      "properties": {
+        "field_id": { "$ref": "#/$defs/FieldId" },
+        "field_key": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "baseline": { "$ref": "#/$defs/AssignmentValue" },
+        "candidate": { "$ref": "#/$defs/AssignmentValue" }
+      }
+    },
+    "NormalizationBinding": {
+      "oneOf": [
+        { "$ref": "#/$defs/NormalizationIdentity" },
+        { "$ref": "#/$defs/NormalizationPercentTokenFloor" },
+        { "$ref": "#/$defs/NormalizationOmpThresholdMode" },
+        { "$ref": "#/$defs/NormalizationStepClmProjection" },
+        { "$ref": "#/$defs/NormalizationCodexCompactionLimits" },
+        { "$ref": "#/$defs/NormalizationClaudeAutocompactWindow" },
+        { "$ref": "#/$defs/NormalizationPiModelOverrideGuard" },
+        { "$ref": "#/$defs/NormalizationOpencodeKeepTokens" },
+        { "$ref": "#/$defs/NormalizationOpenhandsCondenser" }
+      ]
+    },
+    "NormalizationIdentity": {
+      "type": "object", "additionalProperties": false,
+      "required": ["normalization_id", "normalization_version"],
+      "properties": { "normalization_id": { "const": "identity" }, "normalization_version": { "const": "1" } }
+    },
+    "NormalizationPercentTokenFloor": {
+      "type": "object", "additionalProperties": false,
+      "required": ["normalization_id", "normalization_version", "params"],
+      "properties": {
+        "normalization_id": { "const": "percent_token_floor_v1" },
+        "normalization_version": { "const": "1" },
+        "params": {
+          "type": "object", "additionalProperties": false,
+          "required": ["percent_field_id", "token_field_id", "rounding"],
+          "properties": {
+            "percent_field_id": { "$ref": "#/$defs/FieldId" },
+            "token_field_id": { "$ref": "#/$defs/FieldId" },
+            "rounding": { "const": "floor" }
+          }
+        }
+      }
+    },
+    "NormalizationOmpThresholdMode": {
+      "type": "object", "additionalProperties": false,
+      "required": ["normalization_id", "normalization_version", "params"],
+      "properties": {
+        "normalization_id": { "const": "omp_threshold_mode_v1" },
+        "normalization_version": { "const": "1" },
+        "params": {
+          "type": "object", "additionalProperties": false,
+          "required": ["mode"],
+          "properties": { "mode": { "enum": ["percent", "tokens"] } }
+        }
+      }
+    },
+    "NormalizationStepClmProjection": {
+      "type": "object", "additionalProperties": false,
+      "required": ["normalization_id", "normalization_version", "params"],
+      "properties": {
+        "normalization_id": { "const": "step_clm_projection_v1" },
+        "normalization_version": { "const": "1" },
+        "params": {
+          "type": "object", "additionalProperties": false,
+          "required": ["projection_field_id", "compaction_field_id", "ratio_field_id"],
+          "properties": {
+            "projection_field_id": { "$ref": "#/$defs/FieldId" },
+            "compaction_field_id": { "$ref": "#/$defs/FieldId" },
+            "ratio_field_id": { "$ref": "#/$defs/FieldId" }
+          }
+        }
+      }
+    },
+    "NormalizationCodexCompactionLimits": {
+      "type": "object", "additionalProperties": false,
+      "required": ["normalization_id", "normalization_version", "params"],
+      "properties": {
+        "normalization_id": { "const": "codex_compaction_limits_v1" },
+        "normalization_version": { "const": "1" },
+        "params": {
+          "type": "object", "additionalProperties": false,
+          "required": ["window_field_id", "limit_field_id", "scope_field_id", "post_turn_percent_field_id", "async_enabled_field_id", "async_threshold_field_id"],
+          "properties": {
+            "window_field_id": { "$ref": "#/$defs/FieldId" },
+            "limit_field_id": { "$ref": "#/$defs/FieldId" },
+            "scope_field_id": { "$ref": "#/$defs/FieldId" },
+            "post_turn_percent_field_id": { "$ref": "#/$defs/FieldId" },
+            "async_enabled_field_id": { "$ref": "#/$defs/FieldId" },
+            "async_threshold_field_id": { "$ref": "#/$defs/FieldId" }
+          }
+        }
+      }
+    },
+    "NormalizationClaudeAutocompactWindow": {
+      "type": "object", "additionalProperties": false,
+      "required": ["normalization_id", "normalization_version", "params"],
+      "properties": {
+        "normalization_id": { "const": "claude_autocompact_window_v1" },
+        "normalization_version": { "const": "1" },
+        "params": {
+          "type": "object", "additionalProperties": false,
+          "required": ["top_level_field_id", "model_field_id", "model_scoped_field_id"],
+          "properties": {
+            "top_level_field_id": { "$ref": "#/$defs/FieldId" },
+            "model_field_id": { "$ref": "#/$defs/FieldId" },
+            "model_scoped_field_id": { "$ref": "#/$defs/FieldId" }
+          }
+        }
+      }
+    },
+    "NormalizationPiModelOverrideGuard": {
+      "type": "object", "additionalProperties": false,
+      "required": ["normalization_id", "normalization_version", "params"],
+      "properties": {
+        "normalization_id": { "const": "pi_model_override_guard" },
+        "normalization_version": { "const": "1" },
+        "params": {
+          "type": "object", "additionalProperties": false,
+          "required": ["global_field_id", "override_key"],
+          "properties": {
+            "global_field_id": { "$ref": "#/$defs/FieldId" },
+            "override_key": { "type": "string", "minLength": 1 }
+          }
+        }
+      }
+    },
+    "NormalizationOpencodeKeepTokens": {
+      "type": "object", "additionalProperties": false,
+      "required": ["normalization_id", "normalization_version", "params"],
+      "properties": {
+        "normalization_id": { "const": "opencode_keep_tokens_v1" },
+        "normalization_version": { "const": "1" },
+        "params": {
+          "type": "object", "additionalProperties": false,
+          "required": ["auto_field_id", "keep_field_id", "buffer_field_id"],
+          "properties": {
+            "auto_field_id": { "$ref": "#/$defs/FieldId" },
+            "keep_field_id": { "$ref": "#/$defs/FieldId" },
+            "buffer_field_id": { "$ref": "#/$defs/FieldId" }
+          }
+        }
+      }
+    },
+    "NormalizationOpenhandsCondenser": {
+      "type": "object", "additionalProperties": false,
+      "required": ["normalization_id", "normalization_version", "params"],
+      "properties": {
+        "normalization_id": { "const": "openhands_condenser_v1" },
+        "normalization_version": { "const": "1" },
+        "params": {
+          "type": "object", "additionalProperties": false,
+          "required": ["max_size_field_id", "keep_first_field_id", "max_tokens_field_id"],
+          "properties": {
+            "max_size_field_id": { "$ref": "#/$defs/FieldId" },
+            "keep_first_field_id": { "$ref": "#/$defs/FieldId" },
+            "max_tokens_field_id": { "$ref": "#/$defs/FieldId" }
+          }
+        }
+      }
+    },
+    "TrialFactor": {
+      "type": "object", "additionalProperties": false,
+      "required": ["factor_id", "changes", "coupling_group", "normalization", "formula_input_hash"],
+      "properties": {
+        "factor_id": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "changes": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/TrialFieldChange" } },
+        "coupling_group": { "oneOf": [{ "type": "null" }, { "enum": ["omp_threshold_mode", "codex_compaction_limits", "step_clm_projection", "opencode_keep_tokens", "openhands_condenser", "claude_autocompact"] }] },
+        "normalization": { "$ref": "#/$defs/NormalizationBinding" },
+        "formula_input_hash": { "$ref": "#/$defs/Hash" }
+      }
+    },
+    "CapacityEvidence": {
+      "type": "object", "additionalProperties": false,
+      "required": ["schema_version", "config_space_id", "capability_binding_key", "model", "model_scope_key", "scope", "window_tokens", "unit", "source_kind", "evidence_ref", "evidence_hash", "observed_at"],
+      "properties": {
+        "schema_version": { "const": "rsi.capacity_evidence/1" },
+        "config_space_id": { "$ref": "#/$defs/Hash" },
+        "capability_binding_key": { "$ref": "#/$defs/Hash" },
+        "model": { "$ref": "#/$defs/ModelRef" },
+        "model_scope_key": { "type": "string", "minLength": 1 },
+        "scope": { "const": "window_tokens" },
+        "window_tokens": { "type": "integer", "minimum": 1, "maximum": 9007199254740991 },
+        "unit": { "const": "tokens" },
+        "source_kind": { "enum": ["host_capability_readback", "model_catalog"] },
+        "evidence_ref": { "$ref": "#/$defs/SourceRef" },
+        "evidence_hash": { "$ref": "#/$defs/Hash" },
+        "observed_at": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "ConfigFilePath": {
+      "type": "object", "additionalProperties": false,
+      "required": ["kind", "format", "root", "relative_path", "pointer", "create"],
+      "properties": {
+        "kind": { "const": "file" },
+        "format": { "enum": ["json", "jsonc", "yaml", "toml"] },
+        "root": { "enum": ["user", "project", "managed", "session"] },
+        "relative_path": { "type": "string", "minLength": 1, "maxLength": 1024 },
+        "pointer": { "type": "string" },
+        "create": { "type": "boolean" }
+      }
+    },
+    "ConfigFieldAssignment": {
+      "type": "object", "additionalProperties": false,
+      "required": ["field_id", "path", "value"],
+      "properties": { "field_id": { "$ref": "#/$defs/FieldId" }, "path": { "$ref": "#/$defs/ConfigFilePath" }, "value": { "$ref": "#/$defs/AssignmentValue" } }
+    },
+    "ConfigFieldMutation": {
+      "oneOf": [
+        { "type": "object", "additionalProperties": false, "required": ["op", "field_id", "path", "value"], "properties": { "op": { "const": "set" }, "field_id": { "$ref": "#/$defs/FieldId" }, "path": { "$ref": "#/$defs/ConfigFilePath" }, "value": { "$ref": "#/$defs/ConfigScalar" } } },
+        { "type": "object", "additionalProperties": false, "required": ["op", "field_id", "path"], "properties": { "op": { "const": "remove" }, "field_id": { "$ref": "#/$defs/FieldId" }, "path": { "$ref": "#/$defs/ConfigFilePath" } } }
+      ]
+    },
+    "ConfigWritePatch": {
+      "type": "object", "additionalProperties": false,
+      "required": ["schema_version", "config_space_id", "field_registry_snapshot_hash", "layer_id", "model_scope_key", "target_path", "expected_fields", "mutations", "protected_subtrees", "candidate_values", "patch_hash"],
+      "properties": {
+        "schema_version": { "const": "rsi.config_write/1" },
+        "config_space_id": { "$ref": "#/$defs/Hash" },
+        "field_registry_snapshot_hash": { "$ref": "#/$defs/Hash" },
+        "layer_id": { "type": "string", "minLength": 1 },
+        "model_scope_key": { "type": "string", "minLength": 1 },
+        "target_path": { "type": "string", "minLength": 1, "maxLength": 1024 },
+        "expected_fields": { "type": "array", "items": { "$ref": "#/$defs/ConfigFieldAssignment" } },
+        "mutations": { "type": "array", "items": { "$ref": "#/$defs/ConfigFieldMutation" } },
+        "protected_subtrees": { "type": "array", "items": { "type": "object", "additionalProperties": false, "required": ["path", "semantic_hash"], "properties": { "path": { "type": "string" }, "semantic_hash": { "$ref": "#/$defs/Hash" } } } },
+        "candidate_values": { "type": "array", "items": { "$ref": "#/$defs/ConfigFieldAssignment" } },
+        "patch_hash": { "$ref": "#/$defs/Hash" }
+      }
+    },
+    "RootIdentityPin": {
+      "type": "object", "additionalProperties": false,
+      "required": ["schema_version", "root_id", "identity_kind", "device_id", "file_id"],
+      "properties": {
+        "schema_version": { "const": "rsi.root_identity/1" },
+        "root_id": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "identity_kind": { "enum": ["dev_inode", "file_id"] },
+        "device_id": { "type": "string", "minLength": 1 },
+        "file_id": { "type": "string", "minLength": 1 }
+      }
+    },
+    "BaselineCapture": {
+      "type": "object", "additionalProperties": false,
+      "required": ["config_version", "semantic_hash", "source_layer_id", "root_identity_pin", "readback_refs", "captured_at"],
+      "properties": {
+        "config_version": { "type": "string", "minLength": 1 },
+        "semantic_hash": { "$ref": "#/$defs/Hash" },
+        "source_layer_id": { "type": "string", "minLength": 1 },
+        "root_identity_pin": { "$ref": "#/$defs/RootIdentityPin" },
+        "readback_refs": { "type": "array", "items": { "$ref": "#/$defs/SourceRef" } },
+        "captured_at": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "MetricSpec": {
+      "type": "object", "additionalProperties": false,
+      "required": ["metric_id", "direction", "min_effect", "unit", "evidence_source"],
+      "properties": {
+        "metric_id": { "enum": ["acceptance_pass_rate", "task_success_rate", "compaction_events_per_session", "prompt_tokens_p95", "billed_tokens_per_success", "cost_usd_per_success", "context_overflow_count", "compaction_failure_count", "forbidden_write_count"] },
+        "direction": { "enum": ["increase", "decrease"] },
+        "min_effect": { "type": "number" },
+        "unit": { "enum": ["none", "tokens", "percent", "ratio", "ms", "model_ref", "effort_level", "count", "usd"] },
+        "evidence_source": { "enum": ["independent_verifier", "host_events", "usage_meter"] }
+      }
+    },
+    "GuardrailSpec": {
+      "type": "object", "additionalProperties": false,
+      "required": ["guardrail_id", "metric_id", "comparator", "threshold", "unit", "min_samples", "on_breach", "evidence_source", "oracle_id", "sampling"],
+      "properties": {
+        "guardrail_id": { "enum": ["context_overflow", "compaction_failure", "quality_independent", "cost_per_success", "safety_zero"] },
+        "metric_id": { "enum": ["acceptance_pass_rate", "task_success_rate", "compaction_events_per_session", "prompt_tokens_p95", "billed_tokens_per_success", "cost_usd_per_success", "context_overflow_count", "compaction_failure_count", "forbidden_write_count"] },
+        "comparator": { "enum": ["lte", "gte", "eq"] },
+        "threshold": { "type": "number" },
+        "unit": { "enum": ["none", "tokens", "percent", "ratio", "ms", "model_ref", "effort_level", "count", "usd"] },
+        "min_samples": { "type": "integer", "minimum": 1 },
+        "on_breach": { "const": "rollback" },
+        "evidence_source": { "enum": ["host_events", "independent_verifier", "usage_meter", "write_audit"] },
+        "oracle_id": { "enum": ["host_usage_meter_v1", "independent_verifier_v1", "safety_write_audit_v1"] },
+        "sampling": {
+          "oneOf": [
+            { "type": "object", "additionalProperties": false, "required": ["kind", "at", "require_close_audit"], "properties": { "kind": { "const": "every_matched_sample" }, "at": { "const": "sample_close" }, "require_close_audit": { "const": true } } },
+            { "type": "object", "additionalProperties": false, "required": ["kind"], "properties": { "kind": { "const": "window_aggregate" } } }
+          ]
+        }
+      }
+    },
+    "ObservationWindowSpec": {
+      "type": "object", "additionalProperties": false,
+      "required": ["profile_id", "min_matched_samples", "max_elapsed_ms", "match_predicate_id"],
+      "properties": {
+        "profile_id": { "enum": ["W1", "W2"] },
+        "min_matched_samples": { "type": "integer", "minimum": 1 },
+        "max_elapsed_ms": { "type": "integer", "minimum": 1 },
+        "match_predicate_id": { "type": "string", "minLength": 1 }
+      }
+    },
+    "StopRule": {
+      "oneOf": [
+        { "type": "object", "additionalProperties": false, "required": ["kind"], "properties": { "kind": { "const": "window_close" } } },
+        { "type": "object", "additionalProperties": false, "required": ["kind", "on_guardrail"], "properties": { "kind": { "const": "guardrail_or_window" }, "on_guardrail": { "const": "rollback" } } },
+        { "type": "object", "additionalProperties": false, "required": ["kind", "protocol_id", "min_samples", "max_samples"], "properties": { "kind": { "const": "causal_protocol" }, "protocol_id": { "type": "string", "minLength": 3 }, "min_samples": { "type": "integer", "minimum": 1 }, "max_samples": { "type": "integer", "minimum": 1 } } }
+      ]
+    },
+    "ExperimentBudget": {
+      "type": "object", "additionalProperties": false,
+      "required": ["max_sessions", "max_model_requests", "max_tokens", "max_cost_usd", "reservation_ref", "cannot_modify_shared_budget"],
+      "properties": {
+        "max_sessions": { "type": "integer", "minimum": 0 },
+        "max_model_requests": { "type": "integer", "minimum": 0 },
+        "max_tokens": { "type": "integer", "minimum": 0 },
+        "max_cost_usd": { "type": "number", "minimum": 0 },
+        "reservation_ref": { "type": "string", "minLength": 3 },
+        "cannot_modify_shared_budget": { "const": true }
+      }
+    },
+    "RollbackPlan": {
+      "type": "object", "additionalProperties": false,
+      "required": ["profile_id", "target", "field_ids", "source_layer_id", "apply_boundary", "deadline_ms"],
+      "properties": {
+        "profile_id": { "const": "R1" },
+        "target": { "const": "baseline" },
+        "field_ids": { "type": "array", "items": { "type": "string" } },
+        "source_layer_id": { "type": "string", "minLength": 1 },
+        "apply_boundary": { "$ref": "#/$defs/ApplyBoundary" },
+        "deadline_ms": { "type": "integer", "minimum": 1, "maximum": 600000 }
+      }
+    },
+    "AuthorizationRequirement": {
+      "type": "object", "additionalProperties": false,
+      "required": ["scope", "grants_by_kind", "capacity_trial"],
+      "properties": {
+        "scope": {
+          "type": "object", "additionalProperties": false,
+          "required": ["field_ids", "source_layer_ids", "model_scope_key", "config_space_id"],
+          "properties": {
+            "field_ids": { "type": "array", "items": { "$ref": "#/$defs/FieldId" } },
+            "source_layer_ids": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+            "model_scope_key": { "type": "string", "minLength": 1 },
+            "config_space_id": { "$ref": "#/$defs/Hash" }
+          }
+        },
+        "grants_by_kind": {
+          "type": "object", "additionalProperties": false,
+          "required": ["write_and_observe", "observe_only", "rollback_only"],
+          "properties": {
+            "write_and_observe": { "const": ["update", "rollback"] },
+            "observe_only": { "const": [] },
+            "rollback_only": { "const": ["rollback"] }
+          }
+        },
+        "capacity_trial": { "type": "boolean" }
+      }
+    }
+  }
+}

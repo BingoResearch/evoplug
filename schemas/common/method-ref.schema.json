@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:method_ref:1",
+  "title": "MethodRef",
+  "description": "Public method identity plus implementation and rule versions (DD-FND-031.2). All three fields are opaque 1..128 UTF-8 byte strings.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "method_id", "method_version", "rule_version"],
+  "properties": {
+    "schema_version": { "const": "rsi.method_ref/1" },
+    "method_id": { "$ref": "#/$defs/MethodToken" },
+    "method_version": { "$ref": "#/$defs/MethodToken" },
+    "rule_version": { "$ref": "#/$defs/MethodToken" }
+  },
+  "$defs": {
+    "MethodToken": {
+      "title": "MethodToken",
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[^\\u0000-\\u001F\\u007F]+$"
+    }
+  }
+}

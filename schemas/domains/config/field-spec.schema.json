@@ -1,0 +1,320 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:field_spec:1",
+  "title": "FieldSpec",
+  "description": "One versioned host field specification (DD-CFG-030, DD-CFG-181).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "field_id", "field_key", "host_id", "source_pin", "binary_pin",
+    "adapter_version", "config_space", "mapping", "mode", "construction_path",
+    "model_scope", "model_scope_key", "value_schema", "unit", "default_spec",
+    "source_layers", "precedence", "coupling_group", "normalization_id",
+    "apply_boundaries", "readback", "guardrail_profile_id", "window_profile_id",
+    "rollback_profile_id", "authorization_class", "status", "status_reason",
+    "provenance", "spec_hash"
+  ],
+  "properties": {
+    "schema_version": { "const": "rsi.field_spec/1" },
+    "field_id": { "$ref": "#/$defs/FieldId" },
+    "field_key": { "type": "string", "minLength": 1, "maxLength": 256 },
+    "host_id": {
+      "enum": ["pi", "oh-my-pi", "step-code", "codex", "opencode", "openhands-sdk", "claude-code"]
+    },
+    "source_pin": { "$ref": "#/$defs/SourcePin" },
+    "binary_pin": { "$ref": "#/$defs/BinaryPin" },
+    "adapter_version": { "type": "string", "minLength": 1, "maxLength": 64 },
+    "config_space": { "type": "string", "pattern": "^[a-z][a-z0-9_]{0,63}$" },
+    "mapping": { "enum": ["exact", "partial", "unmapped"] },
+    "mode": {
+      "enum": ["interactive", "print", "rpc", "acp", "sdk", "sdk_stdio", "exec", "app-server", "server", "local_conversation", "remote_conversation"]
+    },
+    "construction_path": {
+      "enum": ["cli", "sdk", "rpc", "app_server", "acp", "sdk_stdio", "server", "server_settings", "direct_agent", "preset_agent", "subagent_factory"]
+    },
+    "model_scope": { "$ref": "#/$defs/ModelScope" },
+    "model_scope_key": { "type": "string", "minLength": 1, "maxLength": 512 },
+    "value_schema": { "$ref": "#/$defs/ConfigValueSchema" },
+    "unit": { "$ref": "#/$defs/ConfigUnit" },
+    "default_spec": { "$ref": "#/$defs/DefaultSpec" },
+    "source_layers": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/SourceLayerSpec" } },
+    "precedence": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "coupling_group": {
+      "oneOf": [
+        { "type": "null" },
+        { "enum": ["omp_threshold_mode", "codex_compaction_limits", "step_clm_projection", "opencode_keep_tokens", "openhands_condenser", "claude_autocompact"] }
+      ]
+    },
+    "normalization_id": {
+      "enum": ["identity", "percent_token_floor_v1", "omp_threshold_mode_v1", "step_clm_projection_v1", "codex_compaction_limits_v1", "claude_autocompact_window_v1", "pi_model_override_guard", "opencode_keep_tokens_v1", "openhands_condenser_v1"]
+    },
+    "apply_boundaries": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/ApplyBoundary" } },
+    "readback": { "$ref": "#/$defs/ReadbackSpec" },
+    "guardrail_profile_id": { "const": "G1" },
+    "window_profile_id": { "enum": ["W1", "W2"] },
+    "rollback_profile_id": { "const": "R1" },
+    "authorization_class": {
+      "enum": ["trialable", "host_capacity", "forbidden_credentials", "forbidden_permissions", "forbidden_sandbox", "forbidden_shared_budget", "forbidden_evoplug_policy", "forbidden_managed_policy"]
+    },
+    "status": { "enum": ["active", "h_unverified", "source_only", "unsupported"] },
+    "status_reason": { "type": "string", "minLength": 1, "maxLength": 512 },
+    "provenance": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/SourceRef" } },
+    "spec_hash": { "$ref": "#/$defs/Hash" }
+  },
+  "$defs": {
+    "Hash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "SourceRef": { "type": "string", "pattern": "^(journal://[^#]+|blob://sha256:[0-9a-f]{64})#bytes=(0|[1-9][0-9]*)-(0|[1-9][0-9]*)$" },
+    "FieldId": { "type": "string", "pattern": "^fld:[0-9A-HJKMNP-TV-Z]{26}$" },
+    "SourcePin": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["host_version", "host_version_kind", "source_commit"],
+      "properties": {
+        "host_version": { "type": "string", "minLength": 1 },
+        "host_version_kind": { "enum": ["release", "source_commit", "binary_hash"] },
+        "source_commit": { "oneOf": [{ "type": "null" }, { "type": "string", "minLength": 1 }] }
+      }
+    },
+    "BinaryPin": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["binary_version", "binary_hash"],
+      "properties": {
+        "binary_version": { "oneOf": [{ "type": "null" }, { "type": "string", "minLength": 1 }] },
+        "binary_hash": { "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/Hash" }] }
+      }
+    },
+    "ModelScope": {
+      "oneOf": [
+        { "type": "object", "additionalProperties": false, "required": ["kind"], "properties": { "kind": { "const": "any" } } },
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["kind", "provider", "model_pattern"],
+          "properties": {
+            "kind": { "const": "family" },
+            "provider": { "type": "string", "minLength": 1 },
+            "model_pattern": { "type": "string", "minLength": 1 }
+          }
+        },
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["kind", "provider", "model_id", "variant"],
+          "properties": {
+            "kind": { "const": "exact" },
+            "provider": { "type": "string", "minLength": 1 },
+            "model_id": { "type": "string", "minLength": 1 },
+            "variant": { "oneOf": [{ "type": "null" }, { "type": "string" }] }
+          }
+        }
+      ]
+    },
+    "ConfigUnit": { "enum": ["none", "tokens", "percent", "ratio", "ms", "model_ref", "effort_level"] },
+    "ConfigScalar": { "type": ["string", "number", "boolean", "null"] },
+    "ConfigValueSchema": {
+      "oneOf": [
+        { "type": "object", "additionalProperties": false, "required": ["kind"], "properties": { "kind": { "const": "boolean" } } },
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["kind", "min", "max", "unit"],
+          "properties": {
+            "kind": { "const": "integer" },
+            "min": { "type": "number" },
+            "max": { "oneOf": [{ "type": "null" }, { "type": "number" }] },
+            "unit": { "$ref": "#/$defs/ConfigUnit" }
+          }
+        },
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["kind", "min", "max", "unit", "exclusive_min", "exclusive_max"],
+          "properties": {
+            "kind": { "const": "number" },
+            "min": { "type": "number" },
+            "max": { "oneOf": [{ "type": "null" }, { "type": "number" }] },
+            "unit": { "$ref": "#/$defs/ConfigUnit" },
+            "exclusive_min": { "type": "boolean" },
+            "exclusive_max": { "type": "boolean" }
+          }
+        },
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["kind", "values", "availability"],
+          "properties": {
+            "kind": { "const": "enum" },
+            "values": { "type": "array", "items": { "$ref": "#/$defs/ConfigScalar" } },
+            "availability": { "enum": ["static", "host_catalog"] }
+          }
+        },
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["kind", "min", "max", "unit", "values", "availability"],
+          "properties": {
+            "kind": { "const": "integer_or_enum" },
+            "min": { "type": "number" },
+            "max": { "type": "number" },
+            "unit": { "$ref": "#/$defs/ConfigUnit" },
+            "values": { "type": "array", "items": { "$ref": "#/$defs/ConfigScalar" } },
+            "availability": { "enum": ["static", "host_catalog"] }
+          }
+        },
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["kind", "pattern", "max_length", "unit"],
+          "properties": {
+            "kind": { "const": "string" },
+            "pattern": { "type": "string" },
+            "max_length": { "type": "integer", "minimum": 1 },
+            "unit": { "enum": ["none", "model_ref"] }
+          }
+        },
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["kind", "documented_shape", "known_values", "provenance"],
+          "properties": {
+            "kind": { "const": "unverified" },
+            "documented_shape": { "enum": ["boolean", "integer", "number", "string", "enum"] },
+            "known_values": { "oneOf": [{ "type": "null" }, { "type": "array", "items": { "$ref": "#/$defs/ConfigScalar" } }] },
+            "provenance": { "$ref": "#/$defs/SourceRef" }
+          }
+        }
+      ]
+    },
+    "ConfigPath": {
+      "oneOf": [
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["kind", "format", "root", "relative_path", "pointer", "create"],
+          "properties": {
+            "kind": { "const": "file" },
+            "format": { "enum": ["json", "jsonc", "yaml", "toml"] },
+            "root": { "enum": ["user", "project", "managed", "session"] },
+            "relative_path": { "type": "string", "minLength": 1, "maxLength": 1024 },
+            "pointer": { "type": "string" },
+            "create": { "type": "boolean" }
+          }
+        },
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["kind", "api_id", "key_path", "merge", "readback"],
+          "properties": {
+            "kind": { "const": "settings_api" },
+            "api_id": { "const": "openhands_server_settings" },
+            "key_path": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+            "merge": { "const": "deep_merge" },
+            "readback": { "const": "api_get" }
+          }
+        },
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["kind", "setter_id", "scope"],
+          "properties": {
+            "kind": { "const": "setter" },
+            "setter_id": { "type": "string", "minLength": 1 },
+            "scope": { "enum": ["session", "agent"] }
+          }
+        },
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["kind", "name"],
+          "properties": {
+            "kind": { "const": "env" },
+            "name": { "type": "string", "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,127}$" }
+          }
+        }
+      ]
+    },
+    "SourceLayerSpec": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["layer_id", "path", "precedence_rank", "writable", "trust_gate", "merge"],
+      "properties": {
+        "layer_id": { "type": "string", "minLength": 1 },
+        "path": { "$ref": "#/$defs/ConfigPath" },
+        "precedence_rank": { "type": "integer", "minimum": 0 },
+        "writable": { "type": "boolean" },
+        "trust_gate": { "enum": ["none", "project_trust_required"] },
+        "merge": { "enum": ["replace", "deep_merge", "none"] }
+      }
+    },
+    "DefaultSpec": {
+      "oneOf": [
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["kind", "value", "provenance"],
+          "properties": {
+            "kind": { "const": "fixed" },
+            "value": { "$ref": "#/$defs/ConfigScalar" },
+            "provenance": { "$ref": "#/$defs/SourceRef" }
+          }
+        },
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["kind", "effective_rule_id"],
+          "properties": {
+            "kind": { "const": "absent" },
+            "effective_rule_id": { "type": "string", "minLength": 1 }
+          }
+        },
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["kind", "selector", "cases"],
+          "properties": {
+            "kind": { "const": "path_dependent" },
+            "selector": { "const": "openhands_construction_path" },
+            "cases": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["path", "value"],
+                "properties": {
+                  "path": { "enum": ["cli", "sdk", "rpc", "app_server", "acp", "sdk_stdio", "server", "server_settings", "direct_agent", "preset_agent", "subagent_factory"] },
+                  "value": { "$ref": "#/$defs/AssignmentValue" }
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["kind", "provenance"],
+          "properties": {
+            "kind": { "const": "unknown" },
+            "provenance": { "$ref": "#/$defs/SourceRef" }
+          }
+        }
+      ]
+    },
+    "AssignmentValue": {
+      "oneOf": [
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["presence", "value"],
+          "properties": {
+            "presence": { "const": "present" },
+            "value": { "$ref": "#/$defs/ConfigScalar" }
+          }
+        },
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["presence"],
+          "properties": { "presence": { "const": "absent" } }
+        }
+      ]
+    },
+    "ApplyBoundary": {
+      "enum": ["next_request", "next_session", "conversation_start", "reload", "config_watch", "process_restart", "setter_immediate", "app_server_thread"]
+    },
+    "ReadbackSpec": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["method", "decoder_id", "comparison", "accept_at", "timeout_ms"],
+      "properties": {
+        "method": { "enum": ["file_parse", "setter_get", "process_env", "host_api"] },
+        "decoder_id": { "type": "string", "minLength": 1 },
+        "comparison": { "enum": ["exact", "normalized_equal"] },
+        "accept_at": { "$ref": "#/$defs/ApplyBoundary" },
+        "timeout_ms": { "type": "integer", "minimum": 1, "maximum": 600000 }
+      }
+    }
+  }
+}

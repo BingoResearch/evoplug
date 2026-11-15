@@ -1,0 +1,1038 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:config_trial:1",
+  "title": "ConfigTrial",
+  "description": "Config trial execution and evidence object, schema rsi.config_trial/1 (DD-CFG-120).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "trial_id",
+    "plan_id",
+    "plan_hash",
+    "config_space",
+    "execution_kind",
+    "predecessor_trial_id",
+    "evidence_basis",
+    "authorization",
+    "capability_snapshot_hash",
+    "phase",
+    "evidence_level",
+    "outcome",
+    "current_config",
+    "observation",
+    "close_audit_ref",
+    "rollback",
+    "recovery",
+    "revision",
+    "created_at",
+    "updated_at",
+    "last_error"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "rsi.config_trial/1"
+    },
+    "trial_id": {
+      "$ref": "#/$defs/TrialId"
+    },
+    "plan_id": {
+      "$ref": "#/$defs/PlanId"
+    },
+    "plan_hash": {
+      "$ref": "#/$defs/Hash"
+    },
+    "config_space": {
+      "$ref": "#/$defs/ConfigSpaceRef"
+    },
+    "execution_kind": {
+      "enum": [
+        "write_and_observe",
+        "observe_only",
+        "rollback_only"
+      ]
+    },
+    "predecessor_trial_id": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "#/$defs/TrialId"
+        }
+      ]
+    },
+    "evidence_basis": {
+      "enum": [
+        "own_write",
+        "inherited_candidate",
+        "rollback_only"
+      ]
+    },
+    "authorization": {
+      "$ref": "#/$defs/TrialAuthorization"
+    },
+    "capability_snapshot_hash": {
+      "$ref": "#/$defs/Hash"
+    },
+    "phase": {
+      "$ref": "#/$defs/TrialPhase"
+    },
+    "evidence_level": {
+      "enum": [
+        "none",
+        "written_unverified",
+        "applied",
+        "effective",
+        "causal"
+      ]
+    },
+    "outcome": {
+      "enum": [
+        "running",
+        "not_exercised",
+        "inconclusive",
+        "effect_supported",
+        "effect_rejected",
+        "rolled_back",
+        "failed",
+        "aborted"
+      ]
+    },
+    "current_config": {
+      "$ref": "#/$defs/CurrentConfigProjection"
+    },
+    "observation": {
+      "$ref": "#/$defs/ObservationState"
+    },
+    "close_audit_ref": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "#/$defs/SourceRef"
+        }
+      ]
+    },
+    "rollback": {
+      "$ref": "#/$defs/RollbackState"
+    },
+    "recovery": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "#/$defs/RecoveryState"
+        }
+      ]
+    },
+    "revision": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "created_at": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "updated_at": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "last_error": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "#/$defs/ConfigError"
+        }
+      ]
+    }
+  },
+  "$defs": {
+    "Hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "SourceRef": {
+      "type": "string",
+      "pattern": "^(journal://[^#]+|blob://sha256:[0-9a-f]{64})#bytes=(0|[1-9][0-9]*)-(0|[1-9][0-9]*)$"
+    },
+    "TrialId": {
+      "type": "string",
+      "pattern": "^ctr:[0-9A-HJKMNP-TV-Z]{26}$"
+    },
+    "PlanId": {
+      "type": "string",
+      "pattern": "^trial:[0-9A-HJKMNP-TV-Z]{26}$"
+    },
+    "FieldId": {
+      "type": "string",
+      "pattern": "^fld:[0-9A-HJKMNP-TV-Z]{26}$"
+    },
+    "ConfigScalar": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "null"
+      ]
+    },
+    "TrialPhase": {
+      "enum": [
+        "planned",
+        "authorized",
+        "writing",
+        "write_recorded",
+        "awaiting_apply",
+        "observing",
+        "rolling_back",
+        "recovery_required",
+        "closed",
+        "aborted"
+      ]
+    },
+    "ConfigPath": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "format",
+            "root",
+            "relative_path",
+            "pointer",
+            "create"
+          ],
+          "properties": {
+            "kind": {
+              "const": "file"
+            },
+            "format": {
+              "enum": [
+                "json",
+                "jsonc",
+                "yaml",
+                "toml"
+              ]
+            },
+            "root": {
+              "enum": [
+                "user",
+                "project",
+                "managed",
+                "session"
+              ]
+            },
+            "relative_path": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1024
+            },
+            "pointer": {
+              "type": "string"
+            },
+            "create": {
+              "type": "boolean"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "api_id",
+            "key_path",
+            "merge",
+            "readback"
+          ],
+          "properties": {
+            "kind": {
+              "const": "settings_api"
+            },
+            "api_id": {
+              "const": "openhands_server_settings"
+            },
+            "key_path": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "merge": {
+              "const": "deep_merge"
+            },
+            "readback": {
+              "const": "api_get"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "setter_id",
+            "scope"
+          ],
+          "properties": {
+            "kind": {
+              "const": "setter"
+            },
+            "setter_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "scope": {
+              "enum": [
+                "session",
+                "agent"
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "name"
+          ],
+          "properties": {
+            "kind": {
+              "const": "env"
+            },
+            "name": {
+              "type": "string",
+              "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,127}$"
+            }
+          }
+        }
+      ]
+    },
+    "AssignmentValue": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "presence",
+            "value"
+          ],
+          "properties": {
+            "presence": {
+              "const": "present"
+            },
+            "value": {
+              "$ref": "#/$defs/ConfigScalar"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "presence"
+          ],
+          "properties": {
+            "presence": {
+              "const": "absent"
+            }
+          }
+        }
+      ]
+    },
+    "FieldAssignment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "field_id",
+        "path",
+        "value"
+      ],
+      "properties": {
+        "field_id": {
+          "$ref": "#/$defs/FieldId"
+        },
+        "path": {
+          "$ref": "#/$defs/ConfigPath"
+        },
+        "value": {
+          "$ref": "#/$defs/AssignmentValue"
+        }
+      }
+    },
+    "RootIdentityPin": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "root_id",
+        "identity_kind",
+        "device_id",
+        "file_id"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "rsi.root_identity/1"
+        },
+        "root_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "identity_kind": {
+          "enum": [
+            "dev_inode",
+            "file_id"
+          ]
+        },
+        "device_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "file_id": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "HostBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "host_id",
+        "source_pin",
+        "binary_pin",
+        "adapter_version",
+        "subject",
+        "mode",
+        "config_space",
+        "root_id",
+        "execution_environment",
+        "mapping",
+        "capability_binding_key",
+        "capability_snapshot_hash",
+        "model",
+        "construction_path"
+      ],
+      "properties": {
+        "host_id": {
+          "enum": [
+            "pi",
+            "oh-my-pi",
+            "step-code",
+            "codex",
+            "opencode",
+            "openhands-sdk",
+            "claude-code"
+          ]
+        },
+        "source_pin": {
+          "$ref": "#/$defs/SourcePin"
+        },
+        "binary_pin": {
+          "$ref": "#/$defs/BinaryPin"
+        },
+        "adapter_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "subject": {
+          "const": "product_adapter"
+        },
+        "mode": {
+          "enum": [
+            "interactive",
+            "print",
+            "rpc",
+            "acp",
+            "sdk",
+            "sdk_stdio",
+            "exec",
+            "app-server",
+            "server",
+            "local_conversation",
+            "remote_conversation"
+          ]
+        },
+        "config_space": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]{0,63}$"
+        },
+        "root_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "execution_environment": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "os",
+            "arch",
+            "isolation"
+          ],
+          "properties": {
+            "os": {
+              "type": "string",
+              "minLength": 1
+            },
+            "arch": {
+              "type": "string",
+              "minLength": 1
+            },
+            "isolation": {
+              "enum": [
+                "local",
+                "container",
+                "remote"
+              ]
+            }
+          }
+        },
+        "mapping": {
+          "enum": [
+            "exact",
+            "partial",
+            "unmapped"
+          ]
+        },
+        "capability_binding_key": {
+          "$ref": "#/$defs/Hash"
+        },
+        "capability_snapshot_hash": {
+          "$ref": "#/$defs/Hash"
+        },
+        "model": {
+          "$ref": "#/$defs/ModelRef"
+        },
+        "construction_path": {
+          "enum": [
+            "cli",
+            "sdk",
+            "rpc",
+            "app_server",
+            "acp",
+            "sdk_stdio",
+            "server",
+            "server_settings",
+            "direct_agent",
+            "preset_agent",
+            "subagent_factory"
+          ]
+        }
+      }
+    },
+    "ConfigSpaceRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "config_space_id",
+        "host",
+        "root_id",
+        "root_identity_pin",
+        "source_layer_set_hash",
+        "config_version",
+        "semantic_hash"
+      ],
+      "properties": {
+        "config_space_id": {
+          "$ref": "#/$defs/Hash"
+        },
+        "host": {
+          "$ref": "#/$defs/HostBinding"
+        },
+        "root_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "root_identity_pin": {
+          "$ref": "#/$defs/RootIdentityPin"
+        },
+        "source_layer_set_hash": {
+          "$ref": "#/$defs/Hash"
+        },
+        "config_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "semantic_hash": {
+          "$ref": "#/$defs/Hash"
+        }
+      }
+    },
+    "TrialAuthorization": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "candidate_id",
+        "update_grant_id",
+        "rollback_grant_id",
+        "update_patch_hash",
+        "rollback_patch_hash",
+        "scope_hash",
+        "checked_at"
+      ],
+      "properties": {
+        "candidate_id": {
+          "$ref": "#/$defs/TrialId"
+        },
+        "update_grant_id": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "string",
+              "minLength": 3
+            }
+          ]
+        },
+        "rollback_grant_id": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "string",
+              "minLength": 3
+            }
+          ]
+        },
+        "update_patch_hash": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/Hash"
+            }
+          ]
+        },
+        "rollback_patch_hash": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/Hash"
+            }
+          ]
+        },
+        "scope_hash": {
+          "$ref": "#/$defs/Hash"
+        },
+        "checked_at": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "CurrentConfigProjection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "state",
+        "values",
+        "observed_at",
+        "readback_ref",
+        "config_version"
+      ],
+      "properties": {
+        "state": {
+          "enum": [
+            "baseline_confirmed",
+            "candidate_confirmed",
+            "drifted",
+            "unknown"
+          ]
+        },
+        "values": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/FieldAssignment"
+          }
+        },
+        "observed_at": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "integer",
+              "minimum": 0
+            }
+          ]
+        },
+        "readback_ref": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/SourceRef"
+            }
+          ]
+        },
+        "config_version": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        }
+      }
+    },
+    "ObservationState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "window_opened_at",
+        "window_closes_at",
+        "matched_samples",
+        "trigger_samples",
+        "probe_samples",
+        "guardrail_evaluations",
+        "last_sample_at"
+      ],
+      "properties": {
+        "window_opened_at": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "integer",
+              "minimum": 0
+            }
+          ]
+        },
+        "window_closes_at": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "integer",
+              "minimum": 0
+            }
+          ]
+        },
+        "matched_samples": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "trigger_samples": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "probe_samples": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "guardrail_evaluations": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "last_sample_at": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "integer",
+              "minimum": 0
+            }
+          ]
+        }
+      }
+    },
+    "RollbackState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "state",
+        "reason",
+        "target_values",
+        "readback_ref"
+      ],
+      "properties": {
+        "state": {
+          "enum": [
+            "not_required",
+            "pending",
+            "in_progress",
+            "baseline_confirmed",
+            "conflict",
+            "unverified",
+            "abandoned"
+          ]
+        },
+        "reason": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "enum": [
+                "guardrail",
+                "manual",
+                "external_drift",
+                "budget_exhausted",
+                "stop_rule"
+              ]
+            }
+          ]
+        },
+        "target_values": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/FieldAssignment"
+          }
+        },
+        "readback_ref": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/SourceRef"
+            }
+          ]
+        }
+      }
+    },
+    "RecoveryAttestation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "operator_id",
+        "attestation_ref",
+        "conflict_evidence_ref",
+        "observed_config_version",
+        "observed_semantic_hash"
+      ],
+      "properties": {
+        "operator_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "attestation_ref": {
+          "$ref": "#/$defs/SourceRef"
+        },
+        "conflict_evidence_ref": {
+          "$ref": "#/$defs/SourceRef"
+        },
+        "observed_config_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "observed_semantic_hash": {
+          "$ref": "#/$defs/Hash"
+        }
+      }
+    },
+    "RecoveryState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "attestation",
+        "received_at",
+        "resolution"
+      ],
+      "properties": {
+        "attestation": {
+          "$ref": "#/$defs/RecoveryAttestation"
+        },
+        "received_at": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "resolution": {
+          "enum": [
+            "rollback_requested",
+            "abandoned"
+          ]
+        }
+      }
+    },
+    "ConfigError": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "code",
+        "message_key",
+        "field_id",
+        "path",
+        "retryable",
+        "details"
+      ],
+      "properties": {
+        "code": {
+          "type": "string",
+          "pattern": "^E_CFG_[A-Z0-9_]+$"
+        },
+        "message_key": {
+          "type": "string",
+          "pattern": "^cfg\\.[a-z0-9_]+$"
+        },
+        "field_id": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/FieldId"
+            }
+          ]
+        },
+        "path": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "string",
+              "maxLength": 1024
+            }
+          ]
+        },
+        "retryable": {
+          "type": "boolean"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "key",
+              "value"
+            ],
+            "properties": {
+              "key": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 64
+              },
+              "value": {
+                "$ref": "#/$defs/ConfigScalar"
+              }
+            }
+          }
+        }
+      }
+    },
+    "SourcePin": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "host_version",
+        "host_version_kind",
+        "source_commit"
+      ],
+      "properties": {
+        "host_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "host_version_kind": {
+          "enum": [
+            "release",
+            "source_commit",
+            "binary_hash"
+          ]
+        },
+        "source_commit": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "string",
+              "minLength": 1
+            }
+          ]
+        }
+      }
+    },
+    "BinaryPin": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "binary_version",
+        "binary_hash"
+      ],
+      "properties": {
+        "binary_version": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "string",
+              "minLength": 1
+            }
+          ]
+        },
+        "binary_hash": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/Hash"
+            }
+          ]
+        }
+      }
+    },
+    "ModelRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "provider",
+        "model_id",
+        "variant",
+        "resolution_source"
+      ],
+      "properties": {
+        "provider": {
+          "type": "string",
+          "minLength": 1
+        },
+        "model_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "variant": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "resolution_source": {
+          "enum": [
+            "host_readback",
+            "explicit"
+          ]
+        }
+      }
+    }
+  }
+}

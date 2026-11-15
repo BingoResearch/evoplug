@@ -1,0 +1,116 @@
+{
+  "$id": "urn:evoplug:schema:evd_budget_estimate_row:1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Physical row of evd_budget_estimate (DD-EVD-024); values are the frozen row_json columns.",
+  "properties": {
+    "branch_id": {
+      "type": "string"
+    },
+    "config_version": {
+      "type": "string"
+    },
+    "content_bytes": {
+      "maximum": 33554432,
+      "minimum": 1,
+      "type": "integer"
+    },
+    "content_hash": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "content_ref": {
+      "pattern": "^blob://",
+      "type": "string"
+    },
+    "created_at": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "estimate_hash": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "estimate_id": {
+      "type": "string"
+    },
+    "estimate_key": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "goal_version": {
+      "type": "string"
+    },
+    "input_epoch": {
+      "minimum": 1,
+      "type": "integer"
+    },
+    "limits_hash": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "row_version": {
+      "const": 0,
+      "type": "integer"
+    },
+    "service_profile_key": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "shard_id": {
+      "type": "string"
+    },
+    "shard_key": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "shard_plan_id": {
+      "type": "string"
+    },
+    "source_blob_refs": {
+      "description": "JCS text; JSON array",
+      "type": "string"
+    },
+    "task_id": {
+      "type": "string"
+    },
+    "verdict": {
+      "enum": [
+        "fits",
+        "exceeds_request",
+        "exceeds_question",
+        "limits_unknown"
+      ],
+      "type": "string"
+    },
+    "watermark": {
+      "minimum": 0,
+      "type": "integer"
+    }
+  },
+  "required": [
+    "estimate_id",
+    "estimate_key",
+    "estimate_hash",
+    "shard_id",
+    "shard_key",
+    "shard_plan_id",
+    "service_profile_key",
+    "limits_hash",
+    "verdict",
+    "content_hash",
+    "content_ref",
+    "content_bytes",
+    "source_blob_refs",
+    "row_version",
+    "created_at",
+    "task_id",
+    "branch_id",
+    "input_epoch",
+    "goal_version",
+    "config_version",
+    "watermark"
+  ],
+  "title": "EvdBudgetEstimateRow",
+  "type": "object"
+}

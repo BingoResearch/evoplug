@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:budget_policy:1",
+  "title": "BudgetPolicy",
+  "description": "bpol/1 budget policy (DD-FND-080). Local allowance and provider usage are separate ledgers.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "policy_version", "scopes", "concurrency", "unknown_cost", "unknown_provider_limit", "reservation_ttl_ms"],
+  "properties": {
+    "schema_version": { "const": "rsi.budget_policy/1" },
+    "policy_version": { "const": "bpol/1" },
+    "scopes": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/BudgetScopePolicy" } },
+    "concurrency": { "$ref": "#/$defs/BudgetConcurrencyPolicy" },
+    "unknown_cost": { "const": "block_paid" },
+    "unknown_provider_limit": { "const": "local_guard" },
+    "reservation_ttl_ms": { "type": "integer", "minimum": 1, "maximum": 600000 }
+  },
+  "$defs": {
+    "BudgetPurpose": { "title": "BudgetPurpose", "enum": ["judge", "review_generate", "review_match", "verifier", "egress_other"] },
+    "BudgetScopePolicy": {
+      "title": "BudgetScopePolicy",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["purpose", "max_attempts", "max_input_tokens", "max_output_tokens", "request_max_tokens", "question_max_tokens", "request_margin_tokens", "question_margin_tokens", "max_cost_micros", "wall_ms", "reserve_ms", "min_work_ms", "attempt_charge_at", "attempt_refundable"],
+      "properties": {
+        "purpose": { "$ref": "#/$defs/BudgetPurpose" },
+        "max_attempts": { "type": "integer", "minimum": 1, "maximum": 10 },
+        "max_input_tokens": { "type": "integer", "minimum": 0 },
+        "max_output_tokens": { "type": "integer", "minimum": 0 },
+        "request_max_tokens": { "type": "integer", "minimum": 1 },
+        "question_max_tokens": { "type": "integer", "minimum": 1 },
+        "request_margin_tokens": { "type": "integer", "minimum": 0 },
+        "question_margin_tokens": { "type": "integer", "minimum": 0 },
+        "max_cost_micros": { "type": ["integer", "null"], "minimum": 0 },
+        "wall_ms": { "type": "integer", "minimum": 1 },
+        "reserve_ms": { "type": "integer", "minimum": 0 },
+        "min_work_ms": { "type": "integer", "minimum": 1 },
+        "attempt_charge_at": { "const": "claim" },
+        "attempt_refundable": { "const": false }
+      }
+    },
+    "BudgetConcurrencyPolicy": {
+      "title": "BudgetConcurrencyPolicy",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["global_inflight", "per_scope_inflight", "rpm", "burst", "cooldown_base_ms", "cooldown_max_ms", "unknown_limit_inflight", "unknown_limit_rpm"],
+      "properties": {
+        "global_inflight": { "type": "integer", "minimum": 1 },
+        "per_scope_inflight": { "type": "integer", "minimum": 1 },
+        "rpm": { "type": "integer", "minimum": 1 },
+        "burst": { "type": "integer", "minimum": 1 },
+        "cooldown_base_ms": { "type": "integer", "minimum": 1 },
+        "cooldown_max_ms": { "type": "integer", "minimum": 1 },
+        "unknown_limit_inflight": { "const": 1 },
+        "unknown_limit_rpm": { "const": 6 }
+      }
+    }
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:closure_result:1",
+  "title": "ClosureResult",
+  "description": "DD-EVD-026 closure result.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "units",
+    "omissions",
+    "per_question",
+    "closure_hash"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "rsi.closure_result/1"
+    },
+    "units": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "omissions": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "per_question": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "question_key",
+          "unit_keys",
+          "omission_keys"
+        ]
+      }
+    },
+    "closure_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    }
+  }
+}

@@ -1,0 +1,142 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:review_snapshots:1",
+  "title": "ReviewSnapshotRow",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "snapshot_id",
+    "schema_version",
+    "snapshot_key",
+    "snapshot_hash",
+    "version_binding_json",
+    "snapshot_scope",
+    "task_id",
+    "branch_id",
+    "input_epoch",
+    "goal_version",
+    "config_version",
+    "watermark",
+    "host_id",
+    "config_space",
+    "mode",
+    "trigger_event_id",
+    "trigger_kind",
+    "review_kind",
+    "review_scope_key",
+    "boundary_key",
+    "signal_digest",
+    "trigger_dedupe_key",
+    "policy_version",
+    "body_blob",
+    "created_at"
+  ],
+  "properties": {
+    "snapshot_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "schema_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "snapshot_key": {
+      "type": "string",
+      "minLength": 1
+    },
+    "snapshot_hash": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "version_binding_json": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Canonical JSON text."
+    },
+    "snapshot_scope": {
+      "type": "string",
+      "minLength": 1
+    },
+    "task_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "branch_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "input_epoch": {
+      "type": "integer"
+    },
+    "goal_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "config_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "watermark": {
+      "type": "integer"
+    },
+    "host_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "config_space": {
+      "type": "string",
+      "minLength": 1
+    },
+    "mode": {
+      "type": "string",
+      "minLength": 1
+    },
+    "trigger_event_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "trigger_kind": {
+      "type": "string",
+      "minLength": 1
+    },
+    "review_kind": {
+      "type": "string",
+      "minLength": 1
+    },
+    "review_scope_key": {
+      "type": "string",
+      "minLength": 1
+    },
+    "boundary_key": {
+      "type": "string",
+      "minLength": 1
+    },
+    "signal_digest": {
+      "type": "string",
+      "minLength": 1
+    },
+    "trigger_dedupe_key": {
+      "type": "string",
+      "minLength": 1
+    },
+    "policy_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "authorization_ref": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "body_blob": {
+      "type": "string",
+      "minLength": 1
+    },
+    "created_at": {
+      "type": "integer"
+    }
+  }
+}

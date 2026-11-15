@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:host_probe_row:1",
+  "title": "HostProbePhysicalRow",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "probe_id", "binding_key", "binding_json", "subject", "target_kind",
+    "probe_contract_version", "probe_mode", "fixture_ref", "probe_action",
+    "assertions_json", "capability_results_json", "result", "blocker_json",
+    "expected", "observed", "evidence_refs_json", "duration_ms", "checked_at", "row_version"
+  ],
+  "properties": {
+    "probe_id": { "type": "string", "pattern": "^prb:" },
+    "binding_key": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "binding_json": { "type": "string", "description": "JCS text of CapabilityBinding" },
+    "subject": { "enum": ["host_contract", "product_adapter"] },
+    "target_kind": { "enum": ["host", "jev_api", "filesystem"] },
+    "probe_contract_version": { "const": "host-probe/2" },
+    "probe_mode": { "enum": ["read_only", "temp_fixture"] },
+    "fixture_ref": { "type": ["string", "null"] },
+    "probe_action": { "type": "string", "minLength": 1 },
+    "assertions_json": { "type": "string" },
+    "capability_results_json": { "type": "string" },
+    "result": { "enum": ["passed", "failed", "blocked", "unknown"] },
+    "blocker_json": { "type": ["string", "null"] },
+    "expected": { "type": "string" },
+    "observed": { "type": "string" },
+    "evidence_refs_json": { "type": "string" },
+    "duration_ms": { "type": "integer", "minimum": 0 },
+    "checked_at": { "type": "integer", "minimum": 0 },
+    "row_version": { "type": "integer", "minimum": 1 }
+  }
+}

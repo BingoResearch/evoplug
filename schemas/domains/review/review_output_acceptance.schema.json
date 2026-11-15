@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:review_output_acceptances:1",
+  "title": "ReviewOutputAcceptanceRow",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "attempt_id",
+    "job_id",
+    "output_ref",
+    "output_hash",
+    "candidate_count",
+    "attempt_version_before",
+    "attempt_version_after",
+    "job_version_before",
+    "job_version_after",
+    "job_stage_after",
+    "fencing_token",
+    "accepted_at",
+    "row_version"
+  ],
+  "properties": {
+    "attempt_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "job_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "output_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "output_hash": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "candidate_count": {
+      "type": "integer"
+    },
+    "attempt_version_before": {
+      "type": "integer"
+    },
+    "attempt_version_after": {
+      "type": "integer"
+    },
+    "job_version_before": {
+      "type": "integer"
+    },
+    "job_version_after": {
+      "type": "integer"
+    },
+    "job_stage_after": {
+      "type": "string",
+      "minLength": 1
+    },
+    "fencing_token": {
+      "type": "integer"
+    },
+    "accepted_at": {
+      "type": "integer"
+    },
+    "row_version": {
+      "type": "integer"
+    }
+  }
+}

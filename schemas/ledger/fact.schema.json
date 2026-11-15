@@ -1,0 +1,548 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:state_fact_record:1",
+  "title": "StateFactRecord",
+  "description": "State fact row plus verification record and draft (DD-FND-053/074). truth_state and stale are independent axes.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "fact_id",
+    "binding",
+    "kind",
+    "subject",
+    "value",
+    "truth_state",
+    "stale",
+    "stale_reason",
+    "source_ref",
+    "producer_ref",
+    "verifier_ref",
+    "artifact_version",
+    "observed_at",
+    "content_hash",
+    "row_version"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "rsi.state_fact/1"
+    },
+    "fact_id": {
+      "type": "string",
+      "pattern": "^fact:[0-9A-HJKMNP-TV-Z]{26}$"
+    },
+    "binding": {
+      "$ref": "#/$defs/VersionBinding"
+    },
+    "kind": {
+      "$ref": "#/$defs/StateFactKind"
+    },
+    "subject": {
+      "type": "string",
+      "minLength": 1
+    },
+    "value": {
+      "type": "string",
+      "minLength": 2
+    },
+    "truth_state": {
+      "enum": [
+        "claim",
+        "observed",
+        "verified",
+        "contradicted",
+        "unknown"
+      ]
+    },
+    "stale": {
+      "type": "boolean"
+    },
+    "stale_reason": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "artifact_changed",
+        "verifier_invalidated",
+        "correction",
+        "explicit",
+        null
+      ]
+    },
+    "source_ref": {
+      "$ref": "#/$defs/SourceRef"
+    },
+    "producer_ref": {
+      "$ref": "#/$defs/SourceRef"
+    },
+    "verifier_ref": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/SourceRef"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "artifact_version": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "observed_at": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "content_hash": {
+      "$ref": "#/$defs/Hash"
+    },
+    "row_version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "verifiers": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/VerifierRegistryView"
+      }
+    }
+  },
+  "$defs": {
+    "Hash": {
+      "title": "Hash",
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "SourceRef": {
+      "title": "SourceRef",
+      "oneOf": [
+        {
+          "type": "string",
+          "pattern": "^journal://ev:[0-9A-HJKMNP-TV-Z]{26}#bytes=(0|[1-9][0-9]*)-(0|[1-9][0-9]*)$"
+        },
+        {
+          "type": "string",
+          "pattern": "^blob://sha256:[0-9a-f]{64}#bytes=(0|[1-9][0-9]*)-(0|[1-9][0-9]*)$"
+        }
+      ]
+    },
+    "VersionBinding": {
+      "title": "VersionBinding",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "task_id",
+        "branch_id",
+        "input_epoch",
+        "goal_version",
+        "config_version",
+        "watermark"
+      ],
+      "properties": {
+        "task_id": {
+          "type": "string"
+        },
+        "branch_id": {
+          "type": "string"
+        },
+        "input_epoch": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "goal_version": {
+          "type": "string"
+        },
+        "config_version": {
+          "type": "string"
+        },
+        "watermark": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "StateFactKind": {
+      "title": "StateFactKind",
+      "enum": [
+        "code",
+        "interface_contract",
+        "call",
+        "result",
+        "diff",
+        "test",
+        "message"
+      ]
+    },
+    "MethodRef": {
+      "title": "MethodRef",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "method_id",
+        "method_version",
+        "rule_version"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "rsi.method_ref/1"
+        },
+        "method_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "method_version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "rule_version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        }
+      }
+    },
+    "VerifierRegistryView": {
+      "title": "VerifierRegistryView",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "fact_id",
+        "event_id",
+        "verifier_ref",
+        "verifier_id",
+        "verifier_kind",
+        "method_ref",
+        "reservation_ids",
+        "independent",
+        "verification_binding",
+        "requirement_ids",
+        "proposition_ids",
+        "effect",
+        "artifact_version",
+        "source_ids",
+        "source_refs",
+        "result",
+        "status",
+        "verified_at",
+        "row_version"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "rsi.fact_verification/1"
+        },
+        "fact_id": {
+          "type": "string"
+        },
+        "event_id": {
+          "type": "string"
+        },
+        "verifier_ref": {
+          "$ref": "#/$defs/SourceRef"
+        },
+        "verifier_id": {
+          "type": "string"
+        },
+        "verifier_kind": {
+          "enum": [
+            "test",
+            "artifact_check",
+            "external",
+            "human"
+          ]
+        },
+        "method_ref": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/MethodRef"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "reservation_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "independent": {
+          "type": "boolean"
+        },
+        "verification_binding": {
+          "$ref": "#/$defs/VersionBinding"
+        },
+        "requirement_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "proposition_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^propo:[0-9a-f]{64}$"
+          }
+        },
+        "effect": {
+          "enum": [
+            "supports",
+            "violates",
+            "unknown"
+          ]
+        },
+        "artifact_version": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "source_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "source_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SourceRef"
+          }
+        },
+        "result": {
+          "enum": [
+            "verified",
+            "contradicted",
+            "unknown"
+          ]
+        },
+        "status": {
+          "enum": [
+            "valid",
+            "invalidated",
+            "unknown"
+          ]
+        },
+        "verified_at": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "row_version": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "StateFactDraft": {
+      "title": "StateFactDraft",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "binding",
+        "kind",
+        "subject",
+        "value",
+        "truth_state",
+        "source_ref",
+        "producer_ref",
+        "artifact_version",
+        "observed_at"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "rsi.state_fact_draft/1"
+        },
+        "binding": {
+          "$ref": "#/$defs/VersionBinding"
+        },
+        "kind": {
+          "$ref": "#/$defs/StateFactKind"
+        },
+        "subject": {
+          "type": "string",
+          "minLength": 1
+        },
+        "value": {
+          "type": "string",
+          "minLength": 2
+        },
+        "truth_state": {
+          "enum": [
+            "claim",
+            "observed"
+          ]
+        },
+        "source_ref": {
+          "$ref": "#/$defs/SourceRef"
+        },
+        "producer_ref": {
+          "$ref": "#/$defs/SourceRef"
+        },
+        "artifact_version": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "observed_at": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "VerifyFactRequest": {
+      "title": "VerifyFactRequest",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "fact_id",
+        "session_id",
+        "trigger_event_id",
+        "expected_row_version",
+        "binding",
+        "verifier_ref",
+        "verifier_id",
+        "verifier_kind",
+        "method_ref",
+        "reservation_ids",
+        "requirement_ids",
+        "proposition_ids",
+        "effect",
+        "artifact_version",
+        "source_ids",
+        "source_refs",
+        "result"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "rsi.verify_fact/1"
+        },
+        "fact_id": {
+          "type": "string"
+        },
+        "session_id": {
+          "type": "string"
+        },
+        "trigger_event_id": {
+          "type": "string"
+        },
+        "expected_row_version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "binding": {
+          "$ref": "#/$defs/VersionBinding"
+        },
+        "verifier_ref": {
+          "$ref": "#/$defs/SourceRef"
+        },
+        "verifier_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "verifier_kind": {
+          "enum": [
+            "test",
+            "artifact_check",
+            "external",
+            "human"
+          ]
+        },
+        "method_ref": {
+          "$ref": "#/$defs/MethodRef"
+        },
+        "reservation_ids": {
+          "type": "array",
+          "maxItems": 8,
+          "items": {
+            "type": "string"
+          }
+        },
+        "requirement_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "proposition_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "effect": {
+          "enum": [
+            "supports",
+            "violates",
+            "unknown"
+          ]
+        },
+        "artifact_version": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "source_ids": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 128,
+          "items": {
+            "type": "string"
+          }
+        },
+        "source_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SourceRef"
+          }
+        },
+        "result": {
+          "enum": [
+            "verified",
+            "contradicted",
+            "unknown"
+          ]
+        }
+      }
+    }
+  },
+  "x-evoplug-ddl": {
+    "table": "state_fact",
+    "enums": {
+      "kind": [
+        "code",
+        "interface_contract",
+        "call",
+        "result",
+        "diff",
+        "test",
+        "message"
+      ],
+      "truth_state": [
+        "claim",
+        "observed",
+        "verified",
+        "contradicted",
+        "unknown"
+      ],
+      "stale_reason": [
+        "artifact_changed",
+        "verifier_invalidated",
+        "correction",
+        "explicit"
+      ]
+    }
+  }
+}

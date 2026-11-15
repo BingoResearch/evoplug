@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:host_trigger_event_row:1",
+  "title": "TriggerEventPhysicalRow",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "trigger_event_id", "owner", "object_type", "revision", "state", "trigger_kind",
+    "decision", "decision_reason", "trigger_dedupe_key", "source_event_key", "boundary_key",
+    "signal_digest", "task_id", "branch_id", "input_epoch", "goal_version", "config_version",
+    "watermark", "source_event_ref", "source_refs_json", "content_hash", "decided_at"
+  ],
+  "properties": {
+    "trigger_event_id": { "type": "string", "pattern": "^trg:" },
+    "owner": { "const": "host" },
+    "object_type": { "const": "trigger_event" },
+    "revision": { "const": 1 },
+    "state": { "const": "recorded" },
+    "trigger_kind": { "enum": ["new_input", "tool_fact", "compaction", "task_boundary_candidate", "task_stable", "session_end", "user_review_request", "experience_trigger", "config_signal"] },
+    "decision": { "enum": ["enqueue", "skip", "defer", "suppress"] },
+    "decision_reason": {
+      "enum": [
+        "auto_enqueued", "explicit_enqueued", "completion_claim_only", "no_verified_signal",
+        "not_boundary_candidate", "stable_boundary_pending", "stable_boundary_unknown",
+        "watermark_gap", "capability_unknown", "capability_unsupported", "capability_failed",
+        "internal_origin", "origin_unknown", "job_live", "task_job_live", "replay_duplicate",
+        "auto_quota_exhausted", "budget_unavailable", "authorization_missing", "grant_missing",
+        "policy_auto_disabled", "late_event", "invalid_identity", "schema_rejected", "explicit_stage"
+      ]
+    },
+    "trigger_dedupe_key": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "source_event_key": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "boundary_key": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "signal_digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "task_id": { "type": "string", "minLength": 1 },
+    "branch_id": { "type": "string", "minLength": 1 },
+    "input_epoch": { "type": "integer", "minimum": 1 },
+    "goal_version": { "type": "string", "minLength": 1 },
+    "config_version": { "type": "string", "minLength": 1 },
+    "watermark": { "type": "integer", "minimum": 0 },
+    "source_event_ref": { "type": "string", "minLength": 1 },
+    "source_refs_json": { "type": "string", "description": "JCS text array of SourceRef" },
+    "content_hash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "decided_at": { "type": "integer", "minimum": 0 }
+  }
+}

@@ -1,0 +1,760 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:budget_reserve_request:1",
+  "title": "BudgetReserveRequest",
+  "description": "Budget reserve/claim/settle API and the two-ledger views (DD-FND-081).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "reservation_key",
+    "binding",
+    "purpose",
+    "scope_key",
+    "service_profile_id",
+    "provider_scope",
+    "limits",
+    "input_tokens_requested",
+    "output_tokens_requested",
+    "deadline_ms"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "rsi.budget_reserve/1"
+    },
+    "reservation_key": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "binding": {
+      "$ref": "#/$defs/VersionBinding"
+    },
+    "purpose": {
+      "$ref": "#/$defs/BudgetPurpose"
+    },
+    "scope_key": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "service_profile_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "provider_scope": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "limits": {
+      "$ref": "#/$defs/ServiceProfileLimits"
+    },
+    "input_tokens_requested": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "output_tokens_requested": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "deadline_ms": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 600000
+    }
+  },
+  "$defs": {
+    "Hash": {
+      "title": "Hash",
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "SourceRef": {
+      "title": "SourceRef",
+      "oneOf": [
+        {
+          "type": "string",
+          "pattern": "^journal://ev:[0-9A-HJKMNP-TV-Z]{26}#bytes=(0|[1-9][0-9]*)-(0|[1-9][0-9]*)$"
+        },
+        {
+          "type": "string",
+          "pattern": "^blob://sha256:[0-9a-f]{64}#bytes=(0|[1-9][0-9]*)-(0|[1-9][0-9]*)$"
+        }
+      ]
+    },
+    "VersionBinding": {
+      "title": "VersionBinding",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "task_id",
+        "branch_id",
+        "input_epoch",
+        "goal_version",
+        "config_version",
+        "watermark"
+      ],
+      "properties": {
+        "task_id": {
+          "type": "string"
+        },
+        "branch_id": {
+          "type": "string"
+        },
+        "input_epoch": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "goal_version": {
+          "type": "string"
+        },
+        "config_version": {
+          "type": "string"
+        },
+        "watermark": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "BudgetPurpose": {
+      "title": "BudgetPurpose",
+      "enum": [
+        "judge",
+        "review_generate",
+        "review_match",
+        "verifier",
+        "egress_other"
+      ]
+    },
+    "ServiceProfileLimits": {
+      "title": "ServiceProfileLimits",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/VerifiedServiceProfileLimits"
+        },
+        {
+          "$ref": "#/$defs/UnknownServiceProfileLimits"
+        }
+      ]
+    },
+    "VerifiedServiceProfileLimits": {
+      "title": "VerifiedServiceProfileLimits",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source",
+        "profile_hash",
+        "request_max_tokens",
+        "question_max_tokens",
+        "max_output_tokens",
+        "rpm",
+        "concurrency",
+        "pricing"
+      ],
+      "properties": {
+        "source": {
+          "const": "verified_profile"
+        },
+        "profile_hash": {
+          "$ref": "#/$defs/Hash"
+        },
+        "request_max_tokens": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "question_max_tokens": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "max_output_tokens": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "rpm": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        },
+        "concurrency": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        },
+        "pricing": {
+          "$ref": "#/$defs/Pricing"
+        }
+      }
+    },
+    "Pricing": {
+      "title": "Pricing",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/KnownPricing"
+        },
+        {
+          "$ref": "#/$defs/UnknownPricing"
+        }
+      ]
+    },
+    "KnownPricing": {
+      "title": "KnownPricing",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "input_micros_per_million",
+        "output_micros_per_million",
+        "fixed_micros"
+      ],
+      "properties": {
+        "status": {
+          "const": "known"
+        },
+        "input_micros_per_million": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "output_micros_per_million": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "fixed_micros": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "UnknownPricing": {
+      "title": "UnknownPricing",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status"
+      ],
+      "properties": {
+        "status": {
+          "const": "unknown"
+        }
+      }
+    },
+    "UnknownServiceProfileLimits": {
+      "title": "UnknownServiceProfileLimits",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source",
+        "profile_hash",
+        "reason_code"
+      ],
+      "properties": {
+        "source": {
+          "const": "unknown"
+        },
+        "profile_hash": {
+          "type": "null"
+        },
+        "reason_code": {
+          "enum": [
+            "profile_missing",
+            "limits_unknown",
+            "pricing_unknown"
+          ]
+        }
+      }
+    },
+    "BudgetReservation": {
+      "title": "BudgetReservation",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reservation_id",
+        "reservation_key",
+        "binding",
+        "policy_version",
+        "purpose",
+        "state",
+        "attempts_remaining",
+        "input_tokens_remaining",
+        "output_tokens_remaining",
+        "cost_micros_remaining",
+        "cost_status",
+        "expires_at",
+        "created_at"
+      ],
+      "properties": {
+        "reservation_id": {
+          "type": "string",
+          "pattern": "^resv:[0-9A-HJKMNP-TV-Z]{26}$"
+        },
+        "reservation_key": {
+          "type": "string"
+        },
+        "binding": {
+          "$ref": "#/$defs/VersionBinding"
+        },
+        "policy_version": {
+          "const": "bpol/1"
+        },
+        "purpose": {
+          "$ref": "#/$defs/BudgetPurpose"
+        },
+        "state": {
+          "enum": [
+            "reserved",
+            "claimed",
+            "settled",
+            "released",
+            "expired",
+            "unsettled"
+          ]
+        },
+        "attempts_remaining": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "input_tokens_remaining": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "output_tokens_remaining": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "cost_micros_remaining": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "cost_status": {
+          "enum": [
+            "known",
+            "unknown",
+            "not_applicable"
+          ]
+        },
+        "expires_at": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "created_at": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "BudgetClaimRequest": {
+      "title": "BudgetClaimRequest",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reservation_id",
+        "attempt_ref",
+        "input_tokens_estimated",
+        "output_tokens_reserved",
+        "counting_method_version",
+        "deadline_ms"
+      ],
+      "properties": {
+        "reservation_id": {
+          "type": "string"
+        },
+        "attempt_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "input_tokens_estimated": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "output_tokens_reserved": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "counting_method_version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "deadline_ms": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 600000
+        }
+      }
+    },
+    "BudgetClaimResult": {
+      "title": "BudgetClaimResult",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/BudgetClaimed"
+        },
+        {
+          "$ref": "#/$defs/BudgetClaimBlocked"
+        }
+      ]
+    },
+    "BudgetClaimed": {
+      "title": "BudgetClaimed",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "state",
+        "reservation",
+        "attempt_charge_id",
+        "effective_deadline_ms"
+      ],
+      "properties": {
+        "state": {
+          "const": "claimed"
+        },
+        "reservation": {
+          "$ref": "#/$defs/BudgetReservation"
+        },
+        "attempt_charge_id": {
+          "type": "string",
+          "pattern": "^chg:[0-9A-HJKMNP-TV-Z]{26}$"
+        },
+        "effective_deadline_ms": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "BudgetClaimBlocked": {
+      "title": "BudgetClaimBlocked",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "state",
+        "reason_code",
+        "retry_after_ms"
+      ],
+      "properties": {
+        "state": {
+          "const": "blocked"
+        },
+        "reason_code": {
+          "enum": [
+            "attempt_exhausted",
+            "token_exhausted",
+            "cost_exhausted",
+            "rate_limited",
+            "concurrency_limited",
+            "deadline_too_short",
+            "budget_unsettled",
+            "limits_unknown"
+          ]
+        },
+        "retry_after_ms": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        }
+      }
+    },
+    "ProviderUsage": {
+      "title": "ProviderUsage",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "usage_key",
+        "attempt_ref",
+        "provider_request_id",
+        "input_tokens",
+        "output_tokens",
+        "cost_micros",
+        "cost_status",
+        "source",
+        "receipt_ref",
+        "recorded_at"
+      ],
+      "properties": {
+        "usage_key": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "attempt_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "provider_request_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "input_tokens": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "output_tokens": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "cost_micros": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "cost_status": {
+          "enum": [
+            "known",
+            "unknown",
+            "not_applicable"
+          ]
+        },
+        "source": {
+          "enum": [
+            "provider_receipt",
+            "host_reported",
+            "none"
+          ]
+        },
+        "receipt_ref": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/SourceRef"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "recorded_at": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "BudgetSettleRequest": {
+      "title": "BudgetSettleRequest",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reservation_id",
+        "outcome",
+        "provider_usage"
+      ],
+      "properties": {
+        "reservation_id": {
+          "type": "string"
+        },
+        "outcome": {
+          "enum": [
+            "succeeded",
+            "failed",
+            "cancelled",
+            "not_sent",
+            "unknown"
+          ]
+        },
+        "provider_usage": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/ProviderUsage"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "BudgetSettlement": {
+      "title": "BudgetSettlement",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reservation_id",
+        "state",
+        "attempt_charges",
+        "input_token_charges",
+        "output_token_charges",
+        "cost_charges_micros",
+        "provider_usage",
+        "overage",
+        "reason_code"
+      ],
+      "properties": {
+        "reservation_id": {
+          "type": "string"
+        },
+        "state": {
+          "enum": [
+            "settled",
+            "released",
+            "unsettled"
+          ]
+        },
+        "attempt_charges": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "input_token_charges": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "output_token_charges": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "cost_charges_micros": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "provider_usage": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/ProviderUsage"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "overage": {
+          "type": "boolean"
+        },
+        "reason_code": {
+          "enum": [
+            "usage_recorded",
+            "released_before_claim",
+            "usage_unknown",
+            "usage_partial"
+          ]
+        }
+      }
+    },
+    "BudgetActualsView": {
+      "title": "BudgetActualsView",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "binding",
+        "reservation_ids",
+        "provider_usage",
+        "input_tokens",
+        "output_tokens",
+        "cost_micros",
+        "cost_status",
+        "cost_complete",
+        "receipts"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "rsi.budget_actuals/1"
+        },
+        "binding": {
+          "$ref": "#/$defs/VersionBinding"
+        },
+        "reservation_ids": {
+          "type": "array",
+          "maxItems": 8,
+          "items": {
+            "type": "string"
+          }
+        },
+        "provider_usage": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ProviderUsage"
+          }
+        },
+        "input_tokens": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "output_tokens": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "cost_micros": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "cost_status": {
+          "enum": [
+            "known",
+            "unknown",
+            "not_applicable"
+          ]
+        },
+        "cost_complete": {
+          "type": "boolean"
+        },
+        "receipts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SourceRef"
+          }
+        }
+      }
+    }
+  },
+  "x-evoplug-ddl": {
+    "table": "budget_reservation",
+    "enums": {
+      "purpose": [
+        "judge",
+        "review_generate",
+        "review_match",
+        "verifier",
+        "egress_other"
+      ],
+      "state": [
+        "reserved",
+        "claimed",
+        "settled",
+        "released",
+        "expired",
+        "unsettled"
+      ],
+      "cost_status": [
+        "known",
+        "unknown",
+        "not_applicable"
+      ]
+    }
+  }
+}

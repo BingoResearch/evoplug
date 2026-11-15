@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:ipc_request:1",
+  "title": "IpcRequest",
+  "description": "Local IPC request envelope (DD-FND-040/042). params is validated by the method-specific validator registered by @evoplug/ipc for IpcParams[method].",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "request_id",
+    "method",
+    "params"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "rsi.ipc_request/1"
+    },
+    "request_id": {
+      "type": "string",
+      "pattern": "^ipc:[0-9A-HJKMNP-TV-Z]{26}$"
+    },
+    "method": {
+      "$ref": "#/$defs/IpcMethod"
+    },
+    "idempotency_key": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9._:-]{8,128}$"
+    },
+    "params": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "x-evoplug-deferred-validation": "params is validated per method by the IpcParams validator registered in @evoplug/ipc; the method closed set is enforced here",
+  "$defs": {
+    "IpcMethod": {
+      "title": "IpcMethod",
+      "enum": [
+        "system.describe",
+        "event.ingest",
+        "host.runtime.result",
+        "host.runtime.poll",
+        "host.runtime.upload",
+        "host.runtime.ready",
+        "identity.resolve",
+        "identity.fork",
+        "identity.resume",
+        "ledger.read",
+        "grant.issue",
+        "grant.revoke",
+        "grant.list",
+        "budget.reserve",
+        "budget.claim",
+        "budget.settle",
+        "decision.record",
+        "delivery.create",
+        "delivery.update",
+        "write.apply",
+        "egress.evaluate",
+        "egress.approve",
+        "install.approve",
+        "install.revoke",
+        "install.approval.get",
+        "install.approval.consume",
+        "replay.classify",
+        "replay.create",
+        "replay.authorize",
+        "replay.approve",
+        "replay.revoke",
+        "replay.reject",
+        "replay.execute",
+        "replay.reconcile",
+        "replay.result",
+        "status.get",
+        "maintenance.gc",
+        "config.space.capture",
+        "config.space.read_fields",
+        "config.trial.create_plan",
+        "config.trial.start",
+        "config.trial.execute_attempt",
+        "config.trial.record_observation",
+        "config.trial.request_rollback",
+        "config.trial.close",
+        "config.trial.reconcile",
+        "config.promotion.collect"
+      ]
+    }
+  }
+}

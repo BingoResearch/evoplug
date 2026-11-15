@@ -1,0 +1,113 @@
+{
+  "$id": "urn:evoplug:schema:evd_shard_row:1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Physical row of evd_shard (DD-EVD-024); values are the frozen row_json columns.",
+  "properties": {
+    "attempt_ids": {
+      "description": "JCS text; JSON array",
+      "type": "string"
+    },
+    "body_json": {
+      "description": "JCS text; JSON object",
+      "type": "string"
+    },
+    "branch_id": {
+      "type": "string"
+    },
+    "config_version": {
+      "type": "string"
+    },
+    "created_at": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "envelope_keys": {
+      "description": "JCS text; JSON array",
+      "type": "string"
+    },
+    "goal_version": {
+      "type": "string"
+    },
+    "input_epoch": {
+      "minimum": 1,
+      "type": "integer"
+    },
+    "reason_codes": {
+      "description": "JCS text; JSON array",
+      "type": "string"
+    },
+    "request_binding_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "row_version": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "shard_id": {
+      "type": "string"
+    },
+    "shard_key": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "shard_order": {
+      "minimum": 1,
+      "type": "integer"
+    },
+    "shard_plan_id": {
+      "type": "string"
+    },
+    "shard_plan_key": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "planned",
+        "budget_rejected",
+        "projection_rejected",
+        "bound",
+        "sent",
+        "accepted",
+        "degraded",
+        "unknown",
+        "cancelled",
+        "deterministic_skip"
+      ],
+      "type": "string"
+    },
+    "task_id": {
+      "type": "string"
+    },
+    "watermark": {
+      "minimum": 0,
+      "type": "integer"
+    }
+  },
+  "required": [
+    "shard_id",
+    "shard_plan_id",
+    "shard_plan_key",
+    "shard_key",
+    "shard_order",
+    "status",
+    "attempt_ids",
+    "envelope_keys",
+    "reason_codes",
+    "body_json",
+    "row_version",
+    "created_at",
+    "task_id",
+    "branch_id",
+    "input_epoch",
+    "goal_version",
+    "config_version",
+    "watermark"
+  ],
+  "title": "EvdShardRow",
+  "type": "object"
+}

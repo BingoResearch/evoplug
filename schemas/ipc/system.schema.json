@@ -1,0 +1,140 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:system_description:1",
+  "title": "SystemDescription",
+  "description": "system.describe result plus SystemStatus and GcReport (DD-FND-103). No secrets, usernames or provider tokens.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "protocol_version", "product_version", "schema_major", "schema_minor", "journal_frame_version", "runtime", "read_only", "feature_flags", "policy_version", "policy_hash"],
+  "properties": {
+    "schema_version": { "const": "rsi.system_description/1" },
+    "protocol_version": { "type": "integer", "minimum": 1 },
+    "product_version": { "type": "string", "minLength": 1, "maxLength": 64 },
+    "schema_major": { "type": "integer", "minimum": 1 },
+    "schema_minor": { "type": "integer", "minimum": 0 },
+    "journal_frame_version": { "type": "integer", "minimum": 1 },
+    "runtime": { "$ref": "#/$defs/RuntimeDescription" },
+    "read_only": { "type": "boolean" },
+    "feature_flags": { "type": "array", "items": { "enum": ["online_judge", "review_worker", "egress", "managed_write", "config_write", "replay", "runtime_probe", "fresh_home_admission", "dispatch_short_circuit", "evidence_supplement", "delivery_ttl", "feedback_ledger", "experience_retrieval", "rollback_resolution", "cli_generation", "config_autotune"] } },
+    "policy_version": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "policy_hash": { "$ref": "#/$defs/Hash" }
+  },
+  "$defs": {
+    "Hash": { "title": "Hash", "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "RuntimeDescription": {
+      "title": "RuntimeDescription",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "version", "sqlite_version", "sqlite_safe"],
+      "properties": {
+        "name": { "const": "node" },
+        "version": { "type": "string", "minLength": 1, "maxLength": 32 },
+        "sqlite_version": { "type": "string", "minLength": 1, "maxLength": 32 },
+        "sqlite_safe": { "type": "boolean" }
+      }
+    },
+    "SystemStatus": {
+      "title": "SystemStatus",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "status", "recovery_state", "storage", "ipc", "budget", "outbox", "config", "capabilities"],
+      "properties": {
+        "schema_version": { "const": "rsi.system_status/1" },
+        "status": { "enum": ["ready", "degraded_read_only", "starting", "stopped"] },
+        "recovery_state": { "enum": ["closed", "scanning", "replaying", "reconciling_outbox", "complete", "failed"] },
+        "storage": { "$ref": "#/$defs/StorageStatus" },
+        "ipc": { "$ref": "#/$defs/IpcStatus" },
+        "budget": { "$ref": "#/$defs/BudgetStatus" },
+        "outbox": { "$ref": "#/$defs/OutboxStatus" },
+        "config": { "$ref": "#/$defs/ConfigStatus" },
+        "capabilities": { "type": "array", "items": { "$ref": "#/$defs/CapabilityStatusEntry" } }
+      }
+    },
+    "StorageStatus": {
+      "title": "StorageStatus",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["journal_tail_state", "trusted_prefix_end", "quarantine_count", "db_quick_check"],
+      "properties": {
+        "journal_tail_state": { "enum": ["clean", "corrupt_tail", "corrupt_middle"] },
+        "trusted_prefix_end": { "type": "integer", "minimum": 0 },
+        "quarantine_count": { "type": "integer", "minimum": 0 },
+        "db_quick_check": { "enum": ["ok", "failed", "not_run"] }
+      }
+    },
+    "IpcStatus": {
+      "title": "IpcStatus",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["socket_mode", "token_mode", "home_mode", "active_connections"],
+      "properties": {
+        "socket_mode": { "const": "0600" },
+        "token_mode": { "const": "0600" },
+        "home_mode": { "const": "0700" },
+        "active_connections": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "BudgetStatus": {
+      "title": "BudgetStatus",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["active_reservations", "unsettled_reservations", "cooldown_scopes"],
+      "properties": {
+        "active_reservations": { "type": "integer", "minimum": 0 },
+        "unsettled_reservations": { "type": "integer", "minimum": 0 },
+        "cooldown_scopes": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "OutboxStatus": {
+      "title": "OutboxStatus",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["pending", "leased", "uncertain", "failed"],
+      "properties": {
+        "pending": { "type": "integer", "minimum": 0 },
+        "leased": { "type": "integer", "minimum": 0 },
+        "uncertain": { "type": "integer", "minimum": 0 },
+        "failed": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "ConfigStatus": {
+      "title": "ConfigStatus",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["config_version", "config_hash", "egress_policy_version"],
+      "properties": {
+        "config_version": { "type": "string" },
+        "config_hash": { "$ref": "#/$defs/Hash" },
+        "egress_policy_version": { "type": "string" }
+      }
+    },
+    "CapabilityStatusEntry": {
+      "title": "CapabilityStatusEntry",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["host_id", "status", "evidence_stage"],
+      "properties": {
+        "host_id": { "enum": ["pi", "oh-my-pi", "step-code", "codex", "opencode", "openhands-sdk", "claude-code"] },
+        "status": { "enum": ["unknown", "verified", "unsupported", "failed"] },
+        "evidence_stage": { "enum": ["none", "static", "loaded", "roundtrip"] }
+      }
+    },
+    "GcReport": {
+      "title": "GcReport",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "mode", "keep_blobs", "delete_blobs", "quarantine_blobs", "reclaimed_bytes", "expired_idempotency_rows", "deleted_temp_files", "run_id"],
+      "properties": {
+        "schema_version": { "const": "rsi.gc_report/1" },
+        "mode": { "enum": ["dry_run", "apply"] },
+        "keep_blobs": { "type": "integer", "minimum": 0 },
+        "delete_blobs": { "type": "integer", "minimum": 0 },
+        "quarantine_blobs": { "type": "integer", "minimum": 0 },
+        "reclaimed_bytes": { "type": "integer", "minimum": 0 },
+        "expired_idempotency_rows": { "type": "integer", "minimum": 0 },
+        "deleted_temp_files": { "type": "integer", "minimum": 0 },
+        "run_id": { "type": ["string", "null"], "pattern": "^mnt:[0-9A-HJKMNP-TV-Z]{26}$" }
+      }
+    }
+  }
+}

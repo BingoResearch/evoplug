@@ -1,0 +1,188 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:review_attempts:1",
+  "title": "ReviewAttemptRow",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "attempt_id",
+    "attempt_key",
+    "job_id",
+    "ordinal",
+    "state",
+    "backend_json",
+    "model_id",
+    "protocol_version",
+    "host_run_json",
+    "isolation_json",
+    "input_manifest_ref",
+    "input_manifest_hash",
+    "output_ref",
+    "budget_json",
+    "cancel_json",
+    "allowance_charge_json",
+    "provider_usage_json",
+    "row_version",
+    "created_at",
+    "updated_at"
+  ],
+  "properties": {
+    "attempt_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "attempt_key": {
+      "type": "string",
+      "minLength": 1
+    },
+    "job_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "ordinal": {
+      "type": "integer"
+    },
+    "state": {
+      "type": "string",
+      "minLength": 1
+    },
+    "backend_json": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Canonical JSON text."
+    },
+    "model_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "protocol_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "host_run_json": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Canonical JSON text."
+    },
+    "isolation_json": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Canonical JSON text."
+    },
+    "input_manifest_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "input_manifest_hash": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "output_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "output_hash": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1,
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "budget_json": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Canonical JSON text."
+    },
+    "deadline_at": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "lease_json": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1,
+      "description": "Canonical JSON text."
+    },
+    "cancel_json": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Canonical JSON text."
+    },
+    "output_json": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1,
+      "description": "Canonical JSON text."
+    },
+    "completion_evidence_ref": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "allowance_charge_json": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Canonical JSON text."
+    },
+    "provider_usage_json": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Canonical JSON text."
+    },
+    "generator_reported_usage_json": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1,
+      "description": "Canonical JSON text."
+    },
+    "exit_json": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1,
+      "description": "Canonical JSON text."
+    },
+    "last_error_json": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1,
+      "description": "Canonical JSON text."
+    },
+    "started_at": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "ended_at": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "row_version": {
+      "type": "integer"
+    },
+    "created_at": {
+      "type": "integer"
+    },
+    "updated_at": {
+      "type": "integer"
+    }
+  }
+}

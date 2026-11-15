@@ -1,0 +1,38 @@
+{
+  "name": "@evoplug/app-kernel",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./local-cli": {
+      "types": "./dist/local-cli.d.ts",
+      "import": "./dist/local-cli.js"
+    },
+    "./testing": {
+      "types": "./dist/testing/index.d.ts",
+      "import": "./dist/testing/index.js"
+    },
+    "./schemas/*": "./dist/schemas/*.json"
+  },
+  "files": [
+    "dist",
+    "schemas"
+  ],
+  "dependencies": {
+    "@evoplug/adapter-claude-code": "workspace:*",
+    "@evoplug/adapter-codex": "workspace:*",
+    "@evoplug/adapter-oh-my-pi": "workspace:*",
+    "@evoplug/adapter-opencode": "workspace:*",
+    "@evoplug/adapter-openhands-sdk": "workspace:*",
+    "@evoplug/adapter-pi": "workspace:*",
+    "@evoplug/adapter-step-code": "workspace:*",
+    "@evoplug/core": "workspace:*",
+    "@evoplug/storage": "workspace:*",
+    "@evoplug/ipc": "workspace:*",
+    "@evoplug/kernel": "workspace:*"
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:planned_shards:1",
+  "title": "PlannedShards",
+  "description": "DD-EVD-026 planned shards output.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "plan",
+    "shards",
+    "estimates",
+    "omissions",
+    "state",
+    "reason_code"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "rsi.planned_shards/1"
+    },
+    "plan": {
+      "type": "object"
+    },
+    "shards": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "estimates": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "omissions": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "state": {
+      "enum": [
+        "planned",
+        "partially_rejected",
+        "bound",
+        "dispatched",
+        "completed",
+        "rejected"
+      ]
+    },
+    "reason_code": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}
