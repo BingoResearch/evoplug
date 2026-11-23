@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:root_registration_row:1",
+  "title": "RootRegistrationRow",
+  "description": "Complete physical row for root_registration (DD-FND-102). Absolute paths never appear in the row.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "root_id", "registration_hash", "host_id", "mode", "config_space", "adapter_id", "native_root_ref", "identity_kind", "device_id", "file_id", "registered_at", "row_version"],
+  "properties": {
+    "schema_version": { "const": "rsi.root_registration_row/1" },
+    "root_id": { "type": "string", "minLength": 1, "maxLength": 256 },
+    "registration_hash": { "$ref": "#/$defs/Hash" },
+    "host_id": { "enum": ["pi", "oh-my-pi", "step-code", "codex", "opencode", "openhands-sdk", "claude-code"] },
+    "mode": { "enum": ["interactive", "print", "rpc", "acp", "sdk", "sdk_stdio", "exec", "app-server", "server", "local_conversation", "remote_conversation"] },
+    "config_space": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "adapter_id": { "type": "string", "pattern": "^adp:[0-9A-HJKMNP-TV-Z]{26}$" },
+    "native_root_ref": { "$ref": "#/$defs/SourceRef" },
+    "identity_kind": { "enum": ["dev_inode", "file_id"] },
+    "device_id": { "type": "string", "minLength": 1, "maxLength": 256 },
+    "file_id": { "type": "string", "minLength": 1, "maxLength": 256 },
+    "registered_at": { "type": "integer", "minimum": 0 },
+    "row_version": { "type": "integer", "minimum": 1 }
+  },
+  "$defs": {
+    "Hash": { "title": "Hash", "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "SourceRef": {
+      "title": "SourceRef",
+      "oneOf": [
+        { "type": "string", "pattern": "^journal://ev:[0-9A-HJKMNP-TV-Z]{26}#bytes=(0|[1-9][0-9]*)-(0|[1-9][0-9]*)$" },
+        { "type": "string", "pattern": "^blob://sha256:[0-9a-f]{64}#bytes=(0|[1-9][0-9]*)-(0|[1-9][0-9]*)$" }
+      ]
+    }
+  }
+}

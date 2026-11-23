@@ -1,0 +1,8 @@
+-- evoplug schema major 4. The workspace read and evidence supplement records are
+-- part of the consolidated physical schema in 0001_core.sql; this artifact keeps
+-- the frozen version slot so homes created by earlier builds still discover the
+-- same migration ordering.
+-- evoplug:directive:begin
+-- evoplug:schema_major=4
+-- evoplug:schema_minor=0
+-- evoplug:directive:end

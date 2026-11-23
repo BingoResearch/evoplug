@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:adapter_install_approval_row:1",
+  "title": "AdapterInstallApprovalRow",
+  "description": "Complete physical row for adapter_install_approval with the fixed schema_version constant (DD-FND-102).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "approval_id", "idempotency_key", "request_hash", "subject", "subject_hash", "state", "bootstrap_state", "evidence_ref", "issued_at", "expires_at", "consumed_at", "consumed_registration_hash", "revoked_at", "revoke_reason", "approval_hash", "row_version"],
+  "properties": {
+    "schema_version": { "const": "rsi.adapter_install_approval_row/1" },
+    "approval_id": { "type": "string", "pattern": "^iap:[0-9A-HJKMNP-TV-Z]{26}$" },
+    "idempotency_key": { "type": "string", "pattern": "^[A-Za-z0-9._:-]{8,128}$" },
+    "request_hash": { "$ref": "#/$defs/Hash" },
+    "subject": { "$ref": "#/$defs/AdapterInstallSubject" },
+    "subject_hash": { "$ref": "#/$defs/Hash" },
+    "state": { "enum": ["active", "consumed", "revoked", "expired"] },
+    "bootstrap_state": { "enum": ["preinstall_ready", "postinstall_ready", "blocked_no_attested_source", "unknown"] },
+    "evidence_ref": { "$ref": "#/$defs/SourceRef" },
+    "issued_at": { "type": "integer", "minimum": 0 },
+    "expires_at": { "type": "integer", "minimum": 1 },
+    "consumed_at": { "type": ["integer", "null"], "minimum": 0 },
+    "consumed_registration_hash": { "type": ["string", "null"], "pattern": "^sha256:[0-9a-f]{64}$" },
+    "revoked_at": { "type": ["integer", "null"], "minimum": 0 },
+    "revoke_reason": { "type": ["string", "null"], "enum": ["human_revoked", "superseded", "security", null] },
+    "approval_hash": { "$ref": "#/$defs/Hash" },
+    "row_version": { "type": "integer", "minimum": 1 }
+  },
+  "$defs": {
+    "Hash": { "title": "Hash", "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "SourceRef": {
+      "title": "SourceRef",
+      "oneOf": [
+        { "type": "string", "pattern": "^journal://ev:[0-9A-HJKMNP-TV-Z]{26}#bytes=(0|[1-9][0-9]*)-(0|[1-9][0-9]*)$" },
+        { "type": "string", "pattern": "^blob://sha256:[0-9a-f]{64}#bytes=(0|[1-9][0-9]*)-(0|[1-9][0-9]*)$" }
+      ]
+    },
+    "AdapterInstallSubject": {
+      "title": "AdapterInstallSubject",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "purpose", "host_id", "mode", "config_space", "adapter_id", "adapter_version", "implementation_hash", "target_id", "artifact_hash", "expected_previous_hash"],
+      "properties": {
+        "schema_version": { "const": "rsi.adapter_install_subject/1" },
+        "purpose": { "const": "adapter_install" },
+        "host_id": { "enum": ["pi", "oh-my-pi", "step-code", "codex", "opencode", "openhands-sdk", "claude-code"] },
+        "mode": { "enum": ["interactive", "print", "rpc", "acp", "sdk", "sdk_stdio", "exec", "app-server", "server", "local_conversation", "remote_conversation"] },
+        "config_space": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "adapter_id": { "type": "string", "pattern": "^adp:[0-9A-HJKMNP-TV-Z]{26}$" },
+        "adapter_version": { "type": "string", "minLength": 1, "maxLength": 64 },
+        "implementation_hash": { "$ref": "#/$defs/Hash" },
+        "target_id": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "artifact_hash": { "$ref": "#/$defs/Hash" },
+        "expected_previous_hash": { "type": ["string", "null"], "pattern": "^sha256:[0-9a-f]{64}$" }
+      }
+    }
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "$id": "urn:evoplug:schema:evd_service_profile_row:1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Physical row of evd_service_profile (DD-EVD-024); values are the frozen row_json columns.",
+  "properties": {
+    "acceptance_status": {
+      "enum": [
+        "eligible",
+        "shadow_only",
+        "blocked"
+      ],
+      "type": "string"
+    },
+    "body_json": {
+      "description": "JCS text; JSON object",
+      "type": "string"
+    },
+    "created_at": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "production_use": {
+      "enum": [
+        0,
+        1
+      ],
+      "type": "integer"
+    },
+    "profile_id": {
+      "type": "string"
+    },
+    "profile_key": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "profile_version": {
+      "minimum": 1,
+      "type": "integer"
+    },
+    "row_version": {
+      "const": 0,
+      "type": "integer"
+    }
+  },
+  "required": [
+    "profile_id",
+    "profile_key",
+    "profile_version",
+    "acceptance_status",
+    "production_use",
+    "body_json",
+    "row_version",
+    "created_at"
+  ],
+  "title": "EvdServiceProfileRow",
+  "type": "object"
+}

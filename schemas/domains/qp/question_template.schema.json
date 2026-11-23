@@ -1,0 +1,318 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:question_template:1",
+  "title": "QuestionTemplate",
+  "description": "QP versioned choice template (DD-QP-11). template_hash covers the body only.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "template_id",
+    "template_version",
+    "template_hash",
+    "question_type",
+    "issue_types",
+    "cardinality",
+    "required_views",
+    "required_sources",
+    "options",
+    "instructions_template",
+    "question_text_template",
+    "proposition_family",
+    "output_reserve_tokens",
+    "status"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "rsi.question_template/1"
+    },
+    "template_id": {
+      "type": "string",
+      "pattern": "^qt\\.[a-z_]+$"
+    },
+    "template_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "template_hash": {
+      "$ref": "#/$defs/Hash"
+    },
+    "question_type": {
+      "const": "choice"
+    },
+    "issue_types": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 8,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "constraint_violation",
+          "missing_requirement",
+          "wrong_target",
+          "missing_verification",
+          "goal_change",
+          "insufficient_evidence",
+          "stall_or_regression_candidate",
+          "experience_applicability"
+        ]
+      }
+    },
+    "cardinality": {
+      "enum": [
+        "per_issue",
+        "per_requirement",
+        "per_acceptance_item",
+        "per_experience_candidate"
+      ]
+    },
+    "required_views": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 9,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "binding",
+          "question_scope",
+          "requirements",
+          "latest_input",
+          "evidence",
+          "comparison",
+          "coverage",
+          "task_conditions",
+          "experience_candidates"
+        ]
+      }
+    },
+    "required_sources": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 16,
+      "items": {
+        "$ref": "#/$defs/RequiredSourceSpec"
+      }
+    },
+    "options": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 255,
+      "items": {
+        "$ref": "#/$defs/ChoiceOption"
+      }
+    },
+    "instructions_template": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2048
+    },
+    "question_text_template": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    },
+    "proposition_family": {
+      "type": "string",
+      "minLength": 1
+    },
+    "output_reserve_tokens": {
+      "type": "integer",
+      "minimum": 16,
+      "maximum": 2048
+    },
+    "status": {
+      "enum": [
+        "active",
+        "deprecated"
+      ]
+    },
+    "supersedes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "template_id",
+        "template_version"
+      ],
+      "properties": {
+        "template_id": {
+          "type": "string"
+        },
+        "template_version": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "Hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "RequiredSourceSpec": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "role",
+        "selector",
+        "presence",
+        "min_count",
+        "max_count",
+        "view",
+        "selection",
+        "omission_impact"
+      ],
+      "properties": {
+        "role": {
+          "type": "string",
+          "minLength": 1
+        },
+        "selector": {
+          "enum": [
+            "latest_input",
+            "active_requirement",
+            "feedback",
+            "artifact_fact",
+            "interface_contract",
+            "verifier_result",
+            "counterevidence",
+            "counterevidence_search",
+            "baseline_checkpoint",
+            "current_checkpoint",
+            "pending_work",
+            "acceptance_criterion",
+            "experience_candidate",
+            "experience_evidence",
+            "task_condition",
+            "unverified_constraint"
+          ]
+        },
+        "presence": {
+          "enum": [
+            "required",
+            "optional"
+          ]
+        },
+        "min_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "max_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "required_if": {
+          "enum": [
+            "issue.contract_required",
+            "issue.has_completion_claim",
+            "issue.has_baseline"
+          ]
+        },
+        "view": {
+          "enum": [
+            "binding",
+            "question_scope",
+            "requirements",
+            "latest_input",
+            "evidence",
+            "comparison",
+            "coverage",
+            "task_conditions",
+            "experience_candidates"
+          ]
+        },
+        "selection": {
+          "enum": [
+            "all",
+            "first_k"
+          ]
+        },
+        "omission_impact": {
+          "enum": [
+            "answer_changing",
+            "none"
+          ]
+        }
+      }
+    },
+    "ChoiceOption": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "key",
+        "criteria",
+        "mapping"
+      ],
+      "properties": {
+        "key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "criteria": {
+          "type": "string",
+          "minLength": 1
+        },
+        "mapping": {
+          "$ref": "#/$defs/ChoiceOptionMapping"
+        }
+      }
+    },
+    "ChoiceOptionMapping": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "semantic_axis",
+        "semantic_value",
+        "option_effect",
+        "issue_effect",
+        "requires_local_authorization",
+        "can_close_issue",
+        "can_satisfy_task"
+      ],
+      "properties": {
+        "semantic_axis": {
+          "enum": [
+            "requirement_compliance",
+            "intent_relation",
+            "progress_effect",
+            "experience_applicability"
+          ]
+        },
+        "semantic_value": {
+          "enum": [
+            "positive",
+            "negative",
+            "neutral",
+            "unknown"
+          ]
+        },
+        "option_effect": {
+          "enum": [
+            "supports",
+            "contradicts",
+            "unknown"
+          ]
+        },
+        "issue_effect": {
+          "enum": [
+            "judged_consistent",
+            "judged_inconsistent",
+            "judged_satisfied",
+            "judged_not_satisfied",
+            "candidate_relation_only",
+            "shadow_only",
+            "needs_evidence"
+          ]
+        },
+        "requires_local_authorization": {
+          "type": "boolean"
+        },
+        "can_close_issue": {
+          "const": false
+        },
+        "can_satisfy_task": {
+          "const": false
+        }
+      }
+    }
+  }
+}

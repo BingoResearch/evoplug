@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:object_head:1",
+  "title": "ObjectHead",
+  "description": "Current document revision pointer for a domain object (DD-FND-058).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["object_id", "owner", "object_type", "revision", "document_id", "state", "content_hash", "row_version", "updated_at"],
+  "properties": {
+    "object_id": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "owner": { "enum": ["evd", "rev", "host", "cfg", "qp"] },
+    "object_type": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "revision": { "type": "integer", "minimum": 1 },
+    "document_id": { "$ref": "#/$defs/Hash" },
+    "state": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "content_hash": { "$ref": "#/$defs/Hash" },
+    "row_version": { "type": "integer", "minimum": 1 },
+    "updated_at": { "type": "integer", "minimum": 0 }
+  },
+  "$defs": {
+    "Hash": { "title": "Hash", "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" }
+  }
+}

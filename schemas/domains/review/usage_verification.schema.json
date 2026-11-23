@@ -1,0 +1,132 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:usage_verification_records:1",
+  "title": "UsageVerificationRecordRow",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "usage_id",
+    "schema_version",
+    "usage_key",
+    "projection_id",
+    "experience_id",
+    "experience_version",
+    "experience_content_hash",
+    "validation_plan_id",
+    "validation_plan_hash",
+    "version_binding_json",
+    "task_family_id",
+    "trigger_result",
+    "loading_json",
+    "behavior_json",
+    "verification_json",
+    "other_change_refs_json",
+    "attribution",
+    "result",
+    "evidence_hash",
+    "causal_supported",
+    "observed_at",
+    "window_index"
+  ],
+  "properties": {
+    "usage_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "schema_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "usage_key": {
+      "type": "string",
+      "minLength": 1
+    },
+    "projection_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "experience_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "experience_version": {
+      "type": "integer"
+    },
+    "experience_content_hash": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "validation_plan_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "validation_plan_hash": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "version_binding_json": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Canonical JSON text."
+    },
+    "task_family_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "trigger_result": {
+      "type": "string",
+      "minLength": 1
+    },
+    "loading_json": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Canonical JSON text."
+    },
+    "behavior_json": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Canonical JSON text."
+    },
+    "verification_json": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Canonical JSON text."
+    },
+    "outcome_ref": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "other_change_refs_json": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Canonical JSON text."
+    },
+    "attribution": {
+      "type": "string",
+      "minLength": 1
+    },
+    "result": {
+      "type": "string",
+      "minLength": 1
+    },
+    "evidence_hash": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "causal_supported": {
+      "type": "integer"
+    },
+    "observed_at": {
+      "type": "integer"
+    },
+    "window_index": {
+      "type": "integer"
+    }
+  }
+}

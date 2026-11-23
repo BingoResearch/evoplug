@@ -1,0 +1,203 @@
+{
+  "schema_version": "rsi.ipc_methods/1",
+  "protocol_version": "evoplug-ipc/1",
+  "description": "Closed IPC method registry (DD-FND-042). Domain extension methods must be registered here and added to IpcMethod/IpcParams/IpcResult in @evoplug/ipc; unregistered methods are rejected with E_IPC_METHOD_UNKNOWN.",
+  "methods": [
+    {
+      "method": "system.describe",
+      "idempotency_key": "forbidden"
+    },
+    {
+      "method": "event.ingest",
+      "idempotency_key": "required"
+    },
+    {
+      "method": "host.runtime.ready",
+      "idempotency_key": "required"
+    },
+    {
+      "method": "host.runtime.upload",
+      "idempotency_key": "required"
+    },
+    {
+      "method": "host.runtime.poll",
+      "idempotency_key": "forbidden"
+    },
+    {
+      "method": "host.runtime.result",
+      "idempotency_key": "required"
+    },
+    {
+      "method": "identity.resolve",
+      "idempotency_key": "forbidden"
+    },
+    {
+      "method": "identity.fork",
+      "idempotency_key": "required"
+    },
+    {
+      "method": "identity.resume",
+      "idempotency_key": "required"
+    },
+    {
+      "method": "ledger.read",
+      "idempotency_key": "forbidden"
+    },
+    {
+      "method": "grant.issue",
+      "idempotency_key": "required"
+    },
+    {
+      "method": "grant.revoke",
+      "idempotency_key": "required"
+    },
+    {
+      "method": "grant.list",
+      "idempotency_key": "forbidden"
+    },
+    {
+      "method": "budget.reserve",
+      "idempotency_key": "required"
+    },
+    {
+      "method": "budget.claim",
+      "idempotency_key": "required"
+    },
+    {
+      "method": "budget.settle",
+      "idempotency_key": "required"
+    },
+    {
+      "method": "decision.record",
+      "idempotency_key": "required"
+    },
+    {
+      "method": "delivery.create",
+      "idempotency_key": "required"
+    },
+    {
+      "method": "delivery.update",
+      "idempotency_key": "required"
+    },
+    {
+      "method": "write.apply",
+      "idempotency_key": "required"
+    },
+    {
+      "method": "egress.evaluate",
+      "idempotency_key": "forbidden"
+    },
+    {
+      "method": "egress.approve",
+      "idempotency_key": "required"
+    },
+    {
+      "method": "install.approve",
+      "idempotency_key": "in_params"
+    },
+    {
+      "method": "install.revoke",
+      "idempotency_key": "in_params"
+    },
+    {
+      "method": "install.approval.get",
+      "idempotency_key": "forbidden"
+    },
+    {
+      "method": "install.approval.consume",
+      "idempotency_key": "in_params"
+    },
+    {
+      "method": "replay.classify",
+      "idempotency_key": "forbidden"
+    },
+    {
+      "method": "replay.create",
+      "idempotency_key": "required"
+    },
+    {
+      "method": "replay.authorize",
+      "idempotency_key": "required"
+    },
+    {
+      "method": "replay.approve",
+      "idempotency_key": "required"
+    },
+    {
+      "method": "replay.revoke",
+      "idempotency_key": "required"
+    },
+    {
+      "method": "replay.reject",
+      "idempotency_key": "required"
+    },
+    {
+      "method": "replay.execute",
+      "idempotency_key": "required"
+    },
+    {
+      "method": "replay.reconcile",
+      "idempotency_key": "required"
+    },
+    {
+      "method": "replay.result",
+      "idempotency_key": "forbidden"
+    },
+    {
+      "method": "status.get",
+      "idempotency_key": "forbidden"
+    },
+    {
+      "method": "cli.execute",
+      "idempotency_key": "required"
+    },
+    {
+      "method": "host.attach.execute",
+      "idempotency_key": "required"
+    },
+    {
+      "method": "maintenance.gc",
+      "idempotency_key": "required"
+    },
+    {
+      "method": "config.space.capture",
+      "idempotency_key": "forbidden"
+    },
+    {
+      "method": "config.space.read_fields",
+      "idempotency_key": "forbidden"
+    },
+    {
+      "method": "config.trial.create_plan",
+      "idempotency_key": "required"
+    },
+    {
+      "method": "config.trial.start",
+      "idempotency_key": "required"
+    },
+    {
+      "method": "config.trial.execute_attempt",
+      "idempotency_key": "required"
+    },
+    {
+      "method": "config.trial.record_observation",
+      "idempotency_key": "required"
+    },
+    {
+      "method": "config.trial.request_rollback",
+      "idempotency_key": "required"
+    },
+    {
+      "method": "config.trial.close",
+      "idempotency_key": "required"
+    },
+    {
+      "method": "config.trial.reconcile",
+      "idempotency_key": "required"
+    },
+    {
+      "method": "config.promotion.collect",
+      "idempotency_key": "forbidden"
+    }
+  ]
+}

@@ -1,0 +1,577 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:egress_request:1",
+  "title": "EgressRequest",
+  "description": "Server-derived egress request preimage with decision and single-use approval (DD-FND-093).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "binding",
+    "purpose",
+    "endpoint",
+    "model",
+    "project_id",
+    "sources",
+    "body_sha256",
+    "byte_length",
+    "replay_plan_id",
+    "policy_version",
+    "request_hash"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "rsi.egress_request/1"
+    },
+    "binding": {
+      "$ref": "#/$defs/VersionBinding"
+    },
+    "purpose": {
+      "enum": [
+        "judge",
+        "review_generate",
+        "review_match",
+        "replay",
+        "other"
+      ]
+    },
+    "endpoint": {
+      "$ref": "#/$defs/EgressEndpoint"
+    },
+    "model": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "project_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/EgressSource"
+      }
+    },
+    "body_sha256": {
+      "$ref": "#/$defs/Hash"
+    },
+    "byte_length": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 16777216
+    },
+    "replay_plan_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^rpl:[0-9A-HJKMNP-TV-Z]{26}$"
+    },
+    "policy_version": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "request_hash": {
+      "$ref": "#/$defs/Hash"
+    }
+  },
+  "$defs": {
+    "Hash": {
+      "title": "Hash",
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "SourceRef": {
+      "title": "SourceRef",
+      "oneOf": [
+        {
+          "type": "string",
+          "pattern": "^journal://ev:[0-9A-HJKMNP-TV-Z]{26}#bytes=(0|[1-9][0-9]*)-(0|[1-9][0-9]*)$"
+        },
+        {
+          "type": "string",
+          "pattern": "^blob://sha256:[0-9a-f]{64}#bytes=(0|[1-9][0-9]*)-(0|[1-9][0-9]*)$"
+        }
+      ]
+    },
+    "VersionBinding": {
+      "title": "VersionBinding",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "task_id",
+        "branch_id",
+        "input_epoch",
+        "goal_version",
+        "config_version",
+        "watermark"
+      ],
+      "properties": {
+        "task_id": {
+          "type": "string"
+        },
+        "branch_id": {
+          "type": "string"
+        },
+        "input_epoch": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "goal_version": {
+          "type": "string"
+        },
+        "config_version": {
+          "type": "string"
+        },
+        "watermark": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "DataClass": {
+      "title": "DataClass",
+      "enum": [
+        "public",
+        "user_text",
+        "source_code",
+        "tool_output",
+        "secret"
+      ]
+    },
+    "EgressEndpoint": {
+      "title": "EgressEndpoint",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scheme",
+        "host",
+        "port",
+        "path"
+      ],
+      "properties": {
+        "scheme": {
+          "const": "https"
+        },
+        "host": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 253
+        },
+        "port": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 65535
+        },
+        "path": {
+          "type": "string",
+          "pattern": "^/"
+        }
+      }
+    },
+    "EgressSource": {
+      "title": "EgressSource",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ref",
+        "data_class"
+      ],
+      "properties": {
+        "ref": {
+          "$ref": "#/$defs/SourceRef"
+        },
+        "data_class": {
+          "$ref": "#/$defs/DataClass"
+        }
+      }
+    },
+    "EgressFinding": {
+      "title": "EgressFinding",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "dimension",
+        "ref",
+        "passed"
+      ],
+      "properties": {
+        "dimension": {
+          "enum": [
+            "endpoint",
+            "model",
+            "data_class",
+            "source",
+            "project",
+            "bytes"
+          ]
+        },
+        "ref": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "passed": {
+          "type": "boolean"
+        }
+      }
+    },
+    "EgressDecision": {
+      "title": "EgressDecision",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/EgressAllowed"
+        },
+        {
+          "$ref": "#/$defs/EgressDenied"
+        },
+        {
+          "$ref": "#/$defs/EgressNeedsApproval"
+        }
+      ]
+    },
+    "EgressAllowed": {
+      "title": "EgressAllowed",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "allowed",
+        "request",
+        "policy_version",
+        "approval_id",
+        "findings"
+      ],
+      "properties": {
+        "allowed": {
+          "const": true
+        },
+        "request": {
+          "$ref": "#/$defs/EgressRequest"
+        },
+        "policy_version": {
+          "type": "string"
+        },
+        "approval_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^egr:[0-9A-HJKMNP-TV-Z]{26}$"
+        },
+        "findings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/EgressFinding"
+          }
+        }
+      }
+    },
+    "EgressDenied": {
+      "title": "EgressDenied",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "allowed",
+        "request",
+        "reason_code",
+        "findings"
+      ],
+      "properties": {
+        "allowed": {
+          "const": false
+        },
+        "request": {
+          "$ref": "#/$defs/EgressRequest"
+        },
+        "reason_code": {
+          "enum": [
+            "endpoint_not_allowed",
+            "model_not_allowed",
+            "data_class_not_allowed",
+            "secret_forbidden",
+            "project_excluded",
+            "source_not_allowed",
+            "source_count_exceeded",
+            "byte_limit_exceeded",
+            "source_unretrievable",
+            "binding_mismatch",
+            "replay_policy_denied"
+          ]
+        },
+        "findings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/EgressFinding"
+          }
+        }
+      }
+    },
+    "EgressNeedsApproval": {
+      "title": "EgressNeedsApproval",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "allowed",
+        "request",
+        "reason_code",
+        "findings",
+        "approval_request_hash"
+      ],
+      "properties": {
+        "allowed": {
+          "const": false
+        },
+        "request": {
+          "$ref": "#/$defs/EgressRequest"
+        },
+        "reason_code": {
+          "const": "approval_required"
+        },
+        "findings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/EgressFinding"
+          }
+        },
+        "approval_request_hash": {
+          "$ref": "#/$defs/Hash"
+        }
+      }
+    },
+    "EgressApproval": {
+      "title": "EgressApproval",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "approval_id",
+        "policy_version",
+        "approved_by",
+        "human_attestation",
+        "attestation_subject_hash",
+        "request_hash",
+        "approval_hash",
+        "purpose",
+        "version_binding",
+        "endpoint",
+        "model",
+        "project_id",
+        "sources",
+        "body_sha256",
+        "byte_length",
+        "replay_plan_id",
+        "ttl_ms",
+        "state",
+        "created_at",
+        "expires_at",
+        "consumed_at",
+        "consumed_request_hash",
+        "revoked_at",
+        "revoke_reason",
+        "row_version"
+      ],
+      "properties": {
+        "approval_id": {
+          "type": "string",
+          "pattern": "^egr:[0-9A-HJKMNP-TV-Z]{26}$"
+        },
+        "policy_version": {
+          "type": "string"
+        },
+        "approved_by": {
+          "const": "human"
+        },
+        "human_attestation": {
+          "$ref": "#/$defs/HumanAttestation"
+        },
+        "attestation_subject_hash": {
+          "$ref": "#/$defs/Hash"
+        },
+        "request_hash": {
+          "$ref": "#/$defs/Hash"
+        },
+        "approval_hash": {
+          "$ref": "#/$defs/Hash"
+        },
+        "purpose": {
+          "enum": [
+            "judge",
+            "review_generate",
+            "review_match",
+            "replay",
+            "other"
+          ]
+        },
+        "version_binding": {
+          "$ref": "#/$defs/VersionBinding"
+        },
+        "endpoint": {
+          "$ref": "#/$defs/EgressEndpoint"
+        },
+        "model": {
+          "type": "string"
+        },
+        "project_id": {
+          "type": "string"
+        },
+        "sources": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/EgressSource"
+          }
+        },
+        "body_sha256": {
+          "$ref": "#/$defs/Hash"
+        },
+        "byte_length": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 16777216
+        },
+        "replay_plan_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "ttl_ms": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 600000
+        },
+        "state": {
+          "enum": [
+            "active",
+            "consumed",
+            "revoked",
+            "expired"
+          ]
+        },
+        "created_at": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "expires_at": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "consumed_at": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "consumed_request_hash": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "revoked_at": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "revoke_reason": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "human_revoked",
+            "policy_replaced",
+            null
+          ]
+        },
+        "row_version": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "HumanAttestation": {
+      "title": "HumanAttestation",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "capability_id",
+        "evidence_ref",
+        "confirmed_at"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "host_verified_interactive_user",
+            "control_plane_explicit_confirmation"
+          ]
+        },
+        "capability_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "evidence_ref": {
+          "$ref": "#/$defs/SourceRef"
+        },
+        "confirmed_at": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "EgressApprovalRequest": {
+      "title": "EgressApprovalRequest",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "request",
+        "ttl_ms",
+        "human_attestation"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "rsi.egress_approval_request/1"
+        },
+        "request": {
+          "$ref": "#/$defs/EgressRequest"
+        },
+        "ttl_ms": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 600000
+        },
+        "human_attestation": {
+          "$ref": "#/$defs/HumanAttestation"
+        }
+      }
+    }
+  },
+  "x-evoplug-ddl": {
+    "table": "egress_approval",
+    "enums": {
+      "purpose": [
+        "judge",
+        "review_generate",
+        "review_match",
+        "replay",
+        "other"
+      ],
+      "state": [
+        "active",
+        "consumed",
+        "revoked",
+        "expired"
+      ],
+      "revoke_reason": [
+        "human_revoked",
+        "policy_replaced"
+      ]
+    }
+  }
+}

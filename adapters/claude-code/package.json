@@ -1,0 +1,27 @@
+{
+  "name": "@evoplug/adapter-claude-code",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./testing": {
+      "types": "./dist/testing/index.d.ts",
+      "import": "./dist/testing/index.js"
+    },
+    "./schemas/*": "./dist/schemas/*.json"
+  },
+  "files": [
+    "dist",
+    "schemas"
+  ],
+  "dependencies": {
+    "@evoplug/adapter-kit": "workspace:*",
+    "@evoplug/core": "workspace:*",
+    "@evoplug/host-runtime": "workspace:*",
+    "@evoplug/ipc": "workspace:*"
+  }
+}

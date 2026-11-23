@@ -1,0 +1,829 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:delivery_plan:1",
+  "title": "DeliveryPlan",
+  "description": "Delivery plan, record, axis updates and outbox effect payloads (DD-FND-092, FND 61).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "task_id",
+    "branch_id",
+    "input_epoch",
+    "config_version",
+    "goal_version",
+    "requirement_ids",
+    "issue_id",
+    "evidence_hash",
+    "pack_hash",
+    "content_hash",
+    "content_ref",
+    "expires_at"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "rsi.delivery_plan/1"
+    },
+    "task_id": {
+      "type": "string"
+    },
+    "branch_id": {
+      "type": "string"
+    },
+    "input_epoch": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "config_version": {
+      "type": "string"
+    },
+    "goal_version": {
+      "type": "string"
+    },
+    "requirement_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^req:[0-9A-HJKMNP-TV-Z]{26}$"
+      }
+    },
+    "issue_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^issue:[0-9A-HJKMNP-TV-Z]{26}$"
+    },
+    "evidence_hash": {
+      "$ref": "#/$defs/Hash"
+    },
+    "pack_hash": {
+      "$ref": "#/$defs/Hash"
+    },
+    "content_hash": {
+      "$ref": "#/$defs/Hash"
+    },
+    "content_ref": {
+      "$ref": "#/$defs/SourceRef"
+    },
+    "expires_at": {
+      "type": "integer",
+      "minimum": 0
+    }
+  },
+  "$defs": {
+    "Hash": {
+      "title": "Hash",
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "SourceRef": {
+      "title": "SourceRef",
+      "oneOf": [
+        {
+          "type": "string",
+          "pattern": "^journal://ev:[0-9A-HJKMNP-TV-Z]{26}#bytes=(0|[1-9][0-9]*)-(0|[1-9][0-9]*)$"
+        },
+        {
+          "type": "string",
+          "pattern": "^blob://sha256:[0-9a-f]{64}#bytes=(0|[1-9][0-9]*)-(0|[1-9][0-9]*)$"
+        }
+      ]
+    },
+    "VersionBinding": {
+      "title": "VersionBinding",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "task_id",
+        "branch_id",
+        "input_epoch",
+        "goal_version",
+        "config_version",
+        "watermark"
+      ],
+      "properties": {
+        "task_id": {
+          "type": "string"
+        },
+        "branch_id": {
+          "type": "string"
+        },
+        "input_epoch": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "goal_version": {
+          "type": "string"
+        },
+        "config_version": {
+          "type": "string"
+        },
+        "watermark": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "DeliveryState": {
+      "title": "DeliveryState",
+      "enum": [
+        "pending",
+        "submitted",
+        "expired",
+        "failed"
+      ]
+    },
+    "InclusionEvidence": {
+      "title": "InclusionEvidence",
+      "enum": [
+        "unknown",
+        "context_projection",
+        "provider_payload",
+        "transport_body",
+        "host_confirmed"
+      ]
+    },
+    "AdoptionEvidence": {
+      "title": "AdoptionEvidence",
+      "enum": [
+        "unknown",
+        "observed",
+        "verified"
+      ]
+    },
+    "DeliveryRecord": {
+      "title": "DeliveryRecord",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "delivery_id",
+        "task_id",
+        "branch_id",
+        "input_epoch",
+        "config_version",
+        "goal_version",
+        "requirement_ids",
+        "issue_id",
+        "evidence_hash",
+        "pack_hash",
+        "content_hash",
+        "content_ref",
+        "expires_at",
+        "dedupe_key",
+        "state",
+        "terminal_reason",
+        "inclusion_evidence",
+        "transport_body_verified",
+        "submission_ref",
+        "inclusion_ref",
+        "adoption",
+        "adoption_ref",
+        "row_version",
+        "created_at",
+        "updated_at"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "rsi.delivery/2"
+        },
+        "delivery_id": {
+          "type": "string",
+          "pattern": "^del:[0-9A-HJKMNP-TV-Z]{26}$"
+        },
+        "task_id": {
+          "type": "string"
+        },
+        "branch_id": {
+          "type": "string"
+        },
+        "input_epoch": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "config_version": {
+          "type": "string"
+        },
+        "goal_version": {
+          "type": "string"
+        },
+        "requirement_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "issue_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "evidence_hash": {
+          "$ref": "#/$defs/Hash"
+        },
+        "pack_hash": {
+          "$ref": "#/$defs/Hash"
+        },
+        "content_hash": {
+          "$ref": "#/$defs/Hash"
+        },
+        "content_ref": {
+          "$ref": "#/$defs/SourceRef"
+        },
+        "expires_at": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "dedupe_key": {
+          "$ref": "#/$defs/Hash"
+        },
+        "state": {
+          "$ref": "#/$defs/DeliveryState"
+        },
+        "terminal_reason": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "host_rejected",
+            "version_changed",
+            "timeout",
+            "cancelled",
+            "expired_by_time",
+            null
+          ]
+        },
+        "inclusion_evidence": {
+          "$ref": "#/$defs/InclusionEvidence"
+        },
+        "transport_body_verified": {
+          "type": "boolean"
+        },
+        "submission_ref": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "inclusion_ref": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/SourceRef"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "adoption": {
+          "$ref": "#/$defs/AdoptionEvidence"
+        },
+        "adoption_ref": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/SourceRef"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "row_version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "created_at": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "updated_at": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "DeliveryUpdateRequest": {
+      "title": "DeliveryUpdateRequest",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/DeliveryTransportSubmittedUpdate"
+        },
+        {
+          "$ref": "#/$defs/DeliveryTransportTerminalUpdate"
+        },
+        {
+          "$ref": "#/$defs/DeliveryInclusionUpdate"
+        },
+        {
+          "$ref": "#/$defs/DeliveryAdoptionUpdate"
+        }
+      ]
+    },
+    "DeliveryTransportSubmittedUpdate": {
+      "title": "DeliveryTransportSubmittedUpdate",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "delivery_id",
+        "expected_row_version",
+        "update"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "rsi.delivery_update/1"
+        },
+        "delivery_id": {
+          "type": "string"
+        },
+        "expected_row_version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "update": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "axis",
+            "state",
+            "submission_ref"
+          ],
+          "properties": {
+            "axis": {
+              "const": "transport"
+            },
+            "state": {
+              "const": "submitted"
+            },
+            "submission_ref": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 256
+            }
+          }
+        }
+      }
+    },
+    "DeliveryTransportTerminalUpdate": {
+      "title": "DeliveryTransportTerminalUpdate",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "delivery_id",
+        "expected_row_version",
+        "update"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "rsi.delivery_update/1"
+        },
+        "delivery_id": {
+          "type": "string"
+        },
+        "expected_row_version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "update": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "axis",
+            "state",
+            "reason_code"
+          ],
+          "properties": {
+            "axis": {
+              "const": "transport"
+            },
+            "state": {
+              "enum": [
+                "failed",
+                "expired"
+              ]
+            },
+            "reason_code": {
+              "enum": [
+                "host_rejected",
+                "version_changed",
+                "timeout",
+                "cancelled"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "DeliveryInclusionUpdate": {
+      "title": "DeliveryInclusionUpdate",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "delivery_id",
+        "expected_row_version",
+        "update"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "rsi.delivery_update/1"
+        },
+        "delivery_id": {
+          "type": "string"
+        },
+        "expected_row_version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "update": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "axis",
+            "evidence",
+            "evidence_ref",
+            "transport_body_verified"
+          ],
+          "properties": {
+            "axis": {
+              "const": "inclusion"
+            },
+            "evidence": {
+              "$ref": "#/$defs/InclusionEvidence"
+            },
+            "evidence_ref": {
+              "$ref": "#/$defs/SourceRef"
+            },
+            "transport_body_verified": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    "DeliveryAdoptionUpdate": {
+      "title": "DeliveryAdoptionUpdate",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "delivery_id",
+        "expected_row_version",
+        "update"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "rsi.delivery_update/1"
+        },
+        "delivery_id": {
+          "type": "string"
+        },
+        "expected_row_version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "update": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "axis",
+            "adoption",
+            "evidence_ref",
+            "verifier"
+          ],
+          "properties": {
+            "axis": {
+              "const": "adoption"
+            },
+            "adoption": {
+              "$ref": "#/$defs/AdoptionEvidence"
+            },
+            "evidence_ref": {
+              "$ref": "#/$defs/SourceRef"
+            },
+            "verifier": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                "human",
+                "independent_artifact",
+                "independent_verifier",
+                null
+              ]
+            }
+          }
+        }
+      }
+    },
+    "DeliveryDispatchEffect": {
+      "title": "DeliveryDispatchEffect",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "delivery_id",
+        "submission_attempt"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "rsi.delivery_dispatch_effect/1"
+        },
+        "delivery_id": {
+          "type": "string",
+          "pattern": "^del:[0-9A-HJKMNP-TV-Z]{26}$"
+        },
+        "submission_attempt": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 16
+        }
+      }
+    },
+    "ReviewEnqueueEffect": {
+      "title": "ReviewEnqueueEffect",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "job_id",
+        "request_id",
+        "trigger_event_id",
+        "trigger_dedupe_key",
+        "binding",
+        "created_at"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "rsi.review_enqueue_effect/1"
+        },
+        "job_id": {
+          "type": "string",
+          "pattern": "^job:[0-9A-HJKMNP-TV-Z]{26}$"
+        },
+        "request_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "trigger_event_id": {
+          "type": "string",
+          "pattern": "^trg:[0-9A-HJKMNP-TV-Z]{26}$"
+        },
+        "trigger_dedupe_key": {
+          "$ref": "#/$defs/Hash"
+        },
+        "binding": {
+          "$ref": "#/$defs/VersionBinding"
+        },
+        "created_at": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "MaintenanceGcEffect": {
+      "title": "MaintenanceGcEffect",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "mode",
+        "retention_days"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "rsi.maintenance_gc_effect/1"
+        },
+        "mode": {
+          "enum": [
+            "dry_run",
+            "apply"
+          ]
+        },
+        "retention_days": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        }
+      }
+    },
+    "DeliveryExpireEffect": {
+      "title": "DeliveryExpireEffect",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "delivery_id",
+        "expires_at"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "rsi.delivery_expire_effect/1"
+        },
+        "delivery_id": {
+          "type": "string",
+          "pattern": "^del:[0-9A-HJKMNP-TV-Z]{26}$"
+        },
+        "expires_at": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "OutboxEnqueueInput": {
+      "title": "OutboxEnqueueInput",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/DeliveryDispatchEnqueue"
+        },
+        {
+          "$ref": "#/$defs/ReviewEnqueueEnqueue"
+        },
+        {
+          "$ref": "#/$defs/MaintenanceGcEnqueue"
+        },
+        {
+          "$ref": "#/$defs/DeliveryExpireEnqueue"
+        }
+      ]
+    },
+    "DeliveryDispatchEnqueue": {
+      "title": "DeliveryDispatchEnqueue",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "effect_kind",
+        "effect_key",
+        "payload",
+        "priority",
+        "max_attempts"
+      ],
+      "properties": {
+        "effect_kind": {
+          "const": "delivery.dispatch"
+        },
+        "effect_key": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "payload": {
+          "$ref": "#/$defs/DeliveryDispatchEffect"
+        },
+        "priority": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9
+        },
+        "max_attempts": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 16
+        }
+      }
+    },
+    "ReviewEnqueueEnqueue": {
+      "title": "ReviewEnqueueEnqueue",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "effect_kind",
+        "effect_key",
+        "payload",
+        "priority",
+        "max_attempts"
+      ],
+      "properties": {
+        "effect_kind": {
+          "const": "review.enqueue"
+        },
+        "effect_key": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "payload": {
+          "$ref": "#/$defs/ReviewEnqueueEffect"
+        },
+        "priority": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9
+        },
+        "max_attempts": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 16
+        }
+      }
+    },
+    "MaintenanceGcEnqueue": {
+      "title": "MaintenanceGcEnqueue",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "effect_kind",
+        "effect_key",
+        "payload",
+        "priority",
+        "max_attempts"
+      ],
+      "properties": {
+        "effect_kind": {
+          "const": "maintenance.gc"
+        },
+        "effect_key": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "payload": {
+          "$ref": "#/$defs/MaintenanceGcEffect"
+        },
+        "priority": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9
+        },
+        "max_attempts": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 16
+        }
+      }
+    },
+    "DeliveryExpireEnqueue": {
+      "title": "DeliveryExpireEnqueue",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "effect_kind",
+        "effect_key",
+        "payload",
+        "priority",
+        "max_attempts"
+      ],
+      "properties": {
+        "effect_kind": {
+          "const": "delivery.expire"
+        },
+        "effect_key": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "payload": {
+          "$ref": "#/$defs/DeliveryExpireEffect"
+        },
+        "priority": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9
+        },
+        "max_attempts": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 16
+        }
+      }
+    }
+  },
+  "x-evoplug-ddl": {
+    "table": "delivery",
+    "enums": {
+      "state": [
+        "pending",
+        "submitted",
+        "expired",
+        "failed"
+      ],
+      "inclusion_evidence": [
+        "unknown",
+        "context_projection",
+        "provider_payload",
+        "transport_body",
+        "host_confirmed"
+      ],
+      "adoption": [
+        "unknown",
+        "observed",
+        "verified"
+      ],
+      "terminal_reason": [
+        "host_rejected",
+        "version_changed",
+        "timeout",
+        "cancelled",
+        "expired_by_time"
+      ]
+    }
+  }
+}

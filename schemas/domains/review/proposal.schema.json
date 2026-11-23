@@ -1,0 +1,196 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:proposals:1",
+  "title": "ProposalRow",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "proposal_id",
+    "proposal_hash",
+    "job_id",
+    "attempt_id",
+    "ordinal",
+    "state",
+    "change_kind",
+    "candidate_hash",
+    "candidate_file_hash",
+    "experience_type",
+    "created_at",
+    "updated_at",
+    "version",
+    "target_json",
+    "diff_json",
+    "experience_json",
+    "normalization_json",
+    "evidence_refs_json",
+    "generator_json",
+    "static_check_json",
+    "match_judge_json"
+  ],
+  "properties": {
+    "proposal_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "proposal_hash": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "job_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "attempt_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "ordinal": {
+      "type": "integer"
+    },
+    "question_key": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "state": {
+      "type": "string",
+      "minLength": 1
+    },
+    "change_kind": {
+      "type": "string",
+      "minLength": 1
+    },
+    "expected_file_hash": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1,
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "expected_block_hash": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1,
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "base_ref": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "create_policy": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "candidate_hash": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "candidate_file_hash": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "candidate_block_hash": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1,
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "experience_type": {
+      "type": "string",
+      "minLength": 1
+    },
+    "handoff_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "adoption_ref": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "stale_reason": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "created_at": {
+      "type": "integer"
+    },
+    "updated_at": {
+      "type": "integer"
+    },
+    "version": {
+      "type": "integer"
+    },
+    "target_json": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Canonical JSON text."
+    },
+    "diff_json": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Canonical JSON text."
+    },
+    "experience_json": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Canonical JSON text."
+    },
+    "normalization_json": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Canonical JSON text."
+    },
+    "evidence_refs_json": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Canonical JSON text."
+    },
+    "egress_decision_ref": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "generator_json": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Canonical JSON text."
+    },
+    "static_check_json": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Canonical JSON text."
+    },
+    "match_judge_json": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Canonical JSON text."
+    }
+  }
+}

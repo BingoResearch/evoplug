@@ -1,0 +1,300 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:review_jobs:1",
+  "title": "ReviewJobRow",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "job_id",
+    "request_id",
+    "task_id",
+    "branch_id",
+    "snapshot_id",
+    "snapshot_hash",
+    "trigger_event_id",
+    "trigger_kind",
+    "review_kind",
+    "review_scope_key",
+    "boundary_key",
+    "trigger_dedupe_key",
+    "signal_digest",
+    "stable_event_ids_json",
+    "stable_watermark",
+    "stable",
+    "stable_evidence_ref",
+    "pending_state",
+    "pending_work_refs_json",
+    "scope_json",
+    "origin_json",
+    "policy_ref",
+    "policy_version",
+    "policy_hash",
+    "capability_snapshot_hash",
+    "budget_policy_ref",
+    "budget_policy_hash",
+    "input_epoch",
+    "goal_version",
+    "config_version",
+    "state",
+    "stage",
+    "backend_json",
+    "current_fencing_token",
+    "attempt_count",
+    "proposal_ids_json",
+    "supersession_depth",
+    "allowance_charge_json",
+    "provider_usage_json",
+    "version",
+    "created_at",
+    "updated_at"
+  ],
+  "properties": {
+    "job_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "request_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "task_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "branch_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "snapshot_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "snapshot_hash": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "trigger_event_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "trigger_kind": {
+      "type": "string",
+      "minLength": 1
+    },
+    "review_kind": {
+      "type": "string",
+      "minLength": 1
+    },
+    "review_scope_key": {
+      "type": "string",
+      "minLength": 1
+    },
+    "boundary_key": {
+      "type": "string",
+      "minLength": 1
+    },
+    "trigger_dedupe_key": {
+      "type": "string",
+      "minLength": 1
+    },
+    "signal_digest": {
+      "type": "string",
+      "minLength": 1
+    },
+    "stable_event_ids_json": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Canonical JSON text."
+    },
+    "stable_watermark": {
+      "type": "integer"
+    },
+    "stable": {
+      "type": "integer"
+    },
+    "stable_evidence_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "pending_state": {
+      "type": "string",
+      "minLength": 1
+    },
+    "pending_work_refs_json": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Canonical JSON text."
+    },
+    "scope_json": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Canonical JSON text."
+    },
+    "origin_json": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Canonical JSON text."
+    },
+    "policy_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "policy_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "policy_hash": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "capability_snapshot_hash": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "budget_policy_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "budget_policy_hash": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "authorization_ref": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "input_epoch": {
+      "type": "integer"
+    },
+    "goal_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "config_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "state": {
+      "type": "string",
+      "minLength": 1
+    },
+    "stage": {
+      "type": "string",
+      "minLength": 1
+    },
+    "block_reason": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "backend_json": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Canonical JSON text."
+    },
+    "active_attempt_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "current_fencing_token": {
+      "type": "integer"
+    },
+    "attempt_count": {
+      "type": "integer"
+    },
+    "proposal_ids_json": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Canonical JSON text."
+    },
+    "handoff_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "handoff_body_ref": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "supersedes_job_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "superseded_by_job_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "supersession_depth": {
+      "type": "integer"
+    },
+    "allowance_charge_json": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Canonical JSON text."
+    },
+    "provider_usage_json": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Canonical JSON text."
+    },
+    "last_error_json": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1,
+      "description": "Canonical JSON text."
+    },
+    "retry_after_at": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "terminal_reason": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "version": {
+      "type": "integer"
+    },
+    "created_at": {
+      "type": "integer"
+    },
+    "updated_at": {
+      "type": "integer"
+    },
+    "terminal_at": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    }
+  }
+}

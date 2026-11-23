@@ -1,0 +1,490 @@
+{
+  "schema_version": "rsi.state_row_registry/1",
+  "owner_domain": "evd",
+  "rows": [
+    {
+      "row_schema": "rsi.evd_evidence_pack_row/1",
+      "owner_domain": "evd",
+      "table": "evd_evidence_pack",
+      "ts_type": "EvdEvidencePackRow",
+      "primary_key": [
+        "pack_id"
+      ],
+      "unique_keys": [
+        [
+          "pack_key"
+        ]
+      ],
+      "event_types": [
+        "state_row.recorded"
+      ],
+      "allowed_operations": [
+        "insert"
+      ],
+      "binding_source": "row",
+      "row_versioned": false,
+      "blob_ref_paths": [
+        "/content_ref",
+        "/source_blob_refs#/[*]"
+      ],
+      "payload_blob_paths": [],
+      "derived_reducer": null,
+      "document": null,
+      "allocation": null,
+      "schema_artifact": "schemas/domains/evidence/state-rows/rsi.evd_evidence_pack_row_1.json"
+    },
+    {
+      "row_schema": "rsi.evd_dependency_unit_row/1",
+      "owner_domain": "evd",
+      "table": "evd_dependency_unit",
+      "ts_type": "EvdDependencyUnitRow",
+      "primary_key": [
+        "unit_id"
+      ],
+      "unique_keys": [
+        [
+          "pack_id",
+          "unit_key"
+        ]
+      ],
+      "event_types": [
+        "state_row.recorded"
+      ],
+      "allowed_operations": [
+        "insert"
+      ],
+      "binding_source": "row",
+      "row_versioned": false,
+      "blob_ref_paths": [
+        "/content_ref",
+        "/source_blob_refs#/[*]"
+      ],
+      "payload_blob_paths": [],
+      "derived_reducer": null,
+      "document": null,
+      "allocation": null,
+      "schema_artifact": "schemas/domains/evidence/state-rows/rsi.evd_dependency_unit_row_1.json"
+    },
+    {
+      "row_schema": "rsi.evd_state_manifest_row/1",
+      "owner_domain": "evd",
+      "table": "evd_state_manifest",
+      "ts_type": "EvdStateManifestRow",
+      "primary_key": [
+        "manifest_id"
+      ],
+      "unique_keys": [
+        [
+          "manifest_key"
+        ]
+      ],
+      "event_types": [
+        "state_row.recorded"
+      ],
+      "allowed_operations": [
+        "insert"
+      ],
+      "binding_source": "row",
+      "row_versioned": false,
+      "blob_ref_paths": [
+        "/content_ref",
+        "/source_blob_refs#/[*]"
+      ],
+      "payload_blob_paths": [],
+      "derived_reducer": null,
+      "document": null,
+      "allocation": null,
+      "schema_artifact": "schemas/domains/evidence/state-rows/rsi.evd_state_manifest_row_1.json"
+    },
+    {
+      "row_schema": "rsi.evd_shard_plan_row/1",
+      "owner_domain": "evd",
+      "table": "evd_shard_plan",
+      "ts_type": "EvdShardPlanRow",
+      "primary_key": [
+        "shard_plan_id"
+      ],
+      "unique_keys": [
+        [
+          "shard_plan_key"
+        ]
+      ],
+      "event_types": [
+        "state_row.recorded"
+      ],
+      "allowed_operations": [
+        "insert"
+      ],
+      "binding_source": "row",
+      "row_versioned": false,
+      "blob_ref_paths": [
+        "/content_ref",
+        "/source_blob_refs#/[*]"
+      ],
+      "payload_blob_paths": [],
+      "derived_reducer": null,
+      "document": null,
+      "allocation": null,
+      "schema_artifact": "schemas/domains/evidence/state-rows/rsi.evd_shard_plan_row_1.json"
+    },
+    {
+      "row_schema": "rsi.evd_shard_row/1",
+      "owner_domain": "evd",
+      "table": "evd_shard",
+      "ts_type": "EvdShardRow",
+      "primary_key": [
+        "shard_id"
+      ],
+      "unique_keys": [
+        [
+          "shard_plan_id",
+          "shard_key"
+        ],
+        [
+          "shard_plan_id",
+          "shard_order"
+        ]
+      ],
+      "event_types": [
+        "state_row.recorded"
+      ],
+      "allowed_operations": [
+        "insert",
+        "transition"
+      ],
+      "binding_source": "row",
+      "row_versioned": true,
+      "blob_ref_paths": [
+        "/body_json#/source_refs[*]"
+      ],
+      "payload_blob_paths": [],
+      "derived_reducer": null,
+      "document": null,
+      "allocation": null,
+      "schema_artifact": "schemas/domains/evidence/state-rows/rsi.evd_shard_row_1.json"
+    },
+    {
+      "row_schema": "rsi.evd_omission_row/1",
+      "owner_domain": "evd",
+      "table": "evd_omission",
+      "ts_type": "EvdOmissionRow",
+      "primary_key": [
+        "omission_id"
+      ],
+      "unique_keys": [
+        [
+          "shard_plan_id",
+          "omission_key"
+        ]
+      ],
+      "event_types": [
+        "state_row.recorded"
+      ],
+      "allowed_operations": [
+        "insert"
+      ],
+      "binding_source": "row",
+      "row_versioned": false,
+      "blob_ref_paths": [
+        "/content_ref",
+        "/source_blob_refs#/[*]"
+      ],
+      "payload_blob_paths": [],
+      "derived_reducer": null,
+      "document": null,
+      "allocation": null,
+      "schema_artifact": "schemas/domains/evidence/state-rows/rsi.evd_omission_row_1.json"
+    },
+    {
+      "row_schema": "rsi.evd_budget_estimate_row/1",
+      "owner_domain": "evd",
+      "table": "evd_budget_estimate",
+      "ts_type": "EvdBudgetEstimateRow",
+      "primary_key": [
+        "estimate_id"
+      ],
+      "unique_keys": [
+        [
+          "estimate_key"
+        ]
+      ],
+      "event_types": [
+        "state_row.recorded"
+      ],
+      "allowed_operations": [
+        "insert"
+      ],
+      "binding_source": "row",
+      "row_versioned": false,
+      "blob_ref_paths": [
+        "/content_ref",
+        "/source_blob_refs#/[*]"
+      ],
+      "payload_blob_paths": [],
+      "derived_reducer": null,
+      "document": null,
+      "allocation": null,
+      "schema_artifact": "schemas/domains/evidence/state-rows/rsi.evd_budget_estimate_row_1.json"
+    },
+    {
+      "row_schema": "rsi.evd_service_profile_row/1",
+      "owner_domain": "evd",
+      "table": "evd_service_profile",
+      "ts_type": "EvdServiceProfileRow",
+      "primary_key": [
+        "profile_id"
+      ],
+      "unique_keys": [
+        [
+          "profile_key",
+          "profile_version"
+        ]
+      ],
+      "event_types": [
+        "state_row.recorded"
+      ],
+      "allowed_operations": [
+        "insert"
+      ],
+      "binding_source": "none",
+      "row_versioned": false,
+      "blob_ref_paths": [
+        "/body_json#/limits/source_refs[*]",
+        "/body_json#/long_context/source_refs[*]",
+        "/body_json#/observed_wire_precision/evidence_refs[*]",
+        "/body_json#/h_evidence_refs[*]",
+        "/body_json#/source_refs[*]",
+        "/body_json#/semantic_competence[*]/calibration_ref"
+      ],
+      "payload_blob_paths": [],
+      "derived_reducer": null,
+      "document": null,
+      "allocation": {
+        "field": "profile_version",
+        "scope_fields": [
+          "profile_key"
+        ],
+        "rule": "max_plus_one"
+      },
+      "schema_artifact": "schemas/domains/evidence/state-rows/rsi.evd_service_profile_row_1.json"
+    },
+    {
+      "row_schema": "rsi.evd_service_state_row/1",
+      "owner_domain": "evd",
+      "table": "evd_service_state",
+      "ts_type": "EvdServiceStateRow",
+      "primary_key": [
+        "service_state_key"
+      ],
+      "unique_keys": [
+        [
+          "profile_key"
+        ]
+      ],
+      "event_types": [
+        "state_row.recorded"
+      ],
+      "allowed_operations": [
+        "insert",
+        "update"
+      ],
+      "binding_source": "none",
+      "row_versioned": true,
+      "blob_ref_paths": [],
+      "payload_blob_paths": [],
+      "derived_reducer": null,
+      "document": null,
+      "allocation": null,
+      "schema_artifact": "schemas/domains/evidence/state-rows/rsi.evd_service_state_row_1.json"
+    },
+    {
+      "row_schema": "rsi.evd_validator_binding_row/1",
+      "owner_domain": "evd",
+      "table": "evd_validator_binding",
+      "ts_type": "EvdValidatorBindingRow",
+      "primary_key": [
+        "validator_binding_id"
+      ],
+      "unique_keys": [
+        [
+          "validator_binding_key"
+        ]
+      ],
+      "event_types": [
+        "state_row.recorded"
+      ],
+      "allowed_operations": [
+        "insert"
+      ],
+      "binding_source": "none",
+      "row_versioned": false,
+      "blob_ref_paths": [],
+      "payload_blob_paths": [],
+      "derived_reducer": null,
+      "document": null,
+      "allocation": null,
+      "schema_artifact": "schemas/domains/evidence/state-rows/rsi.evd_validator_binding_row_1.json"
+    },
+    {
+      "row_schema": "rsi.evd_request_binding_row/1",
+      "owner_domain": "evd",
+      "table": "evd_request_binding",
+      "ts_type": "EvdRequestBindingRow",
+      "primary_key": [
+        "binding_id"
+      ],
+      "unique_keys": [
+        [
+          "dispatch_key",
+          "state_hash"
+        ]
+      ],
+      "event_types": [
+        "state_row.recorded"
+      ],
+      "allowed_operations": [
+        "insert"
+      ],
+      "binding_source": "row",
+      "row_versioned": false,
+      "blob_ref_paths": [
+        "/content_ref",
+        "/source_blob_refs#/[*]"
+      ],
+      "payload_blob_paths": [],
+      "derived_reducer": null,
+      "document": null,
+      "allocation": null,
+      "schema_artifact": "schemas/domains/evidence/state-rows/rsi.evd_request_binding_row_1.json"
+    },
+    {
+      "row_schema": "rsi.evd_attempt_row/1",
+      "owner_domain": "evd",
+      "table": "evd_attempt",
+      "ts_type": "EvdAttemptRow",
+      "primary_key": [
+        "attempt_id"
+      ],
+      "unique_keys": [
+        [
+          "binding_id",
+          "attempt_no"
+        ]
+      ],
+      "event_types": [
+        "state_row.recorded"
+      ],
+      "allowed_operations": [
+        "insert",
+        "transition"
+      ],
+      "binding_source": "row",
+      "row_versioned": true,
+      "blob_ref_paths": [],
+      "payload_blob_paths": [],
+      "derived_reducer": null,
+      "document": null,
+      "allocation": null,
+      "schema_artifact": "schemas/domains/evidence/state-rows/rsi.evd_attempt_row_1.json"
+    },
+    {
+      "row_schema": "rsi.evd_envelope_row/1",
+      "owner_domain": "evd",
+      "table": "evd_envelope",
+      "ts_type": "EvdEnvelopeRow",
+      "primary_key": [
+        "envelope_id"
+      ],
+      "unique_keys": [
+        [
+          "envelope_key"
+        ],
+        [
+          "attempt_id"
+        ]
+      ],
+      "event_types": [
+        "state_row.recorded"
+      ],
+      "allowed_operations": [
+        "insert"
+      ],
+      "binding_source": "row",
+      "row_versioned": false,
+      "blob_ref_paths": [
+        "/content_ref",
+        "/source_blob_refs#/[*]"
+      ],
+      "payload_blob_paths": [],
+      "derived_reducer": null,
+      "document": null,
+      "allocation": null,
+      "schema_artifact": "schemas/domains/evidence/state-rows/rsi.evd_envelope_row_1.json"
+    },
+    {
+      "row_schema": "rsi.evd_late_result_row/1",
+      "owner_domain": "evd",
+      "table": "evd_late_result",
+      "ts_type": "EvdLateResultRow",
+      "primary_key": [
+        "late_result_id"
+      ],
+      "unique_keys": [
+        [
+          "late_result_key"
+        ],
+        [
+          "attempt_id"
+        ]
+      ],
+      "event_types": [
+        "state_row.recorded"
+      ],
+      "allowed_operations": [
+        "insert"
+      ],
+      "binding_source": "row",
+      "row_versioned": false,
+      "blob_ref_paths": [
+        "/content_ref",
+        "/source_blob_refs#/[*]"
+      ],
+      "payload_blob_paths": [],
+      "derived_reducer": null,
+      "document": null,
+      "allocation": null,
+      "schema_artifact": "schemas/domains/evidence/state-rows/rsi.evd_late_result_row_1.json"
+    },
+    {
+      "row_schema": "rsi.evd_aggregate_row/1",
+      "owner_domain": "evd",
+      "table": "evd_aggregate",
+      "ts_type": "EvdAggregateRow",
+      "primary_key": [
+        "aggregate_id"
+      ],
+      "unique_keys": [
+        [
+          "aggregate_key"
+        ]
+      ],
+      "event_types": [
+        "state_row.recorded"
+      ],
+      "allowed_operations": [
+        "insert"
+      ],
+      "binding_source": "row",
+      "row_versioned": false,
+      "blob_ref_paths": [
+        "/content_ref",
+        "/source_blob_refs#/[*]"
+      ],
+      "payload_blob_paths": [],
+      "derived_reducer": null,
+      "document": null,
+      "allocation": null,
+      "schema_artifact": "schemas/domains/evidence/state-rows/rsi.evd_aggregate_row_1.json"
+    }
+  ]
+}

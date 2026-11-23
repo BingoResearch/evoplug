@@ -1,0 +1,140 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:experience_lifecycle_events:1",
+  "title": "ExperienceLifecycleEventRow",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "event_id",
+    "schema_version",
+    "projection_id",
+    "experience_id",
+    "experience_version",
+    "experience_content_hash",
+    "adoption_binding_hash",
+    "sequence",
+    "to_lifecycle",
+    "reason",
+    "trigger_kind",
+    "trigger_usage_ids_json",
+    "write_id",
+    "version_binding_json",
+    "projection_after_hash",
+    "projection_after_json",
+    "row_version_before",
+    "row_version_after",
+    "recorded_at",
+    "event_hash",
+    "event_blob"
+  ],
+  "properties": {
+    "event_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "schema_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "projection_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "experience_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "experience_version": {
+      "type": "integer"
+    },
+    "experience_content_hash": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "adoption_binding_hash": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "sequence": {
+      "type": "integer"
+    },
+    "from_lifecycle": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "to_lifecycle": {
+      "type": "string",
+      "minLength": 1
+    },
+    "reason": {
+      "type": "string",
+      "minLength": 1
+    },
+    "trigger_kind": {
+      "type": "string",
+      "minLength": 1
+    },
+    "trigger_ref": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "trigger_usage_ids_json": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Canonical JSON text."
+    },
+    "write_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "version_binding_json": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Canonical JSON text."
+    },
+    "projection_before_hash": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1,
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "projection_after_hash": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "projection_after_json": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Canonical JSON text."
+    },
+    "row_version_before": {
+      "type": "integer"
+    },
+    "row_version_after": {
+      "type": "integer"
+    },
+    "recorded_at": {
+      "type": "integer"
+    },
+    "event_hash": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "event_blob": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:host_progress_checkpoint_row:1",
+  "title": "ProgressCheckpointPhysicalRow",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "checkpoint_id", "owner", "object_type", "revision", "state", "checkpoint_kind",
+    "task_id", "branch_id", "input_epoch", "goal_version", "config_version", "watermark",
+    "trigger_event_id", "source_event_ref", "source_refs_json", "content_hash", "created_at"
+  ],
+  "properties": {
+    "checkpoint_id": { "type": "string", "pattern": "^chk:" },
+    "owner": { "const": "host" },
+    "object_type": { "const": "progress_checkpoint" },
+    "revision": { "const": 1 },
+    "state": { "const": "recorded" },
+    "checkpoint_kind": { "enum": ["input_boundary", "stable_boundary"] },
+    "task_id": { "type": "string", "minLength": 1 },
+    "branch_id": { "type": "string", "minLength": 1 },
+    "input_epoch": { "type": "integer", "minimum": 1 },
+    "goal_version": { "type": "string", "minLength": 1 },
+    "config_version": { "type": "string", "minLength": 1 },
+    "watermark": { "type": "integer", "minimum": 0 },
+    "trigger_event_id": { "type": "string", "pattern": "^trg:" },
+    "source_event_ref": { "type": "string", "pattern": "^(journal|blob)://[^#]+#bytes=[0-9]+-[0-9]+$" },
+    "source_refs_json": { "type": "string", "description": "JCS text array of SourceRef" },
+    "content_hash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "created_at": { "type": "integer", "minimum": 0 }
+  }
+}

@@ -1,0 +1,3 @@
+-- evoplug schema major 4: this domain schema now lives in
+-- migrations/sql/0001_core.sql as a shared record store plus compatibility views.
+-- The artifact keeps its frozen slot so domain migration ordering is unchanged.

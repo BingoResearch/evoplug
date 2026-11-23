@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:shard_plan_input:1",
+  "title": "ShardPlanInput",
+  "description": "DD-EVD-026 shard plan input.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "plan_id",
+    "plan_hash",
+    "issue_id",
+    "issue_key",
+    "pack",
+    "pack_key",
+    "closure",
+    "snapshot",
+    "service_profile",
+    "limits",
+    "binding",
+    "shard_policy_version"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "rsi.shard_plan_input/1"
+    },
+    "plan_id": {
+      "type": "string"
+    },
+    "plan_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "issue_id": {
+      "type": "string"
+    },
+    "issue_key": {
+      "type": "string"
+    },
+    "pack": {
+      "type": "object"
+    },
+    "pack_key": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "closure": {
+      "type": "object"
+    },
+    "snapshot": {
+      "type": "object"
+    },
+    "service_profile": {
+      "type": "object"
+    },
+    "limits": {
+      "type": "object"
+    },
+    "binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "task_id",
+        "branch_id",
+        "input_epoch",
+        "goal_version",
+        "config_version",
+        "watermark"
+      ],
+      "properties": {
+        "task_id": {
+          "type": "string"
+        },
+        "branch_id": {
+          "type": "string"
+        },
+        "input_epoch": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "goal_version": {
+          "type": "string"
+        },
+        "config_version": {
+          "type": "string"
+        },
+        "watermark": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "shard_policy_version": {
+      "const": "per_shard/1"
+    }
+  }
+}

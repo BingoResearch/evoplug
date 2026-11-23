@@ -1,0 +1,46 @@
+{
+  "$id": "urn:evoplug:schema:evd_validator_binding_row:1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Physical row of evd_validator_binding (DD-EVD-024); values are the frozen row_json columns.",
+  "properties": {
+    "body_json": {
+      "description": "JCS text; JSON object",
+      "type": "string"
+    },
+    "created_at": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "row_version": {
+      "const": 0,
+      "type": "integer"
+    },
+    "service_profile_key": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "validator_binding_id": {
+      "type": "string"
+    },
+    "validator_binding_key": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "validator_policy_hash": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    }
+  },
+  "required": [
+    "validator_binding_id",
+    "validator_binding_key",
+    "validator_policy_hash",
+    "service_profile_key",
+    "body_json",
+    "row_version",
+    "created_at"
+  ],
+  "title": "EvdValidatorBindingRow",
+  "type": "object"
+}

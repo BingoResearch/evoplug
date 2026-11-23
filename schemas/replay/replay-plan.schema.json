@@ -1,0 +1,971 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:replay_plan:1",
+  "title": "ReplayPlan",
+  "description": "Replay plan, classification, authorization, approval and execution (DD-FND-094/096). temp_copy alone is not isolation.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "replay_plan_id",
+    "validation_plan_id",
+    "replay_class",
+    "command",
+    "cwd",
+    "allowed_network",
+    "network_target",
+    "classification_evidence",
+    "environment",
+    "isolation",
+    "side_effect_kinds",
+    "side_effect_refs",
+    "version_binding",
+    "state",
+    "plan_hash"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "rsi.replay_plan/2"
+    },
+    "replay_plan_id": {
+      "type": "string",
+      "pattern": "^rpl:[0-9A-HJKMNP-TV-Z]{26}$"
+    },
+    "validation_plan_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "replay_class": {
+      "$ref": "#/$defs/ReplayClass"
+    },
+    "command": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 8192
+    },
+    "cwd": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096
+    },
+    "allowed_network": {
+      "type": "boolean"
+    },
+    "network_target": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 512
+    },
+    "classification_evidence": {
+      "enum": [
+        "tool_metadata",
+        "observed_effects",
+        "none"
+      ]
+    },
+    "environment": {
+      "enum": [
+        "host",
+        "temp_copy",
+        "sandbox"
+      ]
+    },
+    "isolation": {
+      "$ref": "#/$defs/ReplayIsolation"
+    },
+    "side_effect_kinds": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/SideEffectKind"
+      }
+    },
+    "side_effect_refs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/SourceRef"
+      }
+    },
+    "version_binding": {
+      "$ref": "#/$defs/VersionBinding"
+    },
+    "state": {
+      "enum": [
+        "planned",
+        "running",
+        "passed",
+        "failed",
+        "rejected",
+        "unverified"
+      ]
+    },
+    "plan_hash": {
+      "$ref": "#/$defs/Hash"
+    }
+  },
+  "$defs": {
+    "Hash": {
+      "title": "Hash",
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "SourceRef": {
+      "title": "SourceRef",
+      "oneOf": [
+        {
+          "type": "string",
+          "pattern": "^journal://ev:[0-9A-HJKMNP-TV-Z]{26}#bytes=(0|[1-9][0-9]*)-(0|[1-9][0-9]*)$"
+        },
+        {
+          "type": "string",
+          "pattern": "^blob://sha256:[0-9a-f]{64}#bytes=(0|[1-9][0-9]*)-(0|[1-9][0-9]*)$"
+        }
+      ]
+    },
+    "VersionBinding": {
+      "title": "VersionBinding",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "task_id",
+        "branch_id",
+        "input_epoch",
+        "goal_version",
+        "config_version",
+        "watermark"
+      ],
+      "properties": {
+        "task_id": {
+          "type": "string"
+        },
+        "branch_id": {
+          "type": "string"
+        },
+        "input_epoch": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "goal_version": {
+          "type": "string"
+        },
+        "config_version": {
+          "type": "string"
+        },
+        "watermark": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "ReplayClass": {
+      "title": "ReplayClass",
+      "enum": [
+        "read_only",
+        "sandboxed_temp",
+        "live_external"
+      ]
+    },
+    "SideEffectKind": {
+      "title": "SideEffectKind",
+      "enum": [
+        "file_write",
+        "network",
+        "process_spawn",
+        "secret_access",
+        "external_state"
+      ]
+    },
+    "ReplayIsolation": {
+      "title": "ReplayIsolation",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mechanism",
+        "verified",
+        "evidence_ref",
+        "network_namespace",
+        "writable_roots"
+      ],
+      "properties": {
+        "mechanism": {
+          "enum": [
+            "none",
+            "container",
+            "vm",
+            "os_sandbox"
+          ]
+        },
+        "verified": {
+          "type": "boolean"
+        },
+        "evidence_ref": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/SourceRef"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "network_namespace": {
+          "type": "boolean"
+        },
+        "writable_roots": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "ReplayPlanDraft": {
+      "title": "ReplayPlanDraft",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "validation_plan_id",
+        "replay_class",
+        "command",
+        "cwd",
+        "allowed_network",
+        "network_target",
+        "classification_evidence",
+        "environment",
+        "isolation",
+        "side_effect_kinds",
+        "side_effect_refs",
+        "version_binding"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "rsi.replay_plan/2"
+        },
+        "validation_plan_id": {
+          "type": "string"
+        },
+        "replay_class": {
+          "$ref": "#/$defs/ReplayClass"
+        },
+        "command": {
+          "type": "string"
+        },
+        "cwd": {
+          "type": "string"
+        },
+        "allowed_network": {
+          "type": "boolean"
+        },
+        "network_target": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "classification_evidence": {
+          "enum": [
+            "tool_metadata",
+            "observed_effects",
+            "none"
+          ]
+        },
+        "environment": {
+          "enum": [
+            "host",
+            "temp_copy",
+            "sandbox"
+          ]
+        },
+        "isolation": {
+          "$ref": "#/$defs/ReplayIsolation"
+        },
+        "side_effect_kinds": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SideEffectKind"
+          }
+        },
+        "side_effect_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SourceRef"
+          }
+        },
+        "version_binding": {
+          "$ref": "#/$defs/VersionBinding"
+        }
+      }
+    },
+    "ReplayClassifyRequest": {
+      "title": "ReplayClassifyRequest",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "validation_plan_id",
+        "command",
+        "cwd",
+        "requested_class",
+        "allowed_network",
+        "network_target",
+        "environment",
+        "isolation",
+        "tool_metadata_ref",
+        "observed_effects"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "rsi.replay_classify/1"
+        },
+        "validation_plan_id": {
+          "type": "string"
+        },
+        "command": {
+          "type": "string"
+        },
+        "cwd": {
+          "type": "string"
+        },
+        "requested_class": {
+          "$ref": "#/$defs/ReplayClass"
+        },
+        "allowed_network": {
+          "type": "boolean"
+        },
+        "network_target": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "environment": {
+          "enum": [
+            "host",
+            "temp_copy",
+            "sandbox"
+          ]
+        },
+        "isolation": {
+          "$ref": "#/$defs/ReplayIsolation"
+        },
+        "tool_metadata_ref": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/SourceRef"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "observed_effects": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SideEffectKind"
+          }
+        }
+      }
+    },
+    "ReplayClassification": {
+      "title": "ReplayClassification",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/ReplayClassificationKnown"
+        },
+        {
+          "$ref": "#/$defs/ReplayClassificationUnknown"
+        }
+      ]
+    },
+    "ReplayClassificationKnown": {
+      "title": "ReplayClassificationKnown",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "state",
+        "requested_class",
+        "allowed_network",
+        "network_target",
+        "classification_evidence",
+        "side_effect_kinds"
+      ],
+      "properties": {
+        "state": {
+          "const": "known"
+        },
+        "requested_class": {
+          "$ref": "#/$defs/ReplayClass"
+        },
+        "allowed_network": {
+          "type": "boolean"
+        },
+        "network_target": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "classification_evidence": {
+          "enum": [
+            "tool_metadata",
+            "observed_effects"
+          ]
+        },
+        "side_effect_kinds": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SideEffectKind"
+          }
+        }
+      }
+    },
+    "ReplayClassificationUnknown": {
+      "title": "ReplayClassificationUnknown",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "state",
+        "reason_code"
+      ],
+      "properties": {
+        "state": {
+          "const": "unknown"
+        },
+        "reason_code": {
+          "enum": [
+            "tool_metadata_missing",
+            "effects_unobserved",
+            "isolation_unverified",
+            "command_dynamic"
+          ]
+        }
+      }
+    },
+    "ReplayAuthorizeRequest": {
+      "title": "ReplayAuthorizeRequest",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "replay_plan_id",
+        "approval_id"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "rsi.replay_authorize/1"
+        },
+        "replay_plan_id": {
+          "type": "string"
+        },
+        "approval_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^rpa:[0-9A-HJKMNP-TV-Z]{26}$"
+        }
+      }
+    },
+    "ReplayAuthorization": {
+      "title": "ReplayAuthorization",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "state",
+        "replay_plan_id",
+        "reason_code",
+        "fencing_token"
+      ],
+      "properties": {
+        "state": {
+          "enum": [
+            "authorized",
+            "needs_approval",
+            "rejected"
+          ]
+        },
+        "replay_plan_id": {
+          "type": "string"
+        },
+        "reason_code": {
+          "enum": [
+            "read_only_confirmed",
+            "sandbox_verified",
+            "explicit_approval",
+            "approval_missing",
+            "approval_mismatch",
+            "approval_consumed",
+            "network_scope_mismatch",
+            "isolation_unverified",
+            "classifier_unknown"
+          ]
+        },
+        "fencing_token": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 64
+        }
+      }
+    },
+    "ReplayApproval": {
+      "title": "ReplayApproval",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "approval_id",
+        "replay_plan_id",
+        "plan_hash",
+        "approved_by",
+        "human_attestation",
+        "attestation_subject_hash",
+        "approval_hash",
+        "command",
+        "cwd",
+        "version_binding",
+        "allowed_network",
+        "network_target",
+        "ttl_ms",
+        "state",
+        "created_at",
+        "expires_at",
+        "consumed_at",
+        "consumed_execution_id",
+        "revoked_at",
+        "revoke_reason",
+        "row_version"
+      ],
+      "properties": {
+        "approval_id": {
+          "type": "string",
+          "pattern": "^rpa:[0-9A-HJKMNP-TV-Z]{26}$"
+        },
+        "replay_plan_id": {
+          "type": "string"
+        },
+        "plan_hash": {
+          "$ref": "#/$defs/Hash"
+        },
+        "approved_by": {
+          "const": "human"
+        },
+        "human_attestation": {
+          "$ref": "#/$defs/HumanAttestation"
+        },
+        "attestation_subject_hash": {
+          "$ref": "#/$defs/Hash"
+        },
+        "approval_hash": {
+          "$ref": "#/$defs/Hash"
+        },
+        "command": {
+          "type": "string"
+        },
+        "cwd": {
+          "type": "string"
+        },
+        "version_binding": {
+          "$ref": "#/$defs/VersionBinding"
+        },
+        "allowed_network": {
+          "type": "boolean"
+        },
+        "network_target": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "ttl_ms": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 600000
+        },
+        "state": {
+          "enum": [
+            "active",
+            "consumed",
+            "revoked",
+            "expired"
+          ]
+        },
+        "created_at": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "expires_at": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "consumed_at": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "consumed_execution_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "revoked_at": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "revoke_reason": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "human_revoked",
+            "plan_rejected",
+            "policy_replaced",
+            null
+          ]
+        },
+        "row_version": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "HumanAttestation": {
+      "title": "HumanAttestation",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "capability_id",
+        "evidence_ref",
+        "confirmed_at"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "host_verified_interactive_user",
+            "control_plane_explicit_confirmation"
+          ]
+        },
+        "capability_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "evidence_ref": {
+          "$ref": "#/$defs/SourceRef"
+        },
+        "confirmed_at": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "ReplayExecution": {
+      "title": "ReplayExecution",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "execution_id",
+        "replay_plan_id",
+        "approval_id",
+        "state",
+        "fencing_token",
+        "reconcile_required",
+        "reconciled_at",
+        "reconcile_evidence_ref",
+        "started_at",
+        "ended_at",
+        "exit_code",
+        "stdout_ref",
+        "stderr_ref",
+        "result_hash",
+        "error_code",
+        "row_version",
+        "created_at"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "rsi.replay_execution/1"
+        },
+        "execution_id": {
+          "type": "string",
+          "pattern": "^rex:[0-9A-HJKMNP-TV-Z]{26}$"
+        },
+        "replay_plan_id": {
+          "type": "string"
+        },
+        "approval_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "state": {
+          "enum": [
+            "authorized",
+            "running",
+            "passed",
+            "failed",
+            "unknown",
+            "cancelled"
+          ]
+        },
+        "fencing_token": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{43}$"
+        },
+        "reconcile_required": {
+          "type": "boolean"
+        },
+        "reconciled_at": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "reconcile_evidence_ref": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/SourceRef"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "started_at": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "ended_at": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "exit_code": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "stdout_ref": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/SourceRef"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "stderr_ref": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/SourceRef"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "result_hash": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "error_code": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "row_version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "created_at": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "ReplayApproveRequest": {
+      "title": "ReplayApproveRequest",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "replay_plan_id",
+        "expected_plan_hash",
+        "ttl_ms",
+        "human_attestation",
+        "reason"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "rsi.replay_approve/1"
+        },
+        "replay_plan_id": {
+          "type": "string"
+        },
+        "expected_plan_hash": {
+          "$ref": "#/$defs/Hash"
+        },
+        "ttl_ms": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 600000
+        },
+        "human_attestation": {
+          "$ref": "#/$defs/HumanAttestation"
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        }
+      }
+    },
+    "ReplayRevokeRequest": {
+      "title": "ReplayRevokeRequest",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "approval_id",
+        "expected_approval_hash",
+        "human_attestation",
+        "reason"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "rsi.replay_revoke/1"
+        },
+        "approval_id": {
+          "type": "string"
+        },
+        "expected_approval_hash": {
+          "$ref": "#/$defs/Hash"
+        },
+        "human_attestation": {
+          "$ref": "#/$defs/HumanAttestation"
+        },
+        "reason": {
+          "enum": [
+            "human_revoked",
+            "policy_replaced"
+          ]
+        }
+      }
+    },
+    "ReplayRejectRequest": {
+      "title": "ReplayRejectRequest",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "replay_plan_id",
+        "expected_plan_hash",
+        "human_attestation",
+        "reason"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "rsi.replay_reject/1"
+        },
+        "replay_plan_id": {
+          "type": "string"
+        },
+        "expected_plan_hash": {
+          "$ref": "#/$defs/Hash"
+        },
+        "human_attestation": {
+          "$ref": "#/$defs/HumanAttestation"
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        }
+      }
+    },
+    "ReplayReconcileRequest": {
+      "title": "ReplayReconcileRequest",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "execution_id",
+        "fencing_token",
+        "evidence_ref",
+        "human_attestation",
+        "reason"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "rsi.replay_reconcile/1"
+        },
+        "execution_id": {
+          "type": "string"
+        },
+        "fencing_token": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "evidence_ref": {
+          "$ref": "#/$defs/SourceRef"
+        },
+        "human_attestation": {
+          "$ref": "#/$defs/HumanAttestation"
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        }
+      }
+    }
+  },
+  "x-evoplug-ddl": {
+    "table": "replay_plan",
+    "enums": {
+      "replay_class": [
+        "read_only",
+        "sandboxed_temp",
+        "live_external"
+      ],
+      "classification_evidence": [
+        "tool_metadata",
+        "observed_effects",
+        "none"
+      ],
+      "environment": [
+        "host",
+        "temp_copy",
+        "sandbox"
+      ],
+      "state": [
+        "planned",
+        "running",
+        "passed",
+        "failed",
+        "rejected",
+        "unverified"
+      ]
+    }
+  }
+}

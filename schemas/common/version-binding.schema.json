@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:version_binding:1",
+  "title": "VersionBinding",
+  "description": "Six-field executable version binding (DD-FND-031). goal_version and config_version are opaque strings.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["task_id", "branch_id", "input_epoch", "goal_version", "config_version", "watermark"],
+  "properties": {
+    "task_id": { "$ref": "#/$defs/TaskId" },
+    "branch_id": { "$ref": "#/$defs/BranchId" },
+    "input_epoch": { "type": "integer", "minimum": 1, "maximum": 9007199254740991 },
+    "goal_version": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,255}$" },
+    "config_version": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,127}$" },
+    "watermark": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 }
+  },
+  "$defs": {
+    "TaskId": {
+      "title": "TaskId",
+      "type": "string",
+      "pattern": "^task:[0-9A-HJKMNP-TV-Z]{26}$"
+    },
+    "BranchId": {
+      "title": "BranchId",
+      "type": "string",
+      "pattern": "^br:[0-9A-HJKMNP-TV-Z]{26}$"
+    }
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:trial_attempt:1",
+  "title": "TrialAttempt",
+  "description": "One replayable trial action, schema rsi.trial_attempt/1 (DD-CFG-130).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "trial_id", "sequence", "kind", "phase_before",
+    "phase_after", "idempotency_key", "request_hash", "audit_input",
+    "started_at", "finished_at", "result", "error"
+  ],
+  "properties": {
+    "schema_version": { "const": "rsi.trial_attempt/1" },
+    "trial_id": { "type": "string", "pattern": "^ctr:[0-9A-HJKMNP-TV-Z]{26}$" },
+    "sequence": { "type": "integer", "minimum": 1 },
+    "kind": { "enum": ["write", "readback", "apply_probe", "rollback_write", "rollback_readback", "observation", "reconcile"] },
+    "phase_before": { "$ref": "#/$defs/TrialPhase" },
+    "phase_after": { "$ref": "#/$defs/TrialPhase" },
+    "idempotency_key": { "type": "string", "minLength": 1, "maxLength": 512 },
+    "request_hash": { "$ref": "#/$defs/Hash" },
+    "audit_input": { "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/WriteAttemptAuditInput" }] },
+    "started_at": { "type": "integer", "minimum": 0 },
+    "finished_at": { "oneOf": [{ "type": "null" }, { "type": "integer", "minimum": 0 }] },
+    "result": { "oneOf": [{ "type": "null" }, { "type": "object", "description": "AttemptResult discriminated union, validated by the domain type guard." }] },
+    "error": { "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/ConfigError" }] }
+  },
+  "$defs": {
+    "Hash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "FieldId": { "type": "string", "pattern": "^fld:[0-9A-HJKMNP-TV-Z]{26}$" },
+    "ConfigScalar": { "type": ["string", "number", "boolean", "null"] },
+    "TrialPhase": { "enum": ["planned", "authorized", "writing", "write_recorded", "awaiting_apply", "observing", "rolling_back", "recovery_required", "closed", "aborted"] },
+    "WriteAttemptAuditInput": {
+      "type": "object", "additionalProperties": false,
+      "required": ["schema_version", "config_space_id", "field_registry_snapshot_hash", "root_id", "target_path", "attempted_field_ids", "patch_hash", "config_write_id"],
+      "properties": {
+        "schema_version": { "const": "rsi.cfg_write_attempt_audit/1" },
+        "config_space_id": { "$ref": "#/$defs/Hash" },
+        "field_registry_snapshot_hash": { "$ref": "#/$defs/Hash" },
+        "root_id": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "target_path": { "type": "string", "minLength": 1, "maxLength": 1024 },
+        "attempted_field_ids": { "type": "array", "items": { "$ref": "#/$defs/FieldId" } },
+        "patch_hash": { "$ref": "#/$defs/Hash" },
+        "config_write_id": { "oneOf": [{ "type": "null" }, { "type": "string", "pattern": "^cwi:[0-9A-HJKMNP-TV-Z]{26}$" }] }
+      }
+    },
+    "ConfigError": {
+      "type": "object", "additionalProperties": false,
+      "required": ["code", "message_key", "field_id", "path", "retryable", "details"],
+      "properties": {
+        "code": { "type": "string", "pattern": "^E_CFG_[A-Z0-9_]+$" },
+        "message_key": { "type": "string", "pattern": "^cfg\\.[a-z0-9_]+$" },
+        "field_id": { "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/FieldId" }] },
+        "path": { "oneOf": [{ "type": "null" }, { "type": "string", "maxLength": 1024 }] },
+        "retryable": { "type": "boolean" },
+        "details": {
+          "type": "array",
+          "items": { "type": "object", "additionalProperties": false, "required": ["key", "value"], "properties": { "key": { "type": "string", "minLength": 1, "maxLength": 64 }, "value": { "$ref": "#/$defs/ConfigScalar" } } }
+        }
+      }
+    }
+  }
+}

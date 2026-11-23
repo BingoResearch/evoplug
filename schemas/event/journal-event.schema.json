@@ -1,0 +1,307 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:journal_event:1",
+  "title": "JournalEventBody",
+  "description": "Journal frame payload (DD-FND-059). The concrete event validator is dispatched by event.schema_version: rsi.event/1, rsi.ledger_event/1, rsi.fact_verification_event/1 or a QP event schema.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "event", "event_hash", "blob_hashes"],
+  "properties": {
+    "schema_version": { "const": "rsi.journal_event/1" },
+    "event": { "$ref": "#/$defs/JournalEvent" },
+    "event_hash": { "$ref": "#/$defs/Hash" },
+    "blob_hashes": { "type": "array", "items": { "$ref": "#/$defs/Hash" } }
+  },
+  "x-evoplug-deferred-validation": "event.schema_version selects the concrete generated validator; this envelope only enforces the dispatch discriminant",
+  "$defs": {
+    "Hash": { "title": "Hash", "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "VersionBinding": {
+      "title": "VersionBinding",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["task_id", "branch_id", "input_epoch", "goal_version", "config_version", "watermark"],
+      "properties": {
+        "task_id": { "type": "string", "pattern": "^task:[0-9A-HJKMNP-TV-Z]{26}$" },
+        "branch_id": { "type": "string", "pattern": "^br:[0-9A-HJKMNP-TV-Z]{26}$" },
+        "input_epoch": { "type": "integer", "minimum": 1 },
+        "goal_version": { "type": "string" },
+        "config_version": { "type": "string" },
+        "watermark": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "JournalEvent": {
+      "title": "JournalEvent",
+      "oneOf": [
+        { "$ref": "#/$defs/HostJournalDispatch" },
+        { "$ref": "#/$defs/LedgerJournalDispatch" },
+        { "$ref": "#/$defs/QpJournalDispatch" },
+        { "$ref": "#/$defs/FactVerificationJournalEvent" }
+      ]
+    },
+    "HostJournalDispatch": {
+      "title": "HostJournalDispatch",
+      "type": "object",
+      "required": ["schema_version"],
+      "properties": {
+        "schema_version": { "const": "rsi.event/1" },
+        "event_id": { "type": "string" },
+        "event_key": { "$ref": "#/$defs/Hash" },
+        "payload_hash": { "$ref": "#/$defs/Hash" }
+      }
+    },
+    "LedgerJournalDispatch": {
+      "title": "LedgerJournalDispatch",
+      "type": "object",
+      "required": ["schema_version"],
+      "properties": {
+        "schema_version": { "const": "rsi.ledger_event/1" },
+        "event_id": { "type": "string" },
+        "event_key": { "$ref": "#/$defs/Hash" },
+        "event_type": { "type": "string" },
+        "entity_type": { "type": "string" },
+        "entity_id": { "type": "string" },
+        "operation": { "enum": ["insert", "update", "transition"] },
+        "row_schema": { "type": "string" },
+        "row_json": { "type": "string" },
+        "payload_hash": { "$ref": "#/$defs/Hash" }
+      }
+    },
+    "QpJournalDispatch": {
+      "title": "QpJournalDispatch",
+      "type": "object",
+      "required": ["schema_version", "event_type", "entity_type", "entity_id", "payload_hash", "payload"],
+      "properties": {
+        "schema_version": { "enum": ["rsi.qp_issue_event/1", "rsi.qp_plan_event/1", "rsi.qp_plan_state_event/1", "rsi.qp_judgment_route_event/1"] },
+        "event_type": { "enum": ["issue_transition_appended", "question_plan_put", "plan_state_appended", "judgment_route_recorded"] },
+        "entity_type": { "enum": ["issue_transition", "question_plan", "plan_state", "judgment_route"] },
+        "entity_id": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "payload_hash": { "$ref": "#/$defs/Hash" },
+        "payload": { "$ref": "#/$defs/JsonValue" }
+      }
+    },
+    "FactVerificationJournalEvent": {
+      "title": "FactVerificationJournalEvent",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "event_id", "event_key", "event_type", "occurred_at", "received_at", "host_id", "config_space", "session_id", "binding", "origin", "origin_basis", "human_attestation", "trigger_lineage", "correlation_id", "parent_event_id", "input_id", "run_id", "input_epoch", "source_seq", "call_id", "content_ref", "content_hash", "content_bytes", "payload", "payload_hash"],
+      "properties": {
+        "schema_version": { "const": "rsi.fact_verification_event/1" },
+        "event_id": { "type": "string", "pattern": "^ev:[0-9A-HJKMNP-TV-Z]{26}$" },
+        "event_key": { "$ref": "#/$defs/Hash" },
+        "event_type": { "const": "fact_verification.recorded" },
+        "occurred_at": { "type": "integer", "minimum": 0 },
+        "received_at": { "type": "integer", "minimum": 0 },
+        "host_id": { "type": "string" },
+        "config_space": { "type": "string" },
+        "session_id": { "type": "string" },
+        "binding": { "$ref": "#/$defs/VersionBinding" },
+        "origin": { "const": "system" },
+        "origin_basis": { "const": "explicit_event" },
+        "human_attestation": { "type": "null" },
+        "trigger_lineage": { "$ref": "#/$defs/InternalTriggerLineage" },
+        "correlation_id": { "type": "string" },
+        "parent_event_id": { "type": "string" },
+        "input_id": { "type": "null" },
+        "run_id": { "type": "null" },
+        "input_epoch": { "type": "null" },
+        "source_seq": { "type": "null" },
+        "call_id": { "type": "null" },
+        "content_ref": { "type": "null" },
+        "content_hash": { "type": "null" },
+        "content_bytes": { "type": "null" },
+        "payload": { "$ref": "#/$defs/FactVerificationRecordedPayload" },
+        "payload_hash": { "$ref": "#/$defs/Hash" }
+      }
+    },
+    "InternalTriggerLineage": {
+      "title": "InternalTriggerLineage",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["axis", "root_event_id", "depth"],
+      "properties": {
+        "axis": { "const": "internal_evaluator" },
+        "root_event_id": { "type": "string", "pattern": "^ev:[0-9A-HJKMNP-TV-Z]{26}$" },
+        "depth": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "FactVerificationRecordedPayload": {
+      "title": "FactVerificationRecordedPayload",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "fact_id", "verification_binding", "verifier_ref", "verifier_id", "verifier_kind", "method_ref", "reservation_ids", "independent", "requirement_ids", "proposition_ids", "effect", "artifact_version", "source_ids", "source_refs", "result", "status", "content_hash", "verified_at"],
+      "properties": {
+        "schema_version": { "const": "rsi.fact_verification.recorded/2" },
+        "fact_id": { "type": "string", "pattern": "^fact:[0-9A-HJKMNP-TV-Z]{26}$" },
+        "verification_binding": { "$ref": "#/$defs/VersionBinding" },
+        "verifier_ref": { "$ref": "#/$defs/SourceRef" },
+        "verifier_id": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "verifier_kind": { "enum": ["test", "artifact_check", "external", "human"] },
+        "method_ref": { "$ref": "#/$defs/MethodRef" },
+        "reservation_ids": { "type": "array", "maxItems": 8, "items": { "type": "string", "pattern": "^resv:[0-9A-HJKMNP-TV-Z]{26}$" } },
+        "independent": { "type": "boolean" },
+        "requirement_ids": { "type": "array", "items": { "type": "string", "pattern": "^req:[0-9A-HJKMNP-TV-Z]{26}$" } },
+        "proposition_ids": { "type": "array", "items": { "type": "string", "pattern": "^propo:[0-9a-f]{64}$" } },
+        "effect": { "enum": ["supports", "violates", "unknown"] },
+        "artifact_version": { "type": ["string", "null"] },
+        "source_ids": { "type": "array", "minItems": 1, "maxItems": 128, "items": { "type": "string", "minLength": 1, "maxLength": 128 } },
+        "source_refs": { "type": "array", "items": { "$ref": "#/$defs/SourceRef" } },
+        "result": { "enum": ["verified", "contradicted", "unknown"] },
+        "status": { "enum": ["valid", "invalidated", "unknown"] },
+        "content_hash": { "$ref": "#/$defs/Hash" },
+        "verified_at": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "MethodRef": {
+      "title": "MethodRef",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "method_id", "method_version", "rule_version"],
+      "properties": {
+        "schema_version": { "const": "rsi.method_ref/1" },
+        "method_id": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "method_version": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "rule_version": { "type": "string", "minLength": 1, "maxLength": 128 }
+      }
+    },
+    "SourceRef": {
+      "title": "SourceRef",
+      "oneOf": [
+        { "type": "string", "pattern": "^journal://ev:[0-9A-HJKMNP-TV-Z]{26}#bytes=(0|[1-9][0-9]*)-(0|[1-9][0-9]*)$" },
+        { "type": "string", "pattern": "^blob://sha256:[0-9a-f]{64}#bytes=(0|[1-9][0-9]*)-(0|[1-9][0-9]*)$" }
+      ]
+    },
+    "StateRowBatchBody": {
+      "title": "StateRowBatchBody",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "member_count", "batch_hash", "members"],
+      "properties": {
+        "schema_version": { "const": "rsi.state_row_batch/1" },
+        "member_count": { "type": "integer", "minimum": 1, "maximum": 256 },
+        "batch_hash": { "$ref": "#/$defs/Hash" },
+        "members": { "type": "array", "minItems": 1, "maxItems": 256, "items": { "$ref": "#/$defs/StateRowBatchMember" } }
+      }
+    },
+    "StateRowBatchMember": {
+      "title": "StateRowBatchMember",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["event", "event_hash", "blob_hashes"],
+      "properties": {
+        "event": { "$ref": "#/$defs/StateRowBatchEvent" },
+        "event_hash": { "$ref": "#/$defs/Hash" },
+        "blob_hashes": { "type": "array", "items": { "$ref": "#/$defs/Hash" } }
+      }
+    },
+    "StateRowBatchEvent": {
+      "title": "StateRowBatchEvent",
+      "oneOf": [
+        { "$ref": "#/$defs/StateRowEvent" },
+        { "$ref": "#/$defs/ObjectDocumentEvent" },
+        { "$ref": "#/$defs/ObjectHeadEvent" },
+        { "$ref": "#/$defs/OutboxEnqueuedEvent" },
+        { "$ref": "#/$defs/FactVerificationJournalEvent" }
+      ]
+    },
+    "StateRowEvent": {
+      "title": "StateRowEvent",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "event_id", "event_key", "event_type", "entity_type", "entity_id", "operation", "binding", "before_hash", "after_hash", "row_schema", "row_json", "payload_hash", "recorded_at", "document_id"],
+      "properties": {
+        "schema_version": { "const": "rsi.ledger_event/1" },
+        "event_id": { "type": "string", "pattern": "^ev:[0-9A-HJKMNP-TV-Z]{26}$" },
+        "event_key": { "$ref": "#/$defs/Hash" },
+        "event_type": { "const": "state_row.recorded" },
+        "entity_type": { "const": "state_row" },
+        "entity_id": { "$ref": "#/$defs/Hash" },
+        "operation": { "enum": ["insert", "update", "transition"] },
+        "binding": { "$ref": "#/$defs/VersionBinding" },
+        "before_hash": { "type": ["string", "null"], "pattern": "^sha256:[0-9a-f]{64}$" },
+        "after_hash": { "$ref": "#/$defs/Hash" },
+        "row_schema": { "type": "string", "pattern": "^rsi\\.[a-z0-9_]+_row/[0-9]+$" },
+        "row_json": { "type": "string", "minLength": 2, "maxLength": 8388608 },
+        "payload_hash": { "$ref": "#/$defs/Hash" },
+        "recorded_at": { "type": "integer", "minimum": 0 },
+        "document_id": { "type": ["string", "null"], "pattern": "^sha256:[0-9a-f]{64}$" }
+      }
+    },
+    "ObjectDocumentEvent": {
+      "title": "ObjectDocumentEvent",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "event_id", "event_key", "event_type", "entity_type", "entity_id", "operation", "binding", "before_hash", "after_hash", "row_schema", "row_json", "payload_hash", "recorded_at", "document_id"],
+      "properties": {
+        "schema_version": { "const": "rsi.ledger_event/1" },
+        "event_id": { "type": "string", "pattern": "^ev:[0-9A-HJKMNP-TV-Z]{26}$" },
+        "event_key": { "$ref": "#/$defs/Hash" },
+        "event_type": { "const": "object_document.recorded" },
+        "entity_type": { "const": "object_document" },
+        "entity_id": { "$ref": "#/$defs/Hash" },
+        "operation": { "const": "insert" },
+        "binding": { "$ref": "#/$defs/VersionBinding" },
+        "before_hash": { "type": "null" },
+        "after_hash": { "$ref": "#/$defs/Hash" },
+        "row_schema": { "const": "rsi.object_document_row/1" },
+        "row_json": { "type": "string", "minLength": 2 },
+        "payload_hash": { "$ref": "#/$defs/Hash" },
+        "recorded_at": { "type": "integer", "minimum": 0 },
+        "document_id": { "$ref": "#/$defs/Hash" }
+      }
+    },
+    "ObjectHeadEvent": {
+      "title": "ObjectHeadEvent",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "event_id", "event_key", "event_type", "entity_type", "entity_id", "operation", "binding", "before_hash", "after_hash", "row_schema", "row_json", "payload_hash", "recorded_at", "document_id"],
+      "properties": {
+        "schema_version": { "const": "rsi.ledger_event/1" },
+        "event_id": { "type": "string", "pattern": "^ev:[0-9A-HJKMNP-TV-Z]{26}$" },
+        "event_key": { "$ref": "#/$defs/Hash" },
+        "event_type": { "const": "object_head.transition" },
+        "entity_type": { "const": "object_head" },
+        "entity_id": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "operation": { "enum": ["insert", "transition"] },
+        "binding": { "$ref": "#/$defs/VersionBinding" },
+        "before_hash": { "type": ["string", "null"], "pattern": "^sha256:[0-9a-f]{64}$" },
+        "after_hash": { "$ref": "#/$defs/Hash" },
+        "row_schema": { "const": "rsi.object_head_row/1" },
+        "row_json": { "type": "string", "minLength": 2 },
+        "payload_hash": { "$ref": "#/$defs/Hash" },
+        "recorded_at": { "type": "integer", "minimum": 0 },
+        "document_id": { "$ref": "#/$defs/Hash" }
+      }
+    },
+    "OutboxEnqueuedEvent": {
+      "title": "OutboxEnqueuedEvent",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "event_id", "event_key", "event_type", "entity_type", "entity_id", "operation", "binding", "before_hash", "after_hash", "row_schema", "row_json", "payload_hash", "recorded_at", "document_id"],
+      "properties": {
+        "schema_version": { "const": "rsi.ledger_event/1" },
+        "event_id": { "type": "string", "pattern": "^ev:[0-9A-HJKMNP-TV-Z]{26}$" },
+        "event_key": { "$ref": "#/$defs/Hash" },
+        "event_type": { "const": "outbox.enqueued" },
+        "entity_type": { "const": "outbox" },
+        "entity_id": { "type": "string", "pattern": "^ob:[0-9A-HJKMNP-TV-Z]{26}$" },
+        "operation": { "const": "insert" },
+        "binding": { "$ref": "#/$defs/VersionBinding" },
+        "before_hash": { "type": "null" },
+        "after_hash": { "$ref": "#/$defs/Hash" },
+        "row_schema": { "const": "rsi.outbox/1" },
+        "row_json": { "type": "string", "minLength": 2, "maxLength": 65536 },
+        "payload_hash": { "$ref": "#/$defs/Hash" },
+        "recorded_at": { "type": "integer", "minimum": 0 },
+        "document_id": { "type": "null" }
+      }
+    },
+    "JsonValue": {
+      "title": "JsonValue",
+      "anyOf": [
+        { "type": ["string", "number", "boolean", "null"] },
+        { "type": "array", "items": { "$ref": "#/$defs/JsonValue" } },
+        { "type": "object", "additionalProperties": { "$ref": "#/$defs/JsonValue" } }
+      ]
+    }
+  }
+}

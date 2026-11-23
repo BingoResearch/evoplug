@@ -1,0 +1,43 @@
+# 依赖与构建产物
+node_modules/
+dist/
+coverage/
+.vitest/
+.tools/
+*.tsbuildinfo
+__pycache__/
+*.pyc
+
+# 发布包输出
+release/
+
+# 本地运行状态
+.DS_Store
+.watchdog/
+.tmp-*
+*.runtime.lock
+
+# 测试套件与测试夹具暂不随代码发布
+tests/
+tools/*/test/
+*.test.ts
+*.test.mjs
+vitest.config.ts
+migrations/**/*.sql.frozen
+
+# 内部脚本，只保留构建所需的工具链脚本
+scripts/*
+!scripts/with-toolchain.sh
+
+# 论文、设计与研究材料
+paper/
+exports/
+docs/*
+!docs/evoplug-安装说明-2026-11-18.md
+!docs/evoplug-Jev配置-2026-11-17.md
+
+# 工作记录
+HANDOFF-*.md
+todolist.md
+add_task.md
+/2026-09-30

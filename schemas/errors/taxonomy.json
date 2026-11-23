@@ -1,0 +1,3227 @@
+{
+  "schema_version": "rsi.error_taxonomy/1",
+  "categories": [
+    {
+      "code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "code": "E_NOT_FOUND",
+      "next_action": "检查标识符是否存在"
+    },
+    {
+      "code": "E_CONFLICT",
+      "next_action": "读取最新版本后重试"
+    },
+    {
+      "code": "E_AUTH_DENIED",
+      "next_action": "完成授权或真人确认"
+    },
+    {
+      "code": "E_DISABLED",
+      "next_action": "开启对应开关或配置"
+    },
+    {
+      "code": "E_CAPABILITY_UNKNOWN",
+      "next_action": "先完成探针或升级宿主"
+    },
+    {
+      "code": "E_UNSUPPORTED_VERSION",
+      "next_action": "升级宿主或重建 home"
+    },
+    {
+      "code": "E_BUDGET",
+      "next_action": "等待或调整预算"
+    },
+    {
+      "code": "E_UPSTREAM",
+      "next_action": "检查上游服务后重试"
+    },
+    {
+      "code": "E_TIMEOUT",
+      "next_action": "可重试"
+    },
+    {
+      "code": "E_IO",
+      "next_action": "检查磁盘与权限"
+    },
+    {
+      "code": "E_CORRUPT",
+      "next_action": "进入恢复流程"
+    },
+    {
+      "code": "E_LOCKED",
+      "next_action": "等待内核释放或停止占用"
+    }
+  ],
+  "reasons": [
+    {
+      "legacy_code": "E_ACTIVE_BINDING_MISMATCH",
+      "reason": "active_binding_mismatch",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_ADAPTER_MISMATCH",
+      "reason": "adapter_mismatch",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_ADAPTER_NOT_DECLARED",
+      "reason": "adapter_not_declared",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_AGGREGATE_ATTEMPT_BINDING_MISSING",
+      "reason": "aggregate_attempt_binding_missing",
+      "category_code": "E_NOT_FOUND",
+      "next_action": "检查标识符是否存在"
+    },
+    {
+      "legacy_code": "E_AGGREGATE_BINDING_INCOMPLETE",
+      "reason": "aggregate_binding_incomplete",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_AGGREGATE_BINDING_SHARD_MISSING",
+      "reason": "aggregate_binding_shard_missing",
+      "category_code": "E_NOT_FOUND",
+      "next_action": "检查标识符是否存在"
+    },
+    {
+      "legacy_code": "E_AGGREGATE_BINDING_SHARD_PLAN_MISMATCH",
+      "reason": "aggregate_binding_shard_plan_mismatch",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_AGGREGATE_ENVELOPE_ATTEMPT_MISSING",
+      "reason": "aggregate_envelope_attempt_missing",
+      "category_code": "E_NOT_FOUND",
+      "next_action": "检查标识符是否存在"
+    },
+    {
+      "legacy_code": "E_AGGREGATE_ENVELOPE_BINDING_MISMATCH",
+      "reason": "aggregate_envelope_binding_mismatch",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_AGGREGATE_ENVELOPE_SHARD_MISSING",
+      "reason": "aggregate_envelope_shard_missing",
+      "category_code": "E_NOT_FOUND",
+      "next_action": "检查标识符是否存在"
+    },
+    {
+      "legacy_code": "E_AGGREGATE_ENVELOPE_WITHOUT_BINDING",
+      "reason": "aggregate_envelope_without_binding",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_AGGREGATE_ENVELOPE_WITHOUT_REQUEST_BINDING",
+      "reason": "aggregate_envelope_without_request_binding",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_AGGREGATE_HASH_MISMATCH",
+      "reason": "aggregate_hash_mismatch",
+      "category_code": "E_CORRUPT",
+      "next_action": "进入恢复流程"
+    },
+    {
+      "legacy_code": "E_AGGREGATE_LATE_ATTEMPT_MISSING",
+      "reason": "aggregate_late_attempt_missing",
+      "category_code": "E_NOT_FOUND",
+      "next_action": "检查标识符是否存在"
+    },
+    {
+      "legacy_code": "E_AGGREGATE_NO_PROPOSITIONS",
+      "reason": "aggregate_no_propositions",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_AGGREGATE_NOT_ACCEPTED",
+      "reason": "aggregate_not_accepted",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_AGGREGATE_NOT_FOUND",
+      "reason": "aggregate_not_found",
+      "category_code": "E_NOT_FOUND",
+      "next_action": "检查标识符是否存在"
+    },
+    {
+      "legacy_code": "E_AGGREGATE_OMISSION_SHARD_MISSING",
+      "reason": "aggregate_omission_shard_missing",
+      "category_code": "E_NOT_FOUND",
+      "next_action": "检查标识符是否存在"
+    },
+    {
+      "legacy_code": "E_AGGREGATE_PACK_KEY_MISMATCH",
+      "reason": "aggregate_pack_key_mismatch",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_AGGREGATE_PACK_MISSING",
+      "reason": "aggregate_pack_missing",
+      "category_code": "E_NOT_FOUND",
+      "next_action": "检查标识符是否存在"
+    },
+    {
+      "legacy_code": "E_AGGREGATE_QUESTION_DIGEST_MISMATCH",
+      "reason": "aggregate_question_digest_mismatch",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_AGGREGATE_REJECTED_SHARD_BOUND",
+      "reason": "aggregate_rejected_shard_bound",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_AGGREGATE_SHARD_BINDING_MISMATCH",
+      "reason": "aggregate_shard_binding_mismatch",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_AGGREGATE_SHARD_BINDING_MISSING",
+      "reason": "aggregate_shard_binding_missing",
+      "category_code": "E_NOT_FOUND",
+      "next_action": "检查标识符是否存在"
+    },
+    {
+      "legacy_code": "E_AGGREGATE_SHARD_PLAN_KEY_MISMATCH",
+      "reason": "aggregate_shard_plan_key_mismatch",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_AGGREGATE_SHARD_PLAN_MISMATCH",
+      "reason": "aggregate_shard_plan_mismatch",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_AGGREGATE_SHARD_PLAN_MISSING",
+      "reason": "aggregate_shard_plan_missing",
+      "category_code": "E_NOT_FOUND",
+      "next_action": "检查标识符是否存在"
+    },
+    {
+      "legacy_code": "E_AGGREGATE_SHARD_PLAN_NOT_UNIQUE",
+      "reason": "aggregate_shard_plan_not_unique",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_AGGREGATE_SNAPSHOT_MISMATCH",
+      "reason": "aggregate_snapshot_mismatch",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_ANSWER_SET",
+      "reason": "answer_set",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_APPROVAL_CONSUMED",
+      "reason": "approval_consumed",
+      "category_code": "E_AUTH_DENIED",
+      "next_action": "完成授权或真人确认"
+    },
+    {
+      "legacy_code": "E_APPROVAL_EXPIRED",
+      "reason": "approval_expired",
+      "category_code": "E_AUTH_DENIED",
+      "next_action": "完成授权或真人确认"
+    },
+    {
+      "legacy_code": "E_APPROVAL_HASH",
+      "reason": "approval_hash",
+      "category_code": "E_AUTH_DENIED",
+      "next_action": "完成授权或真人确认"
+    },
+    {
+      "legacy_code": "E_APPROVAL_INVALID",
+      "reason": "approval_invalid",
+      "category_code": "E_AUTH_DENIED",
+      "next_action": "完成授权或真人确认"
+    },
+    {
+      "legacy_code": "E_APPROVAL_NOT_FOUND",
+      "reason": "approval_not_found",
+      "category_code": "E_NOT_FOUND",
+      "next_action": "检查标识符是否存在"
+    },
+    {
+      "legacy_code": "E_APPROVAL_STATE",
+      "reason": "approval_state",
+      "category_code": "E_AUTH_DENIED",
+      "next_action": "完成授权或真人确认"
+    },
+    {
+      "legacy_code": "E_APPROVAL_SUBJECT_MISMATCH",
+      "reason": "approval_subject_mismatch",
+      "category_code": "E_AUTH_DENIED",
+      "next_action": "完成授权或真人确认"
+    },
+    {
+      "legacy_code": "E_APPROVAL_UNVERIFIED",
+      "reason": "approval_unverified",
+      "category_code": "E_AUTH_DENIED",
+      "next_action": "完成授权或真人确认"
+    },
+    {
+      "legacy_code": "E_ARTIFACT_MISMATCH",
+      "reason": "artifact_mismatch",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_ATTEMPT_IN_FLIGHT",
+      "reason": "attempt_in_flight",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_AUTH_CONFIG_SCOPE",
+      "reason": "auth_config_scope",
+      "category_code": "E_AUTH_DENIED",
+      "next_action": "完成授权或真人确认"
+    },
+    {
+      "legacy_code": "E_AUTH_DENIED",
+      "reason": "auth_denied",
+      "category_code": "E_AUTH_DENIED",
+      "next_action": "完成授权或真人确认"
+    },
+    {
+      "legacy_code": "E_AUTH_UNAVAILABLE",
+      "reason": "auth_unavailable",
+      "category_code": "E_AUTH_DENIED",
+      "next_action": "完成授权或真人确认"
+    },
+    {
+      "legacy_code": "E_BINDING_V1_READ_ONLY",
+      "reason": "binding_v1_read_only",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_BLOB_MISSING",
+      "reason": "blob_missing",
+      "category_code": "E_NOT_FOUND",
+      "next_action": "检查标识符是否存在"
+    },
+    {
+      "legacy_code": "E_BLOCK_AMBIGUOUS",
+      "reason": "block_ambiguous",
+      "category_code": "E_LOCKED",
+      "next_action": "等待内核释放或停止占用"
+    },
+    {
+      "legacy_code": "E_BLOCK_CONTENT",
+      "reason": "block_content",
+      "category_code": "E_LOCKED",
+      "next_action": "等待内核释放或停止占用"
+    },
+    {
+      "legacy_code": "E_BLOCK_HASH_MISMATCH",
+      "reason": "block_hash_mismatch",
+      "category_code": "E_LOCKED",
+      "next_action": "等待内核释放或停止占用"
+    },
+    {
+      "legacy_code": "E_BLOCK_MALFORMED",
+      "reason": "block_malformed",
+      "category_code": "E_LOCKED",
+      "next_action": "等待内核释放或停止占用"
+    },
+    {
+      "legacy_code": "E_BLOCK_SELECTOR",
+      "reason": "block_selector",
+      "category_code": "E_LOCKED",
+      "next_action": "等待内核释放或停止占用"
+    },
+    {
+      "legacy_code": "E_BLOCK_STATE",
+      "reason": "block_state",
+      "category_code": "E_LOCKED",
+      "next_action": "等待内核释放或停止占用"
+    },
+    {
+      "legacy_code": "E_BUDGET",
+      "reason": "budget",
+      "category_code": "E_BUDGET",
+      "next_action": "等待或调整预算"
+    },
+    {
+      "legacy_code": "E_BUDGET_EXCEEDED",
+      "reason": "budget_exceeded",
+      "category_code": "E_BUDGET",
+      "next_action": "等待或调整预算"
+    },
+    {
+      "legacy_code": "E_BUDGET_POLICY_UNAVAILABLE",
+      "reason": "budget_policy_unavailable",
+      "category_code": "E_BUDGET",
+      "next_action": "等待或调整预算"
+    },
+    {
+      "legacy_code": "E_BUDGET_RESERVE_INCONSISTENT",
+      "reason": "budget_reserve_inconsistent",
+      "category_code": "E_BUDGET",
+      "next_action": "等待或调整预算"
+    },
+    {
+      "legacy_code": "E_BUDGET_UNKNOWN",
+      "reason": "budget_unknown",
+      "category_code": "E_NOT_FOUND",
+      "next_action": "检查标识符是否存在"
+    },
+    {
+      "legacy_code": "E_BYTE_RANGE_INVALID",
+      "reason": "byte_range_invalid",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_CANCELLED",
+      "reason": "cancelled",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_CAPABILITY",
+      "reason": "capability",
+      "category_code": "E_CAPABILITY_UNKNOWN",
+      "next_action": "先完成探针或升级宿主"
+    },
+    {
+      "legacy_code": "E_CAPABILITY_UNKNOWN",
+      "reason": "capability_unknown",
+      "category_code": "E_CAPABILITY_UNKNOWN",
+      "next_action": "先完成探针或升级宿主"
+    },
+    {
+      "legacy_code": "E_CAPACITY_BINDING_MISMATCH",
+      "reason": "capacity_binding_mismatch",
+      "category_code": "E_BUDGET",
+      "next_action": "等待或调整预算"
+    },
+    {
+      "legacy_code": "E_CAPACITY_HASH_MISMATCH",
+      "reason": "capacity_hash_mismatch",
+      "category_code": "E_BUDGET",
+      "next_action": "等待或调整预算"
+    },
+    {
+      "legacy_code": "E_CAPACITY_NOT_FOUND",
+      "reason": "capacity_not_found",
+      "category_code": "E_NOT_FOUND",
+      "next_action": "检查标识符是否存在"
+    },
+    {
+      "legacy_code": "E_CAPACITY_UNAVAILABLE",
+      "reason": "capacity_unavailable",
+      "category_code": "E_BUDGET",
+      "next_action": "等待或调整预算"
+    },
+    {
+      "legacy_code": "E_CFG_",
+      "reason": "cfg_",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_CFG_ACTIVE_TRIAL",
+      "reason": "cfg_active_trial",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_CFG_APPLY_UNCONFIRMED",
+      "reason": "cfg_apply_unconfirmed",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_CFG_AUTHORIZATION_MISSING",
+      "reason": "cfg_authorization_missing",
+      "category_code": "E_NOT_FOUND",
+      "next_action": "检查标识符是否存在"
+    },
+    {
+      "legacy_code": "E_CFG_AUTHORIZATION_SCOPE",
+      "reason": "cfg_authorization_scope",
+      "category_code": "E_AUTH_DENIED",
+      "next_action": "完成授权或真人确认"
+    },
+    {
+      "legacy_code": "E_CFG_BUDGET_EXHAUSTED",
+      "reason": "cfg_budget_exhausted",
+      "category_code": "E_BUDGET",
+      "next_action": "等待或调整预算"
+    },
+    {
+      "legacy_code": "E_CFG_CANCELLED",
+      "reason": "cfg_cancelled",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_CFG_CAPABILITY_UNVERIFIED",
+      "reason": "cfg_capability_unverified",
+      "category_code": "E_CAPABILITY_UNKNOWN",
+      "next_action": "先完成探针或升级宿主"
+    },
+    {
+      "legacy_code": "E_CFG_CAPACITY_MISMATCH",
+      "reason": "cfg_capacity_mismatch",
+      "category_code": "E_BUDGET",
+      "next_action": "等待或调整预算"
+    },
+    {
+      "legacy_code": "E_CFG_CAPACITY_UNVERIFIED",
+      "reason": "cfg_capacity_unverified",
+      "category_code": "E_BUDGET",
+      "next_action": "等待或调整预算"
+    },
+    {
+      "legacy_code": "E_CFG_COUPLING_INCOMPLETE",
+      "reason": "cfg_coupling_incomplete",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_CFG_DEADLINE_EXCEEDED",
+      "reason": "cfg_deadline_exceeded",
+      "category_code": "E_TIMEOUT",
+      "next_action": "可重试"
+    },
+    {
+      "legacy_code": "E_CFG_DEFAULT_UNKNOWN",
+      "reason": "cfg_default_unknown",
+      "category_code": "E_NOT_FOUND",
+      "next_action": "检查标识符是否存在"
+    },
+    {
+      "legacy_code": "E_CFG_EXTERNAL_CHANGE",
+      "reason": "cfg_external_change",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_CFG_FIELD_CLAIMED",
+      "reason": "cfg_field_claimed",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_CFG_FIELD_CONFLICT",
+      "reason": "cfg_field_conflict",
+      "category_code": "E_CONFLICT",
+      "next_action": "读取最新版本后重试"
+    },
+    {
+      "legacy_code": "E_CFG_FIELD_NOT_EXECUTABLE",
+      "reason": "cfg_field_not_executable",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_CFG_FIELD_RANGE",
+      "reason": "cfg_field_range",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_CFG_FIELD_TYPE",
+      "reason": "cfg_field_type",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_CFG_FIELD_UNIT",
+      "reason": "cfg_field_unit",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_CFG_FIELD_UNKNOWN",
+      "reason": "cfg_field_unknown",
+      "category_code": "E_NOT_FOUND",
+      "next_action": "检查标识符是否存在"
+    },
+    {
+      "legacy_code": "E_CFG_FORBIDDEN_FIELD",
+      "reason": "cfg_forbidden_field",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_CFG_FORMULA_HASH",
+      "reason": "cfg_formula_hash",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_CFG_GUARDRAIL_BREACH",
+      "reason": "cfg_guardrail_breach",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_CFG_GUARDRAIL_SPEC",
+      "reason": "cfg_guardrail_spec",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_CFG_GUARDRAIL_UNKNOWN",
+      "reason": "cfg_guardrail_unknown",
+      "category_code": "E_NOT_FOUND",
+      "next_action": "检查标识符是否存在"
+    },
+    {
+      "legacy_code": "E_CFG_HOST_VERSION_UNBOUND",
+      "reason": "cfg_host_version_unbound",
+      "category_code": "E_UNSUPPORTED_VERSION",
+      "next_action": "升级宿主或重建 home"
+    },
+    {
+      "legacy_code": "E_CFG_IDEMPOTENCY_CONFLICT",
+      "reason": "cfg_idempotency_conflict",
+      "category_code": "E_CONFLICT",
+      "next_action": "读取最新版本后重试"
+    },
+    {
+      "legacy_code": "E_CFG_ILLEGAL_TRANSITION",
+      "reason": "cfg_illegal_transition",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_CFG_LEGACY_UNVERIFIED",
+      "reason": "cfg_legacy_unverified",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_CFG_MODE_UNBOUND",
+      "reason": "cfg_mode_unbound",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_CFG_MODEL_UNBOUND",
+      "reason": "cfg_model_unbound",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_CFG_MULTI_FILE_FACTOR",
+      "reason": "cfg_multi_file_factor",
+      "category_code": "E_IO",
+      "next_action": "检查磁盘与权限"
+    },
+    {
+      "legacy_code": "E_CFG_NORMALIZATION_INPUT",
+      "reason": "cfg_normalization_input",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_CFG_NORMALIZATION_MISMATCH",
+      "reason": "cfg_normalization_mismatch",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_CFG_NORMALIZATION_MISSING",
+      "reason": "cfg_normalization_missing",
+      "category_code": "E_NOT_FOUND",
+      "next_action": "检查标识符是否存在"
+    },
+    {
+      "legacy_code": "E_CFG_NORMALIZATION_SHADOWED",
+      "reason": "cfg_normalization_shadowed",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_CFG_NORMALIZATION_UNVERIFIED",
+      "reason": "cfg_normalization_unverified",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_CFG_OBSERVATION_HASH",
+      "reason": "cfg_observation_hash",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_CFG_PLAN_NOT_FOUND",
+      "reason": "cfg_plan_not_found",
+      "category_code": "E_NOT_FOUND",
+      "next_action": "检查标识符是否存在"
+    },
+    {
+      "legacy_code": "E_CFG_PROTECTED_SUBTREE",
+      "reason": "cfg_protected_subtree",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_CFG_READBACK_TIMEOUT",
+      "reason": "cfg_readback_timeout",
+      "category_code": "E_TIMEOUT",
+      "next_action": "可重试"
+    },
+    {
+      "legacy_code": "E_CFG_RECOVERY_REQUIRED",
+      "reason": "cfg_recovery_required",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_CFG_REGISTRY_AMBIGUOUS",
+      "reason": "cfg_registry_ambiguous",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_CFG_ROLLBACK_CONFLICT",
+      "reason": "cfg_rollback_conflict",
+      "category_code": "E_CONFLICT",
+      "next_action": "读取最新版本后重试"
+    },
+    {
+      "legacy_code": "E_CFG_ROLLBACK_UNCERTAIN",
+      "reason": "cfg_rollback_uncertain",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_CFG_ROOT_AMBIGUOUS",
+      "reason": "cfg_root_ambiguous",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_CFG_ROOT_IDENTITY_MISMATCH",
+      "reason": "cfg_root_identity_mismatch",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_CFG_ROOT_INVALID",
+      "reason": "cfg_root_invalid",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_CFG_ROOT_UNAVAILABLE",
+      "reason": "cfg_root_unavailable",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_CFG_ROOT_UNRESOLVED",
+      "reason": "cfg_root_unresolved",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_CFG_SNAPSHOT_HASH",
+      "reason": "cfg_snapshot_hash",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_CFG_STALE_BASELINE",
+      "reason": "cfg_stale_baseline",
+      "category_code": "E_CONFLICT",
+      "next_action": "读取最新版本后重试"
+    },
+    {
+      "legacy_code": "E_CFG_TRIAL_NOT_FOUND",
+      "reason": "cfg_trial_not_found",
+      "category_code": "E_NOT_FOUND",
+      "next_action": "检查标识符是否存在"
+    },
+    {
+      "legacy_code": "E_CFG_TRIAL_TERMINAL",
+      "reason": "cfg_trial_terminal",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_CFG_WRITE_FAILED",
+      "reason": "cfg_write_failed",
+      "category_code": "E_IO",
+      "next_action": "检查磁盘与权限"
+    },
+    {
+      "legacy_code": "E_CFG_WRITE_PORT_UNSUPPORTED",
+      "reason": "cfg_write_port_unsupported",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_CFG_WRITE_UNCERTAIN",
+      "reason": "cfg_write_uncertain",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_CHOICE_OUT_OF_SET",
+      "reason": "choice_out_of_set",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_CLI_UNKNOWN_COMMAND",
+      "reason": "cli_unknown_command",
+      "category_code": "E_NOT_FOUND",
+      "next_action": "检查标识符是否存在"
+    },
+    {
+      "legacy_code": "E_CLOSE_EVIDENCE_INSUFFICIENT",
+      "reason": "close_evidence_insufficient",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_CONFIDENCE_MISMATCH",
+      "reason": "confidence_mismatch",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_CONFIG_FIELD_NOT_ACTIVE",
+      "reason": "config_field_not_active",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_CONFIG_SPACE_NOT_DECLARED",
+      "reason": "config_space_not_declared",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_CONFIRMATION_EVIDENCE_INSUFFICIENT",
+      "reason": "confirmation_evidence_insufficient",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_CONFIRMATION_KIND_NOT_ALLOWED",
+      "reason": "confirmation_kind_not_allowed",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_CONFLICT",
+      "reason": "conflict",
+      "category_code": "E_CONFLICT",
+      "next_action": "读取最新版本后重试"
+    },
+    {
+      "legacy_code": "E_CONTENT_HASH_MISMATCH",
+      "reason": "content_hash_mismatch",
+      "category_code": "E_CORRUPT",
+      "next_action": "进入恢复流程"
+    },
+    {
+      "legacy_code": "E_CONTRACT_PATH_MISMATCH",
+      "reason": "contract_path_mismatch",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_CORRUPT",
+      "reason": "corrupt",
+      "category_code": "E_CORRUPT",
+      "next_action": "进入恢复流程"
+    },
+    {
+      "legacy_code": "E_CREDENTIAL_REF_UNAVAILABLE",
+      "reason": "credential_ref_unavailable",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_DEADLINE_EXCEEDED",
+      "reason": "deadline_exceeded",
+      "category_code": "E_TIMEOUT",
+      "next_action": "可重试"
+    },
+    {
+      "legacy_code": "E_DELIVERY_CONTENT",
+      "reason": "delivery_content",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_DISABLED",
+      "reason": "disabled",
+      "category_code": "E_DISABLED",
+      "next_action": "开启对应开关或配置"
+    },
+    {
+      "legacy_code": "E_DISPATCH_AUDIT_UNAVAILABLE",
+      "reason": "dispatch_audit_unavailable",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_EGRESS_APPROVAL_CONSUMED",
+      "reason": "egress_approval_consumed",
+      "category_code": "E_AUTH_DENIED",
+      "next_action": "完成授权或真人确认"
+    },
+    {
+      "legacy_code": "E_EGRESS_APPROVAL_EXPIRED",
+      "reason": "egress_approval_expired",
+      "category_code": "E_AUTH_DENIED",
+      "next_action": "完成授权或真人确认"
+    },
+    {
+      "legacy_code": "E_EGRESS_APPROVAL_MISMATCH",
+      "reason": "egress_approval_mismatch",
+      "category_code": "E_AUTH_DENIED",
+      "next_action": "完成授权或真人确认"
+    },
+    {
+      "legacy_code": "E_EGRESS_APPROVAL_NOT_FOUND",
+      "reason": "egress_approval_not_found",
+      "category_code": "E_NOT_FOUND",
+      "next_action": "检查标识符是否存在"
+    },
+    {
+      "legacy_code": "E_EGRESS_APPROVAL_REVOKED",
+      "reason": "egress_approval_revoked",
+      "category_code": "E_AUTH_DENIED",
+      "next_action": "完成授权或真人确认"
+    },
+    {
+      "legacy_code": "E_EGRESS_APPROVAL_STATE",
+      "reason": "egress_approval_state",
+      "category_code": "E_AUTH_DENIED",
+      "next_action": "完成授权或真人确认"
+    },
+    {
+      "legacy_code": "E_EGRESS_APPROVAL_UNVERIFIED",
+      "reason": "egress_approval_unverified",
+      "category_code": "E_AUTH_DENIED",
+      "next_action": "完成授权或真人确认"
+    },
+    {
+      "legacy_code": "E_EGRESS_BYTE_LIMIT",
+      "reason": "egress_byte_limit",
+      "category_code": "E_UPSTREAM",
+      "next_action": "检查上游服务后重试"
+    },
+    {
+      "legacy_code": "E_EGRESS_POLICY_STALE",
+      "reason": "egress_policy_stale",
+      "category_code": "E_UPSTREAM",
+      "next_action": "检查上游服务后重试"
+    },
+    {
+      "legacy_code": "E_EGRESS_REQUEST_HASH",
+      "reason": "egress_request_hash",
+      "category_code": "E_UPSTREAM",
+      "next_action": "检查上游服务后重试"
+    },
+    {
+      "legacy_code": "E_EGRESS_REQUEST_INVALID",
+      "reason": "egress_request_invalid",
+      "category_code": "E_UPSTREAM",
+      "next_action": "检查上游服务后重试"
+    },
+    {
+      "legacy_code": "E_EGRESS_REQUEST_PREIMAGE",
+      "reason": "egress_request_preimage",
+      "category_code": "E_UPSTREAM",
+      "next_action": "检查上游服务后重试"
+    },
+    {
+      "legacy_code": "E_ENDPOINT_UNAUTHORIZED",
+      "reason": "endpoint_unauthorized",
+      "category_code": "E_AUTH_DENIED",
+      "next_action": "完成授权或真人确认"
+    },
+    {
+      "legacy_code": "E_ENUM_UNKNOWN",
+      "reason": "enum_unknown",
+      "category_code": "E_NOT_FOUND",
+      "next_action": "检查标识符是否存在"
+    },
+    {
+      "legacy_code": "E_EVD_OBJECT_TOO_LARGE",
+      "reason": "evd_object_too_large",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_EVENT_ADAPTER_UNBOUND",
+      "reason": "event_adapter_unbound",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_EVENT_CONFIG_SPACE_UNBOUND",
+      "reason": "event_config_space_unbound",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_EVENT_CONTRACT_VIOLATION",
+      "reason": "event_contract_violation",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_EVENT_IDENTITY_MISMATCH",
+      "reason": "event_identity_mismatch",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_EVENT_KEY_MISMATCH",
+      "reason": "event_key_mismatch",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_EVENT_ORIGIN_CONFLICT",
+      "reason": "event_origin_conflict",
+      "category_code": "E_CONFLICT",
+      "next_action": "读取最新版本后重试"
+    },
+    {
+      "legacy_code": "E_EVENT_ORIGIN_UNVERIFIED",
+      "reason": "event_origin_unverified",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_EVENT_POST_NORMALIZE_MISMATCH",
+      "reason": "event_post_normalize_mismatch",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_EVENT_RETRY_INVALID",
+      "reason": "event_retry_invalid",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_EVENT_SCOPE_FORBIDDEN",
+      "reason": "event_scope_forbidden",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_EVENT_SCOPE_REQUIRED",
+      "reason": "event_scope_required",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_EVENT_SCOPE_STALE",
+      "reason": "event_scope_stale",
+      "category_code": "E_CONFLICT",
+      "next_action": "读取最新版本后重试"
+    },
+    {
+      "legacy_code": "E_EVENT_SCOPE_UNBOUND",
+      "reason": "event_scope_unbound",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_EVENT_TOO_LARGE",
+      "reason": "event_too_large",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_EVENT_TRIGGER_LINEAGE",
+      "reason": "event_trigger_lineage",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_EVIDENCE_CLOSURE_INCOMPLETE",
+      "reason": "evidence_closure_incomplete",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_EVIDENCE_EXCEEDS_BUDGET",
+      "reason": "evidence_exceeds_budget",
+      "category_code": "E_BUDGET",
+      "next_action": "等待或调整预算"
+    },
+    {
+      "legacy_code": "E_EVIDENCE_INSEPARABLE_SPLIT",
+      "reason": "evidence_inseparable_split",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_EVIDENCE_LIMITS_UNKNOWN",
+      "reason": "evidence_limits_unknown",
+      "category_code": "E_NOT_FOUND",
+      "next_action": "检查标识符是否存在"
+    },
+    {
+      "legacy_code": "E_EVIDENCE_MANIFEST_MISMATCH",
+      "reason": "evidence_manifest_mismatch",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_EVIDENCE_OMISSION_BINDING",
+      "reason": "evidence_omission_binding",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_EVIDENCE_PACK_STALE",
+      "reason": "evidence_pack_stale",
+      "category_code": "E_CONFLICT",
+      "next_action": "读取最新版本后重试"
+    },
+    {
+      "legacy_code": "E_EVIDENCE_PACK_V1_READ_ONLY",
+      "reason": "evidence_pack_v1_read_only",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_EVIDENCE_PLAN_NOT_DISPATCHABLE",
+      "reason": "evidence_plan_not_dispatchable",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_EVIDENCE_UNKNOWN",
+      "reason": "evidence_unknown",
+      "category_code": "E_CAPABILITY_UNKNOWN",
+      "next_action": "先完成探针或升级宿主"
+    },
+    {
+      "legacy_code": "E_EXCERPT_EXCEEDS_LIMIT",
+      "reason": "excerpt_exceeds_limit",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_EXPERIENCE_",
+      "reason": "experience_",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_EXPERIENCE_EVENT_CONFLICT",
+      "reason": "experience_event_conflict",
+      "category_code": "E_CONFLICT",
+      "next_action": "读取最新版本后重试"
+    },
+    {
+      "legacy_code": "E_EXPERIENCE_HOST_FACTS_UNAVAILABLE",
+      "reason": "experience_host_facts_unavailable",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_EXPERIENCE_ILLEGAL_PROJECTION_TRANSITION",
+      "reason": "experience_illegal_projection_transition",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_EXPERIENCE_PLAN_SOURCE_CHANGED",
+      "reason": "experience_plan_source_changed",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_EXPERIENCE_SCHEMA",
+      "reason": "experience_schema",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_EXPERIENCE_TOO_LARGE",
+      "reason": "experience_too_large",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_EXPERIENCE_USAGE_KEY_COLLISION",
+      "reason": "experience_usage_key_collision",
+      "category_code": "E_CONFLICT",
+      "next_action": "读取最新版本后重试"
+    },
+    {
+      "legacy_code": "E_EXPERIENCE_VERIFIER_BINDING",
+      "reason": "experience_verifier_binding",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_FACT_VALUE_INVALID",
+      "reason": "fact_value_invalid",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_FEEDBACK_SOURCE_NOT_HUMAN",
+      "reason": "feedback_source_not_human",
+      "category_code": "E_AUTH_DENIED",
+      "next_action": "完成授权或真人确认"
+    },
+    {
+      "legacy_code": "E_FIELD_MISSING",
+      "reason": "field_missing",
+      "category_code": "E_NOT_FOUND",
+      "next_action": "检查标识符是否存在"
+    },
+    {
+      "legacy_code": "E_GOAL_STALE",
+      "reason": "goal_stale",
+      "category_code": "E_CONFLICT",
+      "next_action": "读取最新版本后重试"
+    },
+    {
+      "legacy_code": "E_GRANT_OBJECT_ID",
+      "reason": "grant_object_id",
+      "category_code": "E_AUTH_DENIED",
+      "next_action": "完成授权或真人确认"
+    },
+    {
+      "legacy_code": "E_GRANT_SCOPE",
+      "reason": "grant_scope",
+      "category_code": "E_AUTH_DENIED",
+      "next_action": "完成授权或真人确认"
+    },
+    {
+      "legacy_code": "E_HANDOFF_CONFLICT",
+      "reason": "handoff_conflict",
+      "category_code": "E_CONFLICT",
+      "next_action": "读取最新版本后重试"
+    },
+    {
+      "legacy_code": "E_HANDOFF_INCOMPLETE",
+      "reason": "handoff_incomplete",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_HANDOFF_NOT_READY",
+      "reason": "handoff_not_ready",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_HANDOFF_PAYLOAD_INVALID",
+      "reason": "handoff_payload_invalid",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_HANDOFF_PROPOSAL_MISMATCH",
+      "reason": "handoff_proposal_mismatch",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_HARD_FACT_KEY_MISMATCH",
+      "reason": "hard_fact_key_mismatch",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_HOME_INCOMPATIBLE",
+      "reason": "home_incompatible",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_HOST_REJECTED",
+      "reason": "host_rejected",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_HOST_RUNTIME_ARTIFACT",
+      "reason": "host_runtime_artifact",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_HOST_RUNTIME_BUSY",
+      "reason": "host_runtime_busy",
+      "category_code": "E_LOCKED",
+      "next_action": "等待内核释放或停止占用"
+    },
+    {
+      "legacy_code": "E_HOST_RUNTIME_SESSION",
+      "reason": "host_runtime_session",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_HOST_RUNTIME_UNBOUND",
+      "reason": "host_runtime_unbound",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_HTTP_4XX",
+      "reason": "http_4xx",
+      "category_code": "E_UPSTREAM",
+      "next_action": "检查上游服务后重试"
+    },
+    {
+      "legacy_code": "E_HTTP_5XX",
+      "reason": "http_5xx",
+      "category_code": "E_UPSTREAM",
+      "next_action": "检查上游服务后重试"
+    },
+    {
+      "legacy_code": "E_ID_PREFIX_UNKNOWN",
+      "reason": "id_prefix_unknown",
+      "category_code": "E_NOT_FOUND",
+      "next_action": "检查标识符是否存在"
+    },
+    {
+      "legacy_code": "E_IDEMPOTENCY_CONFLICT",
+      "reason": "idempotency_conflict",
+      "category_code": "E_CONFLICT",
+      "next_action": "读取最新版本后重试"
+    },
+    {
+      "legacy_code": "E_IDENTITY_MISSING",
+      "reason": "identity_missing",
+      "category_code": "E_NOT_FOUND",
+      "next_action": "检查标识符是否存在"
+    },
+    {
+      "legacy_code": "E_ILLEGAL_REVIEW_JOB_TRANSITION",
+      "reason": "illegal_review_job_transition",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_ILLEGAL_REVIEW_TRANSITION",
+      "reason": "illegal_review_transition",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_INDEX_",
+      "reason": "index_",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_INDEX_ABORTED",
+      "reason": "index_aborted",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_INDEX_BINDING_INVALID",
+      "reason": "index_binding_invalid",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_INDEX_DEADLINE_EXCEEDED",
+      "reason": "index_deadline_exceeded",
+      "category_code": "E_TIMEOUT",
+      "next_action": "可重试"
+    },
+    {
+      "legacy_code": "E_INDEX_DERIVATION_FAILED",
+      "reason": "index_derivation_failed",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_INDEX_LIMIT_EXCEEDED",
+      "reason": "index_limit_exceeded",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_INDEX_NOT_LOADED",
+      "reason": "index_not_loaded",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_INDEX_PROGRESS_UNSUPPORTED",
+      "reason": "index_progress_unsupported",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_INDEX_REQUEST_INVALID",
+      "reason": "index_request_invalid",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_INDEX_REVIEW_SNAPSHOT_INVALID",
+      "reason": "index_review_snapshot_invalid",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_INDEX_REVIEW_SNAPSHOT_MISSING",
+      "reason": "index_review_snapshot_missing",
+      "category_code": "E_NOT_FOUND",
+      "next_action": "检查标识符是否存在"
+    },
+    {
+      "legacy_code": "E_INDEX_SCOPE_MISMATCH",
+      "reason": "index_scope_mismatch",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_INDEX_SNAPSHOT_ID_MISMATCH",
+      "reason": "index_snapshot_id_mismatch",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_INDEX_SOURCE_CONFLICT",
+      "reason": "index_source_conflict",
+      "category_code": "E_CONFLICT",
+      "next_action": "读取最新版本后重试"
+    },
+    {
+      "legacy_code": "E_INDEX_SOURCE_HASH_MISMATCH",
+      "reason": "index_source_hash_mismatch",
+      "category_code": "E_CORRUPT",
+      "next_action": "进入恢复流程"
+    },
+    {
+      "legacy_code": "E_INDEX_SOURCE_TOO_LARGE",
+      "reason": "index_source_too_large",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_INDEX_SOURCE_UNRETRIEVABLE",
+      "reason": "index_source_unretrievable",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_INDEX_SOURCE_UTF8_INVALID",
+      "reason": "index_source_utf8_invalid",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_INDEX_UPSTREAM_UNAVAILABLE",
+      "reason": "index_upstream_unavailable",
+      "category_code": "E_UPSTREAM",
+      "next_action": "检查上游服务后重试"
+    },
+    {
+      "legacy_code": "E_INDEX_VERSION_CONFLICT",
+      "reason": "index_version_conflict",
+      "category_code": "E_CONFLICT",
+      "next_action": "读取最新版本后重试"
+    },
+    {
+      "legacy_code": "E_INDEX_WATERMARK_INVALID",
+      "reason": "index_watermark_invalid",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_INDEX_WINDOW_INVALID",
+      "reason": "index_window_invalid",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_INSTALL_CONFLICT",
+      "reason": "install_conflict",
+      "category_code": "E_CONFLICT",
+      "next_action": "读取最新版本后重试"
+    },
+    {
+      "legacy_code": "E_INTERNAL",
+      "reason": "internal",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_INVALID",
+      "reason": "invalid",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_IO",
+      "reason": "io",
+      "category_code": "E_IO",
+      "next_action": "检查磁盘与权限"
+    },
+    {
+      "legacy_code": "E_IPC_AUTH",
+      "reason": "ipc_auth",
+      "category_code": "E_AUTH_DENIED",
+      "next_action": "完成授权或真人确认"
+    },
+    {
+      "legacy_code": "E_IPC_BODY_TOO_LARGE",
+      "reason": "ipc_body_too_large",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_IPC_BUSY",
+      "reason": "ipc_busy",
+      "category_code": "E_LOCKED",
+      "next_action": "等待内核释放或停止占用"
+    },
+    {
+      "legacy_code": "E_IPC_DISCONNECTED",
+      "reason": "ipc_disconnected",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_IPC_FRAME_TOO_LARGE",
+      "reason": "ipc_frame_too_large",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_IPC_IDEMPOTENCY_UNCERTAIN",
+      "reason": "ipc_idempotency_uncertain",
+      "category_code": "E_CONFLICT",
+      "next_action": "读取最新版本后重试"
+    },
+    {
+      "legacy_code": "E_IPC_IN_PROGRESS",
+      "reason": "ipc_in_progress",
+      "category_code": "E_LOCKED",
+      "next_action": "等待内核释放或停止占用"
+    },
+    {
+      "legacy_code": "E_IPC_METHOD_NOT_IDEMPOTENT",
+      "reason": "ipc_method_not_idempotent",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_IPC_METHOD_UNKNOWN",
+      "reason": "ipc_method_unknown",
+      "category_code": "E_NOT_FOUND",
+      "next_action": "检查标识符是否存在"
+    },
+    {
+      "legacy_code": "E_IPC_PEER_LIMIT",
+      "reason": "ipc_peer_limit",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_IPC_PROTOCOL",
+      "reason": "ipc_protocol",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_IPC_TRUNCATED",
+      "reason": "ipc_truncated",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_ISSUE_LIMIT",
+      "reason": "issue_limit",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_ISSUE_TRANSITION_ILLEGAL",
+      "reason": "issue_transition_illegal",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_ISSUE_VERSION_CONFLICT",
+      "reason": "issue_version_conflict",
+      "category_code": "E_CONFLICT",
+      "next_action": "读取最新版本后重试"
+    },
+    {
+      "legacy_code": "E_JOURNAL_CORRUPT_MIDDLE",
+      "reason": "journal_corrupt_middle",
+      "category_code": "E_CORRUPT",
+      "next_action": "进入恢复流程"
+    },
+    {
+      "legacy_code": "E_JUDGE_DEGRADED",
+      "reason": "judge_degraded",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_JUDGE_OUTCOME_MISSING",
+      "reason": "judge_outcome_missing",
+      "category_code": "E_NOT_FOUND",
+      "next_action": "检查标识符是否存在"
+    },
+    {
+      "legacy_code": "E_JUDGE_STATE_V1_READ_ONLY",
+      "reason": "judge_state_v1_read_only",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_JUDGMENT_BASIS_INSUFFICIENT",
+      "reason": "judgment_basis_insufficient",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_LATE_RESULT_APPENDED",
+      "reason": "late_result_appended",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_LEDGER_ASOF_UNAVAILABLE",
+      "reason": "ledger_asof_unavailable",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_LEDGER_EVENT_INVALID",
+      "reason": "ledger_event_invalid",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_LEDGER_SOURCE_ID_INVALID",
+      "reason": "ledger_source_id_invalid",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_LEDGER_VERIFIER_INVALID",
+      "reason": "ledger_verifier_invalid",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_LEGACY_READ_ONLY",
+      "reason": "legacy_read_only",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_LOCKED",
+      "reason": "locked",
+      "category_code": "E_LOCKED",
+      "next_action": "等待内核释放或停止占用"
+    },
+    {
+      "legacy_code": "E_MARKER_MISMATCH",
+      "reason": "marker_mismatch",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_MODEL_MISMATCH",
+      "reason": "model_mismatch",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_NON_FINITE",
+      "reason": "non_finite",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_NOT_FOUND",
+      "reason": "not_found",
+      "category_code": "E_NOT_FOUND",
+      "next_action": "检查标识符是否存在"
+    },
+    {
+      "legacy_code": "E_OPTION_COUNT",
+      "reason": "option_count",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_ORIGIN_UNRESOLVED",
+      "reason": "origin_unresolved",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_OUTCOME_UNKNOWN",
+      "reason": "outcome_unknown",
+      "category_code": "E_NOT_FOUND",
+      "next_action": "检查标识符是否存在"
+    },
+    {
+      "legacy_code": "E_OVERLOAD",
+      "reason": "overload",
+      "category_code": "E_BUDGET",
+      "next_action": "等待或调整预算"
+    },
+    {
+      "legacy_code": "E_PATH_CHANGED",
+      "reason": "path_changed",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_PATH_ESCAPE",
+      "reason": "path_escape",
+      "category_code": "E_AUTH_DENIED",
+      "next_action": "完成授权或真人确认"
+    },
+    {
+      "legacy_code": "E_PERSISTENCE_INTEGRITY",
+      "reason": "persistence_integrity",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_PLAN_AGGREGATION_BINDING",
+      "reason": "plan_aggregation_binding",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_PLAN_CLOSURE_INCOMPLETE",
+      "reason": "plan_closure_incomplete",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_PLAN_HASH_MISMATCH",
+      "reason": "plan_hash_mismatch",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_PLAN_NOT_FOUND",
+      "reason": "plan_not_found",
+      "category_code": "E_NOT_FOUND",
+      "next_action": "检查标识符是否存在"
+    },
+    {
+      "legacy_code": "E_PLAN_REQUIRED",
+      "reason": "plan_required",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_PLAN_STALE",
+      "reason": "plan_stale",
+      "category_code": "E_CONFLICT",
+      "next_action": "读取最新版本后重试"
+    },
+    {
+      "legacy_code": "E_PLAN_STATE_CONFLICT",
+      "reason": "plan_state_conflict",
+      "category_code": "E_CONFLICT",
+      "next_action": "读取最新版本后重试"
+    },
+    {
+      "legacy_code": "E_POLICY_BUDGET_MISSING",
+      "reason": "policy_budget_missing",
+      "category_code": "E_NOT_FOUND",
+      "next_action": "检查标识符是否存在"
+    },
+    {
+      "legacy_code": "E_POLICY_CAPABILITY_GATE",
+      "reason": "policy_capability_gate",
+      "category_code": "E_CAPABILITY_UNKNOWN",
+      "next_action": "先完成探针或升级宿主"
+    },
+    {
+      "legacy_code": "E_POLICY_LIFECYCLE",
+      "reason": "policy_lifecycle",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_POLICY_RANGE",
+      "reason": "policy_range",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_POLICY_SCOPE_INVALID",
+      "reason": "policy_scope_invalid",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_POLICY_SIGNAL_GATE",
+      "reason": "policy_signal_gate",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_POLICY_UNAVAILABLE",
+      "reason": "policy_unavailable",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_POLICY_VERSION_CONFLICT",
+      "reason": "policy_version_conflict",
+      "category_code": "E_CONFLICT",
+      "next_action": "读取最新版本后重试"
+    },
+    {
+      "legacy_code": "E_PROBABILITY_KEYS",
+      "reason": "probability_keys",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_PROBABILITY_RANGE",
+      "reason": "probability_range",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_PROBABILITY_SUM",
+      "reason": "probability_sum",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_PROBE_DIAGNOSTIC",
+      "reason": "probe_diagnostic",
+      "category_code": "E_CAPABILITY_UNKNOWN",
+      "next_action": "先完成探针或升级宿主"
+    },
+    {
+      "legacy_code": "E_PROBE_OBSERVATION",
+      "reason": "probe_observation",
+      "category_code": "E_CAPABILITY_UNKNOWN",
+      "next_action": "先完成探针或升级宿主"
+    },
+    {
+      "legacy_code": "E_PROBE_TIMEOUT",
+      "reason": "probe_timeout",
+      "category_code": "E_TIMEOUT",
+      "next_action": "可重试"
+    },
+    {
+      "legacy_code": "E_PROBE_UNSUPPORTED",
+      "reason": "probe_unsupported",
+      "category_code": "E_CAPABILITY_UNKNOWN",
+      "next_action": "先完成探针或升级宿主"
+    },
+    {
+      "legacy_code": "E_PROGRESS_CANCELLED",
+      "reason": "progress_cancelled",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_PROGRESS_DATA",
+      "reason": "progress_data",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_PROGRESS_DEADLINE",
+      "reason": "progress_deadline",
+      "category_code": "E_TIMEOUT",
+      "next_action": "可重试"
+    },
+    {
+      "legacy_code": "E_PROGRESS_ENSURE_CONFLICT",
+      "reason": "progress_ensure_conflict",
+      "category_code": "E_CONFLICT",
+      "next_action": "读取最新版本后重试"
+    },
+    {
+      "legacy_code": "E_PROGRESS_ENSURE_DATA",
+      "reason": "progress_ensure_data",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_PROGRESS_ENSURE_RECOVERY",
+      "reason": "progress_ensure_recovery",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_PROGRESS_ENSURE_REQUEST",
+      "reason": "progress_ensure_request",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_PROGRESS_ENSURE_STORAGE",
+      "reason": "progress_ensure_storage",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_PROGRESS_HISTORY_MISSING",
+      "reason": "progress_history_missing",
+      "category_code": "E_NOT_FOUND",
+      "next_action": "检查标识符是否存在"
+    },
+    {
+      "legacy_code": "E_PROGRESS_LIMIT",
+      "reason": "progress_limit",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_PROGRESS_REQUEST",
+      "reason": "progress_request",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_PROGRESS_SCOPE_MISMATCH",
+      "reason": "progress_scope_mismatch",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_PROGRESS_STORAGE",
+      "reason": "progress_storage",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_PROGRESS_WINDOW",
+      "reason": "progress_window",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_PROJECTION_OMISSION_BLOCKING",
+      "reason": "projection_omission_blocking",
+      "category_code": "E_LOCKED",
+      "next_action": "等待内核释放或停止占用"
+    },
+    {
+      "legacy_code": "E_PROJECTION_SOURCE_MISSING",
+      "reason": "projection_source_missing",
+      "category_code": "E_NOT_FOUND",
+      "next_action": "检查标识符是否存在"
+    },
+    {
+      "legacy_code": "E_PROJECTION_VIEW_MISSING",
+      "reason": "projection_view_missing",
+      "category_code": "E_NOT_FOUND",
+      "next_action": "检查标识符是否存在"
+    },
+    {
+      "legacy_code": "E_PROPOSAL_",
+      "reason": "proposal_",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_PROPOSAL_ADOPTION_MISMATCH",
+      "reason": "proposal_adoption_mismatch",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_PROPOSAL_BINDING",
+      "reason": "proposal_binding",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_PROPOSAL_DIFF_APPLY",
+      "reason": "proposal_diff_apply",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_PROPOSAL_DIFF_MISMATCH",
+      "reason": "proposal_diff_mismatch",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_PROPOSAL_DIFF_TOO_LARGE",
+      "reason": "proposal_diff_too_large",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_PROPOSAL_DUPLICATE_ORDINAL",
+      "reason": "proposal_duplicate_ordinal",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_PROPOSAL_EVIDENCE_NOT_ALLOWED",
+      "reason": "proposal_evidence_not_allowed",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_PROPOSAL_GENERATOR_MISMATCH",
+      "reason": "proposal_generator_mismatch",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_PROPOSAL_ILLEGAL_TRANSITION",
+      "reason": "proposal_illegal_transition",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_PROPOSAL_NO_CHANGE",
+      "reason": "proposal_no_change",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_PROPOSAL_OLD_HASH_MISMATCH",
+      "reason": "proposal_old_hash_mismatch",
+      "category_code": "E_CORRUPT",
+      "next_action": "进入恢复流程"
+    },
+    {
+      "legacy_code": "E_PROPOSAL_OLD_HASH_MISSING",
+      "reason": "proposal_old_hash_missing",
+      "category_code": "E_NOT_FOUND",
+      "next_action": "检查标识符是否存在"
+    },
+    {
+      "legacy_code": "E_PROPOSAL_PROTECTED_FIELD",
+      "reason": "proposal_protected_field",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_PROPOSAL_SCHEMA",
+      "reason": "proposal_schema",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_PROPOSAL_SCOPE",
+      "reason": "proposal_scope",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_PROPOSAL_STALE_TARGET",
+      "reason": "proposal_stale_target",
+      "category_code": "E_CONFLICT",
+      "next_action": "读取最新版本后重试"
+    },
+    {
+      "legacy_code": "E_PROPOSAL_TARGET",
+      "reason": "proposal_target",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_PROPOSAL_UNTRUSTED_FIELD",
+      "reason": "proposal_untrusted_field",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_PROVIDER_RESPONSE_SCHEMA",
+      "reason": "provider_response_schema",
+      "category_code": "E_UPSTREAM",
+      "next_action": "检查上游服务后重试"
+    },
+    {
+      "legacy_code": "E_RATE_LIMITED",
+      "reason": "rate_limited",
+      "category_code": "E_BUDGET",
+      "next_action": "等待或调整预算"
+    },
+    {
+      "legacy_code": "E_REBUILD_DIVERGENCE",
+      "reason": "rebuild_divergence",
+      "category_code": "E_CORRUPT",
+      "next_action": "进入恢复流程"
+    },
+    {
+      "legacy_code": "E_REOPEN_EVIDENCE_INSUFFICIENT",
+      "reason": "reopen_evidence_insufficient",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_REOPEN_EVIDENCE_REUSED",
+      "reason": "reopen_evidence_reused",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_REPLAY_APPROVAL_CONSUMED",
+      "reason": "replay_approval_consumed",
+      "category_code": "E_AUTH_DENIED",
+      "next_action": "完成授权或真人确认"
+    },
+    {
+      "legacy_code": "E_REPLAY_APPROVAL_EXPIRED",
+      "reason": "replay_approval_expired",
+      "category_code": "E_AUTH_DENIED",
+      "next_action": "完成授权或真人确认"
+    },
+    {
+      "legacy_code": "E_REPLAY_APPROVAL_MISMATCH",
+      "reason": "replay_approval_mismatch",
+      "category_code": "E_AUTH_DENIED",
+      "next_action": "完成授权或真人确认"
+    },
+    {
+      "legacy_code": "E_REPLAY_APPROVAL_NOT_FOUND",
+      "reason": "replay_approval_not_found",
+      "category_code": "E_NOT_FOUND",
+      "next_action": "检查标识符是否存在"
+    },
+    {
+      "legacy_code": "E_REPLAY_APPROVAL_REVOKED",
+      "reason": "replay_approval_revoked",
+      "category_code": "E_AUTH_DENIED",
+      "next_action": "完成授权或真人确认"
+    },
+    {
+      "legacy_code": "E_REPLAY_APPROVAL_STATE",
+      "reason": "replay_approval_state",
+      "category_code": "E_AUTH_DENIED",
+      "next_action": "完成授权或真人确认"
+    },
+    {
+      "legacy_code": "E_REPLAY_ATTESTATION_UNVERIFIED",
+      "reason": "replay_attestation_unverified",
+      "category_code": "E_AUTH_DENIED",
+      "next_action": "完成授权或真人确认"
+    },
+    {
+      "legacy_code": "E_REPLAY_EXECUTION_IN_PROGRESS",
+      "reason": "replay_execution_in_progress",
+      "category_code": "E_LOCKED",
+      "next_action": "等待内核释放或停止占用"
+    },
+    {
+      "legacy_code": "E_REPLAY_EXECUTION_RECONCILE_REQUIRED",
+      "reason": "replay_execution_reconcile_required",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_REPLAY_PLAN_MISMATCH",
+      "reason": "replay_plan_mismatch",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_REPLAY_PLAN_NOT_FOUND",
+      "reason": "replay_plan_not_found",
+      "category_code": "E_NOT_FOUND",
+      "next_action": "检查标识符是否存在"
+    },
+    {
+      "legacy_code": "E_REPLAY_PLAN_STATE",
+      "reason": "replay_plan_state",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_REPLAY_RECONCILE_CONFLICT",
+      "reason": "replay_reconcile_conflict",
+      "category_code": "E_CONFLICT",
+      "next_action": "读取最新版本后重试"
+    },
+    {
+      "legacy_code": "E_REQUIRED_SOURCE_MISSING",
+      "reason": "required_source_missing",
+      "category_code": "E_NOT_FOUND",
+      "next_action": "检查标识符是否存在"
+    },
+    {
+      "legacy_code": "E_REQUIREMENT_SOURCE",
+      "reason": "requirement_source",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_REQUIREMENT_UNKNOWN",
+      "reason": "requirement_unknown",
+      "category_code": "E_NOT_FOUND",
+      "next_action": "检查标识符是否存在"
+    },
+    {
+      "legacy_code": "E_RESOURCE_CHILD_PROCESS_EXHAUSTED",
+      "reason": "resource_child_process_exhausted",
+      "category_code": "E_BUDGET",
+      "next_action": "等待或调整预算"
+    },
+    {
+      "legacy_code": "E_RESOURCE_FD_EXHAUSTED",
+      "reason": "resource_fd_exhausted",
+      "category_code": "E_BUDGET",
+      "next_action": "等待或调整预算"
+    },
+    {
+      "legacy_code": "E_RESOURCE_MEMORY_EXHAUSTED",
+      "reason": "resource_memory_exhausted",
+      "category_code": "E_BUDGET",
+      "next_action": "等待或调整预算"
+    },
+    {
+      "legacy_code": "E_RESPONSE_LIMIT_OR_JSON",
+      "reason": "response_limit_or_json",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_REVIEW_",
+      "reason": "review_",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_REVIEW_BACKEND_AUTH",
+      "reason": "review_backend_auth",
+      "category_code": "E_AUTH_DENIED",
+      "next_action": "完成授权或真人确认"
+    },
+    {
+      "legacy_code": "E_REVIEW_BACKEND_CAPABILITY",
+      "reason": "review_backend_capability",
+      "category_code": "E_CAPABILITY_UNKNOWN",
+      "next_action": "先完成探针或升级宿主"
+    },
+    {
+      "legacy_code": "E_REVIEW_BACKEND_EXIT",
+      "reason": "review_backend_exit",
+      "category_code": "E_UPSTREAM",
+      "next_action": "检查上游服务后重试"
+    },
+    {
+      "legacy_code": "E_REVIEW_BACKEND_SPAWN",
+      "reason": "review_backend_spawn",
+      "category_code": "E_UPSTREAM",
+      "next_action": "检查上游服务后重试"
+    },
+    {
+      "legacy_code": "E_REVIEW_BACKEND_TIMEOUT",
+      "reason": "review_backend_timeout",
+      "category_code": "E_TIMEOUT",
+      "next_action": "可重试"
+    },
+    {
+      "legacy_code": "E_REVIEW_BACKEND_UNAVAILABLE",
+      "reason": "review_backend_unavailable",
+      "category_code": "E_UPSTREAM",
+      "next_action": "检查上游服务后重试"
+    },
+    {
+      "legacy_code": "E_REVIEW_BOUNDARY_PENDING",
+      "reason": "review_boundary_pending",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_REVIEW_BUDGET",
+      "reason": "review_budget",
+      "category_code": "E_BUDGET",
+      "next_action": "等待或调整预算"
+    },
+    {
+      "legacy_code": "E_REVIEW_BUDGET_EXHAUSTED",
+      "reason": "review_budget_exhausted",
+      "category_code": "E_BUDGET",
+      "next_action": "等待或调整预算"
+    },
+    {
+      "legacy_code": "E_REVIEW_BUDGET_INVALID",
+      "reason": "review_budget_invalid",
+      "category_code": "E_BUDGET",
+      "next_action": "等待或调整预算"
+    },
+    {
+      "legacy_code": "E_REVIEW_BUDGET_LEDGER_MISMATCH",
+      "reason": "review_budget_ledger_mismatch",
+      "category_code": "E_BUDGET",
+      "next_action": "等待或调整预算"
+    },
+    {
+      "legacy_code": "E_REVIEW_CANCELLED",
+      "reason": "review_cancelled",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_REVIEW_CONCURRENT_UPDATE",
+      "reason": "review_concurrent_update",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_REVIEW_CREDENTIAL_LEAK",
+      "reason": "review_credential_leak",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_REVIEW_EGRESS_NOT_APPROVED",
+      "reason": "review_egress_not_approved",
+      "category_code": "E_UPSTREAM",
+      "next_action": "检查上游服务后重试"
+    },
+    {
+      "legacy_code": "E_REVIEW_EXIT_TIMEOUT",
+      "reason": "review_exit_timeout",
+      "category_code": "E_TIMEOUT",
+      "next_action": "可重试"
+    },
+    {
+      "legacy_code": "E_REVIEW_FENCING_STALE",
+      "reason": "review_fencing_stale",
+      "category_code": "E_CONFLICT",
+      "next_action": "读取最新版本后重试"
+    },
+    {
+      "legacy_code": "E_REVIEW_GOAL_UNAVAILABLE",
+      "reason": "review_goal_unavailable",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_REVIEW_ILLEGAL_ATTEMPT_TRANSITION",
+      "reason": "review_illegal_attempt_transition",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_REVIEW_INPUT_PATH",
+      "reason": "review_input_path",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_REVIEW_INPUT_TOO_LARGE",
+      "reason": "review_input_too_large",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_REVIEW_LEASE_EXPIRED",
+      "reason": "review_lease_expired",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_REVIEW_NO_VERIFIER",
+      "reason": "review_no_verifier",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_REVIEW_ORPHAN_UNKNOWN",
+      "reason": "review_orphan_unknown",
+      "category_code": "E_NOT_FOUND",
+      "next_action": "检查标识符是否存在"
+    },
+    {
+      "legacy_code": "E_REVIEW_OUTPUT_AFTER_TERMINAL",
+      "reason": "review_output_after_terminal",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_REVIEW_OUTPUT_BAD_JSON",
+      "reason": "review_output_bad_json",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_REVIEW_OUTPUT_BAD_UTF8",
+      "reason": "review_output_bad_utf8",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_REVIEW_OUTPUT_COUNT_MISMATCH",
+      "reason": "review_output_count_mismatch",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_REVIEW_OUTPUT_DUPLICATE_ORDINAL",
+      "reason": "review_output_duplicate_ordinal",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_REVIEW_OUTPUT_LINE_TOO_LARGE",
+      "reason": "review_output_line_too_large",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_REVIEW_OUTPUT_MULTIPLE_TERMINAL",
+      "reason": "review_output_multiple_terminal",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_REVIEW_OUTPUT_ORDINAL_GAP",
+      "reason": "review_output_ordinal_gap",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_REVIEW_OUTPUT_POLICY_INVALID",
+      "reason": "review_output_policy_invalid",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_REVIEW_OUTPUT_READ_MISMATCH",
+      "reason": "review_output_read_mismatch",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_REVIEW_OUTPUT_START",
+      "reason": "review_output_start",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_REVIEW_OUTPUT_TOO_LARGE",
+      "reason": "review_output_too_large",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_REVIEW_OUTPUT_TOO_MANY_LINES",
+      "reason": "review_output_too_many_lines",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_REVIEW_OUTPUT_TOO_MANY_PROGRESS",
+      "reason": "review_output_too_many_progress",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_REVIEW_OUTPUT_TOO_MANY_PROPOSALS",
+      "reason": "review_output_too_many_proposals",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_REVIEW_OUTPUT_TRUNCATED",
+      "reason": "review_output_truncated",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_REVIEW_OUTPUT_UNKNOWN_EVENT",
+      "reason": "review_output_unknown_event",
+      "category_code": "E_NOT_FOUND",
+      "next_action": "检查标识符是否存在"
+    },
+    {
+      "legacy_code": "E_REVIEW_PROVIDER_COST_OVERAGE",
+      "reason": "review_provider_cost_overage",
+      "category_code": "E_UPSTREAM",
+      "next_action": "检查上游服务后重试"
+    },
+    {
+      "legacy_code": "E_REVIEW_QUOTA_POLICY_UNAVAILABLE",
+      "reason": "review_quota_policy_unavailable",
+      "category_code": "E_BUDGET",
+      "next_action": "等待或调整预算"
+    },
+    {
+      "legacy_code": "E_REVIEW_ROLLBACK_CONFLICT",
+      "reason": "review_rollback_conflict",
+      "category_code": "E_CONFLICT",
+      "next_action": "读取最新版本后重试"
+    },
+    {
+      "legacy_code": "E_REVIEW_SNAPSHOT_COLLISION",
+      "reason": "review_snapshot_collision",
+      "category_code": "E_CONFLICT",
+      "next_action": "读取最新版本后重试"
+    },
+    {
+      "legacy_code": "E_REVIEW_SNAPSHOT_INVALID",
+      "reason": "review_snapshot_invalid",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_REVIEW_SNAPSHOT_SOURCE_MISSING",
+      "reason": "review_snapshot_source_missing",
+      "category_code": "E_NOT_FOUND",
+      "next_action": "检查标识符是否存在"
+    },
+    {
+      "legacy_code": "E_REVIEW_SNAPSHOT_STALE",
+      "reason": "review_snapshot_stale",
+      "category_code": "E_CONFLICT",
+      "next_action": "读取最新版本后重试"
+    },
+    {
+      "legacy_code": "E_REVIEW_SUPERSEDE_DEPTH",
+      "reason": "review_supersede_depth",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_REVIEW_SUPERSEDE_INVALID",
+      "reason": "review_supersede_invalid",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_REVIEW_TRIGGER_INVALID",
+      "reason": "review_trigger_invalid",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_REVIEW_WINDOW_LIMIT",
+      "reason": "review_window_limit",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_ROLLBACK_TARGET_UNRESOLVED",
+      "reason": "rollback_target_unresolved",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_ROOT_",
+      "reason": "root_",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_ROOT_AMBIGUOUS",
+      "reason": "root_ambiguous",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_ROOT_IDENTITY_MISMATCH",
+      "reason": "root_identity_mismatch",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_ROOT_INVALID",
+      "reason": "root_invalid",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_ROOT_NOT_FOUND",
+      "reason": "root_not_found",
+      "category_code": "E_NOT_FOUND",
+      "next_action": "检查标识符是否存在"
+    },
+    {
+      "legacy_code": "E_ROOT_UNAVAILABLE",
+      "reason": "root_unavailable",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_SCHEMA",
+      "reason": "schema",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_SCHEMA_COMPAT_UNPROVEN",
+      "reason": "schema_compat_unproven",
+      "category_code": "E_UNSUPPORTED_VERSION",
+      "next_action": "升级宿主或重建 home"
+    },
+    {
+      "legacy_code": "E_SCHEMA_MAJOR_UNSUPPORTED",
+      "reason": "schema_major_unsupported",
+      "category_code": "E_UNSUPPORTED_VERSION",
+      "next_action": "用 evolve export 导出旧 home 数据，再新建 home"
+    },
+    {
+      "legacy_code": "E_SCHEMA_MIGRATION_DESTRUCTIVE",
+      "reason": "schema_migration_destructive",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_SCORE_LEVELS",
+      "reason": "score_levels",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_SEMANTIC_BACKEND_UNKNOWN",
+      "reason": "semantic_backend_unknown",
+      "category_code": "E_CAPABILITY_UNKNOWN",
+      "next_action": "先完成探针或升级宿主"
+    },
+    {
+      "legacy_code": "E_SEMANTIC_BINDING_CHANGED",
+      "reason": "semantic_binding_changed",
+      "category_code": "E_UPSTREAM",
+      "next_action": "检查上游服务后重试"
+    },
+    {
+      "legacy_code": "E_SEMANTIC_CONTRACT_UNSUPPORTED",
+      "reason": "semantic_contract_unsupported",
+      "category_code": "E_UPSTREAM",
+      "next_action": "检查上游服务后重试"
+    },
+    {
+      "legacy_code": "E_SEMANTIC_OUTPUT_INVALID",
+      "reason": "semantic_output_invalid",
+      "category_code": "E_UPSTREAM",
+      "next_action": "检查上游服务后重试"
+    },
+    {
+      "legacy_code": "E_SEMANTIC_SCOPE_UNSUPPORTED",
+      "reason": "semantic_scope_unsupported",
+      "category_code": "E_UPSTREAM",
+      "next_action": "检查上游服务后重试"
+    },
+    {
+      "legacy_code": "E_SERVICE_PROFILE_BLOCKED",
+      "reason": "service_profile_blocked",
+      "category_code": "E_LOCKED",
+      "next_action": "等待内核释放或停止占用"
+    },
+    {
+      "legacy_code": "E_SERVICE_PROFILE_MISMATCH",
+      "reason": "service_profile_mismatch",
+      "category_code": "E_IO",
+      "next_action": "检查磁盘与权限"
+    },
+    {
+      "legacy_code": "E_SERVICE_PROFILE_UNKNOWN",
+      "reason": "service_profile_unknown",
+      "category_code": "E_NOT_FOUND",
+      "next_action": "检查标识符是否存在"
+    },
+    {
+      "legacy_code": "E_SERVICE_STATE_INCONSISTENT",
+      "reason": "service_state_inconsistent",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_SERVICE_UNAVAILABLE",
+      "reason": "service_unavailable",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_SOURCE_CHANGED",
+      "reason": "source_changed",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_SOURCE_CONFLICT",
+      "reason": "source_conflict",
+      "category_code": "E_CONFLICT",
+      "next_action": "读取最新版本后重试"
+    },
+    {
+      "legacy_code": "E_SOURCE_COUNT_EXCEEDED",
+      "reason": "source_count_exceeded",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_SOURCE_HASH",
+      "reason": "source_hash",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_SOURCE_NOT_FOUND",
+      "reason": "source_not_found",
+      "category_code": "E_NOT_FOUND",
+      "next_action": "检查标识符是否存在"
+    },
+    {
+      "legacy_code": "E_SOURCE_OUT_OF_RANGE",
+      "reason": "source_out_of_range",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_SOURCE_REF_INVALID",
+      "reason": "source_ref_invalid",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_SOURCE_TOO_LARGE",
+      "reason": "source_too_large",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_SOURCE_UNRETRIEVABLE",
+      "reason": "source_unretrievable",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_SOURCE_UTF8_INVALID",
+      "reason": "source_utf8_invalid",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_STALE_VERSION",
+      "reason": "stale_version",
+      "category_code": "E_UNSUPPORTED_VERSION",
+      "next_action": "升级宿主或重建 home"
+    },
+    {
+      "legacy_code": "E_STATE_LOCAL_URI",
+      "reason": "state_local_uri",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_STATE_ROW_BINDING",
+      "reason": "state_row_binding",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_STATE_ROW_SCHEMA",
+      "reason": "state_row_schema",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_STATE_VERSION_UNSUPPORTED",
+      "reason": "state_version_unsupported",
+      "category_code": "E_UNSUPPORTED_VERSION",
+      "next_action": "升级宿主或重建 home"
+    },
+    {
+      "legacy_code": "E_STATE_VOLATILE_FIELD",
+      "reason": "state_volatile_field",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_STATE_WHOLE_TASK_SCOPE",
+      "reason": "state_whole_task_scope",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_STORAGE",
+      "reason": "storage",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_STORAGE_",
+      "reason": "storage_",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_STORAGE_ACK_ENOSPC",
+      "reason": "storage_ack_enospc",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_STORAGE_BLOB_ENOSPC",
+      "reason": "storage_blob_enospc",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_STORAGE_BUSY",
+      "reason": "storage_busy",
+      "category_code": "E_LOCKED",
+      "next_action": "等待内核释放或停止占用"
+    },
+    {
+      "legacy_code": "E_STORAGE_CONFLICT",
+      "reason": "storage_conflict",
+      "category_code": "E_CONFLICT",
+      "next_action": "读取最新版本后重试"
+    },
+    {
+      "legacy_code": "E_STORAGE_CORRUPT",
+      "reason": "storage_corrupt",
+      "category_code": "E_CORRUPT",
+      "next_action": "进入恢复流程"
+    },
+    {
+      "legacy_code": "E_STORAGE_DELIVERY_ENOSPC",
+      "reason": "storage_delivery_enospc",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_STORAGE_IO",
+      "reason": "storage_io",
+      "category_code": "E_IO",
+      "next_action": "检查磁盘与权限"
+    },
+    {
+      "legacy_code": "E_STORAGE_JOURNAL_ENOSPC",
+      "reason": "storage_journal_enospc",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_STORAGE_JOURNAL_RECOVERY_REQUIRED",
+      "reason": "storage_journal_recovery_required",
+      "category_code": "E_CORRUPT",
+      "next_action": "重启 serve 以执行 journal 恢复"
+    },
+    {
+      "legacy_code": "E_STORAGE_MIGRATION",
+      "reason": "storage_migration",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_STORAGE_SQLITE_ENOSPC",
+      "reason": "storage_sqlite_enospc",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_STORAGE_SQLITE_UNSAFE",
+      "reason": "storage_sqlite_unsafe",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_STORAGE_UNAVAILABLE",
+      "reason": "storage_unavailable",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_SUCCESS_EVIDENCE_ATTESTATION",
+      "reason": "success_evidence_attestation",
+      "category_code": "E_AUTH_DENIED",
+      "next_action": "完成授权或真人确认"
+    },
+    {
+      "legacy_code": "E_SUCCESS_EVIDENCE_BINDING",
+      "reason": "success_evidence_binding",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_SUCCESS_EVIDENCE_REQUIREMENT",
+      "reason": "success_evidence_requirement",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_SUCCESS_EVIDENCE_UNVERIFIED",
+      "reason": "success_evidence_unverified",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_SUPPLEMENT_BUDGET_EXHAUSTED",
+      "reason": "supplement_budget_exhausted",
+      "category_code": "E_BUDGET",
+      "next_action": "等待或调整预算"
+    },
+    {
+      "legacy_code": "E_SUPPLEMENT_UNAVAILABLE",
+      "reason": "supplement_unavailable",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_TARGET_NOT_DECLARED",
+      "reason": "target_not_declared",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_TEMPLATE_BINDING_MISSING",
+      "reason": "template_binding_missing",
+      "category_code": "E_NOT_FOUND",
+      "next_action": "检查标识符是否存在"
+    },
+    {
+      "legacy_code": "E_TEMPLATE_DEPRECATED",
+      "reason": "template_deprecated",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_TEMPLATE_HASH_MISMATCH",
+      "reason": "template_hash_mismatch",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_TEMPLATE_ISSUE_TYPE_MISMATCH",
+      "reason": "template_issue_type_mismatch",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_TEMPLATE_NOT_FOUND",
+      "reason": "template_not_found",
+      "category_code": "E_NOT_FOUND",
+      "next_action": "检查标识符是否存在"
+    },
+    {
+      "legacy_code": "E_TIMEOUT",
+      "reason": "timeout",
+      "category_code": "E_TIMEOUT",
+      "next_action": "可重试"
+    },
+    {
+      "legacy_code": "E_TRANSITION_ID_COLLISION",
+      "reason": "transition_id_collision",
+      "category_code": "E_CONFLICT",
+      "next_action": "读取最新版本后重试"
+    },
+    {
+      "legacy_code": "E_TRANSPORT",
+      "reason": "transport",
+      "category_code": "E_UPSTREAM",
+      "next_action": "检查上游服务后重试"
+    },
+    {
+      "legacy_code": "E_TYPE",
+      "reason": "type",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_UNINSTALL_NONMANAGED",
+      "reason": "uninstall_nonmanaged",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_UNKNOWN_OPTION",
+      "reason": "unknown_option",
+      "category_code": "E_NOT_FOUND",
+      "next_action": "检查标识符是否存在"
+    },
+    {
+      "legacy_code": "E_UNSUPPORTED",
+      "reason": "unsupported",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_UNSUPPORTED_QUESTION_TYPE",
+      "reason": "unsupported_question_type",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_UNSUPPORTED_VERSION",
+      "reason": "unsupported_version",
+      "category_code": "E_UNSUPPORTED_VERSION",
+      "next_action": "升级宿主或重建 home"
+    },
+    {
+      "legacy_code": "E_UPSTREAM",
+      "reason": "upstream",
+      "category_code": "E_UPSTREAM",
+      "next_action": "检查上游服务后重试"
+    },
+    {
+      "legacy_code": "E_USAGE_ESTIMATE_UNDERFLOW",
+      "reason": "usage_estimate_underflow",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_VALIDATOR_BINDING_MISSING",
+      "reason": "validator_binding_missing",
+      "category_code": "E_NOT_FOUND",
+      "next_action": "检查标识符是否存在"
+    },
+    {
+      "legacy_code": "E_VALIDATOR_POLICY_MISMATCH",
+      "reason": "validator_policy_mismatch",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_VERSION_BINDING",
+      "reason": "version_binding",
+      "category_code": "E_UNSUPPORTED_VERSION",
+      "next_action": "升级宿主或重建 home"
+    },
+    {
+      "legacy_code": "E_VERSION_UNMAPPED",
+      "reason": "version_unmapped",
+      "category_code": "E_UNSUPPORTED_VERSION",
+      "next_action": "升级宿主或重建 home"
+    },
+    {
+      "legacy_code": "E_VIEW_PROFILE_MISMATCH",
+      "reason": "view_profile_mismatch",
+      "category_code": "E_IO",
+      "next_action": "检查磁盘与权限"
+    },
+    {
+      "legacy_code": "E_WATERMARK_AHEAD",
+      "reason": "watermark_ahead",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_WATERMARK_UNKNOWN",
+      "reason": "watermark_unknown",
+      "category_code": "E_NOT_FOUND",
+      "next_action": "检查标识符是否存在"
+    },
+    {
+      "legacy_code": "E_WHOLE_TASK_SCOPE_NOT_ALLOWED",
+      "reason": "whole_task_scope_not_allowed",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_WIRE_INVALID",
+      "reason": "wire_invalid",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_WORKSPACE_CHANGED",
+      "reason": "workspace_changed",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_WORKSPACE_READ_DENIED",
+      "reason": "workspace_read_denied",
+      "category_code": "E_AUTH_DENIED",
+      "next_action": "完成授权或真人确认"
+    },
+    {
+      "legacy_code": "E_WORKSPACE_READ_TOO_LARGE",
+      "reason": "workspace_read_too_large",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_WORKSPACE_READ_UNSUPPORTED",
+      "reason": "workspace_read_unsupported",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_WRITE_CANDIDATE_HASH",
+      "reason": "write_candidate_hash",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_WRITE_CANDIDATE_ID",
+      "reason": "write_candidate_id",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_WRITE_CONFIG_APPLY",
+      "reason": "write_config_apply",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_WRITE_CONFIG_CONTENT",
+      "reason": "write_config_content",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_WRITE_CONFIG_FIELD",
+      "reason": "write_config_field",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_WRITE_CONFIG_IN_PROGRESS",
+      "reason": "write_config_in_progress",
+      "category_code": "E_LOCKED",
+      "next_action": "等待内核释放或停止占用"
+    },
+    {
+      "legacy_code": "E_WRITE_CONFIG_LOCKED",
+      "reason": "write_config_locked",
+      "category_code": "E_LOCKED",
+      "next_action": "等待内核释放或停止占用"
+    },
+    {
+      "legacy_code": "E_WRITE_CONFIG_NOT_FOUND",
+      "reason": "write_config_not_found",
+      "category_code": "E_NOT_FOUND",
+      "next_action": "检查标识符是否存在"
+    },
+    {
+      "legacy_code": "E_WRITE_CONFIG_PATCH",
+      "reason": "write_config_patch",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_WRITE_CONFIG_PATH",
+      "reason": "write_config_path",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_WRITE_CONFIG_READBACK",
+      "reason": "write_config_readback",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_WRITE_CONFIG_RECOVERY_REQUIRED",
+      "reason": "write_config_recovery_required",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_WRITE_CONFIG_STALE",
+      "reason": "write_config_stale",
+      "category_code": "E_CONFLICT",
+      "next_action": "读取最新版本后重试"
+    },
+    {
+      "legacy_code": "E_WRITE_CONFIG_UNSUPPORTED",
+      "reason": "write_config_unsupported",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_WRITE_MODE_UNSUPPORTED",
+      "reason": "write_mode_unsupported",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_WRITE_NOT_FOUND",
+      "reason": "write_not_found",
+      "category_code": "E_NOT_FOUND",
+      "next_action": "检查标识符是否存在"
+    },
+    {
+      "legacy_code": "E_WRITE_ROLLBACK_TARGET",
+      "reason": "write_rollback_target",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_WRITE_SCOPE_UNRESOLVED",
+      "reason": "write_scope_unresolved",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_WRITE_STATE",
+      "reason": "write_state",
+      "category_code": "E_INVALID",
+      "next_action": "修正输入后重试"
+    },
+    {
+      "legacy_code": "E_GENERATION_AUTH_REJECTED",
+      "reason": "auth_rejected",
+      "category_code": "E_AUTH_DENIED",
+      "next_action": "完成授权或真人确认"
+    },
+    {
+      "legacy_code": "E_GENERATION_PROVIDER_REJECTED",
+      "reason": "provider_rejected",
+      "category_code": "E_UPSTREAM",
+      "next_action": "检查上游服务后重试"
+    },
+    {
+      "legacy_code": "E_GENERATION_EXIT_NONZERO",
+      "reason": "process_exit_nonzero",
+      "category_code": "E_UPSTREAM",
+      "next_action": "检查上游服务后重试"
+    },
+    {
+      "legacy_code": "E_GENERATION_OUTPUT_UNPARSEABLE",
+      "reason": "output_unparseable",
+      "category_code": "E_UPSTREAM",
+      "next_action": "检查上游服务后重试"
+    },
+    {
+      "legacy_code": "E_GENERATION_PROTOCOL_MISMATCH",
+      "reason": "protocol_mismatch",
+      "category_code": "E_UPSTREAM",
+      "next_action": "检查上游服务后重试"
+    }
+  ]
+}

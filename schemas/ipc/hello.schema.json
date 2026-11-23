@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:ipc_hello:1",
+  "title": "IpcHello",
+  "description": "First and only hello frame on a local IPC connection (DD-FND-040). The token never enters logs or persistence.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "protocol_version",
+    "client_id",
+    "client_kind",
+    "product_version",
+    "pid",
+    "token"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "rsi.ipc_hello/1"
+    },
+    "protocol_version": {
+      "const": "evoplug-ipc/1"
+    },
+    "client_id": {
+      "type": "string",
+      "pattern": "^adp:[0-9A-HJKMNP-TV-Z]{26}$"
+    },
+    "client_kind": {
+      "enum": [
+        "host_runtime",
+        "adapter",
+        "cli",
+        "worker",
+        "test"
+      ]
+    },
+    "product_version": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64
+    },
+    "pid": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 2147483647
+    },
+    "token": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{43}$"
+    }
+  }
+}

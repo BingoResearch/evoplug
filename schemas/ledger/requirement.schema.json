@@ -1,0 +1,841 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:requirement_op_record:1",
+  "title": "RequirementOpRecord",
+  "description": "Persisted requirement operation plus requirement, source, head, feedback, correction and constraint records (DD-FND-053/074).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "op_id",
+    "task_id",
+    "branch_id",
+    "source_event_id",
+    "actor_origin",
+    "directive_strength",
+    "op",
+    "target_requirement_id",
+    "created_requirement_id",
+    "superseded_requirement_ids",
+    "statement_ref",
+    "source_text_hash",
+    "scope",
+    "acceptance",
+    "source_quote_ref",
+    "status",
+    "effective_input_epoch",
+    "goal_version_before",
+    "goal_version_after",
+    "recorded_at",
+    "content_hash"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "rsi.requirement_op_record/1"
+    },
+    "op_id": {
+      "type": "string",
+      "pattern": "^reqop:[0-9A-HJKMNP-TV-Z]{26}$"
+    },
+    "task_id": {
+      "type": "string",
+      "pattern": "^task:[0-9A-HJKMNP-TV-Z]{26}$"
+    },
+    "branch_id": {
+      "type": "string",
+      "pattern": "^br:[0-9A-HJKMNP-TV-Z]{26}$"
+    },
+    "source_event_id": {
+      "type": "string",
+      "pattern": "^ev:[0-9A-HJKMNP-TV-Z]{26}$"
+    },
+    "actor_origin": {
+      "$ref": "#/$defs/Origin"
+    },
+    "directive_strength": {
+      "enum": [
+        "explicit",
+        "ambiguous"
+      ]
+    },
+    "op": {
+      "$ref": "#/$defs/RequirementOpKind"
+    },
+    "target_requirement_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^req:[0-9A-HJKMNP-TV-Z]{26}$"
+    },
+    "created_requirement_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^req:[0-9A-HJKMNP-TV-Z]{26}$"
+    },
+    "superseded_requirement_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^req:[0-9A-HJKMNP-TV-Z]{26}$"
+      }
+    },
+    "statement_ref": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/SourceRef"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "source_text_hash": {
+      "$ref": "#/$defs/Hash"
+    },
+    "scope": {
+      "$ref": "#/$defs/RequirementScope"
+    },
+    "acceptance": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/AcceptanceCriterion"
+      }
+    },
+    "source_quote_ref": {
+      "$ref": "#/$defs/SourceRef"
+    },
+    "status": {
+      "$ref": "#/$defs/RequirementOpStatus"
+    },
+    "effective_input_epoch": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "goal_version_before": {
+      "type": "string"
+    },
+    "goal_version_after": {
+      "type": "string"
+    },
+    "recorded_at": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "valid_from_event": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "valid_to_event": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "content_hash": {
+      "$ref": "#/$defs/Hash"
+    }
+  },
+  "$defs": {
+    "Hash": {
+      "title": "Hash",
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "SourceRef": {
+      "title": "SourceRef",
+      "oneOf": [
+        {
+          "type": "string",
+          "pattern": "^journal://ev:[0-9A-HJKMNP-TV-Z]{26}#bytes=(0|[1-9][0-9]*)-(0|[1-9][0-9]*)$"
+        },
+        {
+          "type": "string",
+          "pattern": "^blob://sha256:[0-9a-f]{64}#bytes=(0|[1-9][0-9]*)-(0|[1-9][0-9]*)$"
+        }
+      ]
+    },
+    "Origin": {
+      "title": "Origin",
+      "enum": [
+        "human",
+        "user",
+        "agent",
+        "evaluator",
+        "system",
+        "host",
+        "unknown"
+      ]
+    },
+    "RequirementOpKind": {
+      "title": "RequirementOpKind",
+      "enum": [
+        "add",
+        "clarify",
+        "supersede",
+        "retract",
+        "confirm"
+      ]
+    },
+    "RequirementOpStatus": {
+      "title": "RequirementOpStatus",
+      "enum": [
+        "applied",
+        "proposed",
+        "conflict",
+        "rejected"
+      ]
+    },
+    "RequirementScope": {
+      "title": "RequirementScope",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "paths",
+        "hosts",
+        "modes",
+        "project_ids"
+      ],
+      "properties": {
+        "paths": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "hosts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "modes": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "online",
+              "review",
+              "trial",
+              "global"
+            ]
+          }
+        },
+        "project_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "AcceptanceCriterion": {
+      "title": "AcceptanceCriterion",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/HumanAcceptanceCriterion"
+        },
+        {
+          "$ref": "#/$defs/TestPassCriterion"
+        },
+        {
+          "$ref": "#/$defs/ArtifactCheckCriterion"
+        },
+        {
+          "$ref": "#/$defs/ExternalVerificationCriterion"
+        }
+      ]
+    },
+    "HumanAcceptanceCriterion": {
+      "title": "HumanAcceptanceCriterion",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "source_ref"
+      ],
+      "properties": {
+        "kind": {
+          "const": "human_acceptance"
+        },
+        "source_ref": {
+          "$ref": "#/$defs/SourceRef"
+        }
+      }
+    },
+    "TestPassCriterion": {
+      "title": "TestPassCriterion",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "command",
+        "cwd"
+      ],
+      "properties": {
+        "kind": {
+          "const": "test_pass"
+        },
+        "command": {
+          "type": "string",
+          "minLength": 1
+        },
+        "cwd": {
+          "type": "string"
+        }
+      }
+    },
+    "ArtifactCheckCriterion": {
+      "title": "ArtifactCheckCriterion",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "path"
+      ],
+      "properties": {
+        "kind": {
+          "const": "artifact_check"
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "expected_hash": {
+          "$ref": "#/$defs/Hash"
+        }
+      }
+    },
+    "ExternalVerificationCriterion": {
+      "title": "ExternalVerificationCriterion",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "verifier",
+        "evidence_ref"
+      ],
+      "properties": {
+        "kind": {
+          "const": "external_verification"
+        },
+        "verifier": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence_ref": {
+          "$ref": "#/$defs/SourceRef"
+        }
+      }
+    },
+    "RequirementRecord": {
+      "title": "RequirementRecord",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "requirement_id",
+        "revision",
+        "task_id",
+        "branch_id",
+        "statement_ref",
+        "statement_text_hash",
+        "scope",
+        "acceptance",
+        "status",
+        "created_by_op_id",
+        "valid_from_event",
+        "valid_to_event",
+        "effective_input_epoch",
+        "content_hash",
+        "recorded_at"
+      ],
+      "properties": {
+        "requirement_id": {
+          "type": "string",
+          "pattern": "^req:[0-9A-HJKMNP-TV-Z]{26}$"
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "task_id": {
+          "type": "string",
+          "pattern": "^task:[0-9A-HJKMNP-TV-Z]{26}$"
+        },
+        "branch_id": {
+          "type": "string",
+          "pattern": "^br:[0-9A-HJKMNP-TV-Z]{26}$"
+        },
+        "statement_ref": {
+          "$ref": "#/$defs/SourceRef"
+        },
+        "statement_text_hash": {
+          "$ref": "#/$defs/Hash"
+        },
+        "scope": {
+          "$ref": "#/$defs/RequirementScope"
+        },
+        "acceptance": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/AcceptanceCriterion"
+          }
+        },
+        "status": {
+          "enum": [
+            "proposed",
+            "active",
+            "superseded",
+            "retracted",
+            "rejected"
+          ]
+        },
+        "created_by_op_id": {
+          "type": "string"
+        },
+        "superseded_by_requirement_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "valid_from_event": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "valid_to_event": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "effective_input_epoch": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "content_hash": {
+          "$ref": "#/$defs/Hash"
+        },
+        "recorded_at": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "RequirementSourceRecord": {
+      "title": "RequirementSourceRecord",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "requirement_id",
+        "requirement_revision",
+        "source_event_id",
+        "source_ref",
+        "quote_hash",
+        "role"
+      ],
+      "properties": {
+        "requirement_id": {
+          "type": "string"
+        },
+        "requirement_revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "source_event_id": {
+          "type": "string"
+        },
+        "source_ref": {
+          "$ref": "#/$defs/SourceRef"
+        },
+        "quote_hash": {
+          "$ref": "#/$defs/Hash"
+        },
+        "role": {
+          "enum": [
+            "original",
+            "clarification",
+            "confirmation",
+            "correction"
+          ]
+        }
+      }
+    },
+    "RequirementHeadRecord": {
+      "title": "RequirementHeadRecord",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "requirement_id",
+        "revision",
+        "status",
+        "current_goal_version",
+        "updated_at",
+        "row_version"
+      ],
+      "properties": {
+        "requirement_id": {
+          "type": "string"
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "status": {
+          "enum": [
+            "proposed",
+            "active",
+            "superseded",
+            "retracted",
+            "rejected"
+          ]
+        },
+        "current_goal_version": {
+          "type": "string"
+        },
+        "updated_at": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "row_version": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "FeedbackRecord": {
+      "title": "FeedbackRecord",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "feedback_id",
+        "task_id",
+        "branch_id",
+        "source_event_id",
+        "kind",
+        "quote_ref",
+        "target_issue_id",
+        "status",
+        "goal_version",
+        "input_epoch",
+        "recorded_at"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "rsi.feedback/2"
+        },
+        "feedback_id": {
+          "type": "string",
+          "pattern": "^fb:[0-9A-HJKMNP-TV-Z]{26}$"
+        },
+        "task_id": {
+          "type": "string"
+        },
+        "branch_id": {
+          "type": "string"
+        },
+        "source_event_id": {
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "correction",
+            "dissatisfaction",
+            "new_goal",
+            "acceptance"
+          ]
+        },
+        "quote_ref": {
+          "$ref": "#/$defs/SourceRef"
+        },
+        "target_issue_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "status": {
+          "enum": [
+            "recorded",
+            "needs_evidence"
+          ]
+        },
+        "goal_version": {
+          "type": "string"
+        },
+        "input_epoch": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "recorded_at": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "LedgerCorrection": {
+      "title": "LedgerCorrection",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "correction_id",
+        "task_id",
+        "branch_id",
+        "corrected_record_id",
+        "correction_kind",
+        "original_source_event_id",
+        "original_source_ref",
+        "original_text_hash",
+        "status",
+        "recorded_at",
+        "valid_from_event",
+        "replacement_op_ids",
+        "invalidated_judgment_ids",
+        "correction_hash"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "rsi.ledger_correction/2"
+        },
+        "correction_id": {
+          "type": "string",
+          "pattern": "^lcor:[0-9A-HJKMNP-TV-Z]{26}$"
+        },
+        "task_id": {
+          "type": "string"
+        },
+        "branch_id": {
+          "type": "string"
+        },
+        "corrected_record_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "correction_kind": {
+          "enum": [
+            "missed_extraction",
+            "wrong_extraction",
+            "wrong_link"
+          ]
+        },
+        "original_source_event_id": {
+          "type": "string"
+        },
+        "original_source_ref": {
+          "$ref": "#/$defs/SourceRef"
+        },
+        "original_text_hash": {
+          "$ref": "#/$defs/Hash"
+        },
+        "status": {
+          "enum": [
+            "applied",
+            "rejected_original_missing"
+          ]
+        },
+        "recorded_at": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "valid_from_event": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "replacement_op_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "invalidated_judgment_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "correction_hash": {
+          "$ref": "#/$defs/Hash"
+        }
+      }
+    },
+    "UnverifiedConstraint": {
+      "title": "UnverifiedConstraint",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "constraint_id",
+        "task_id",
+        "branch_id",
+        "binding",
+        "source_event_id",
+        "source_ref",
+        "quote",
+        "quote_hash",
+        "scope_hint",
+        "status",
+        "authorization",
+        "usable_for",
+        "conflict_with_requirement_ids",
+        "confirmed_by_event_id",
+        "recorded_at_watermark",
+        "created_at",
+        "row_version"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "rsi.unverified_constraint/2"
+        },
+        "constraint_id": {
+          "type": "string",
+          "pattern": "^uc:[0-9A-HJKMNP-TV-Z]{26}$"
+        },
+        "task_id": {
+          "type": "string"
+        },
+        "branch_id": {
+          "type": "string"
+        },
+        "binding": {
+          "$ref": "#/$defs/VersionBinding"
+        },
+        "source_event_id": {
+          "type": "string"
+        },
+        "source_ref": {
+          "$ref": "#/$defs/SourceRef"
+        },
+        "quote": {
+          "type": "string"
+        },
+        "quote_hash": {
+          "$ref": "#/$defs/Hash"
+        },
+        "scope_hint": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/RequirementScope"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "status": {
+          "enum": [
+            "unverified_constraint",
+            "confirmed",
+            "rejected"
+          ]
+        },
+        "authorization": {
+          "const": 0
+        },
+        "usable_for": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "context",
+              "review",
+              "trial"
+            ]
+          }
+        },
+        "conflict_with_requirement_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "confirmed_by_event_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "recorded_at_watermark": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "created_at": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "row_version": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "VersionBinding": {
+      "title": "VersionBinding",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "task_id",
+        "branch_id",
+        "input_epoch",
+        "goal_version",
+        "config_version",
+        "watermark"
+      ],
+      "properties": {
+        "task_id": {
+          "type": "string"
+        },
+        "branch_id": {
+          "type": "string"
+        },
+        "input_epoch": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "goal_version": {
+          "type": "string"
+        },
+        "config_version": {
+          "type": "string"
+        },
+        "watermark": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    }
+  },
+  "x-evoplug-ddl": {
+    "table": "requirement_op",
+    "enums": {
+      "actor_origin": [
+        "human",
+        "user",
+        "agent",
+        "evaluator",
+        "system",
+        "host",
+        "unknown"
+      ],
+      "directive_strength": [
+        "explicit",
+        "ambiguous"
+      ],
+      "op": [
+        "add",
+        "clarify",
+        "supersede",
+        "retract",
+        "confirm"
+      ],
+      "status": [
+        "applied",
+        "proposed",
+        "conflict",
+        "rejected"
+      ]
+    }
+  }
+}

@@ -1,0 +1,122 @@
+{
+  "$id": "urn:evoplug:schema:evd_dependency_unit_row:1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Physical row of evd_dependency_unit (DD-EVD-024); values are the frozen row_json columns.",
+  "properties": {
+    "branch_id": {
+      "type": "string"
+    },
+    "config_version": {
+      "type": "string"
+    },
+    "content_bytes": {
+      "maximum": 33554432,
+      "minimum": 1,
+      "type": "integer"
+    },
+    "content_hash": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "content_ref": {
+      "pattern": "^blob://",
+      "type": "string"
+    },
+    "created_at": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "dependency_key": {
+      "type": "string"
+    },
+    "goal_version": {
+      "type": "string"
+    },
+    "input_epoch": {
+      "minimum": 1,
+      "type": "integer"
+    },
+    "inseparable_group_key": {
+      "type": "string"
+    },
+    "pack_id": {
+      "type": "string"
+    },
+    "pack_key": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "plan_hash": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "plan_id": {
+      "type": "string"
+    },
+    "row_version": {
+      "const": 0,
+      "type": "integer"
+    },
+    "source_blob_refs": {
+      "description": "JCS text; JSON array",
+      "type": "string"
+    },
+    "task_id": {
+      "type": "string"
+    },
+    "transport_role": {
+      "enum": [
+        "requirement",
+        "feedback",
+        "artifact",
+        "verifier",
+        "counter",
+        "history",
+        "context"
+      ],
+      "type": "string"
+    },
+    "unit_hash": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "unit_id": {
+      "type": "string"
+    },
+    "unit_key": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "watermark": {
+      "minimum": 0,
+      "type": "integer"
+    }
+  },
+  "required": [
+    "unit_id",
+    "unit_key",
+    "unit_hash",
+    "plan_id",
+    "plan_hash",
+    "pack_id",
+    "pack_key",
+    "dependency_key",
+    "inseparable_group_key",
+    "transport_role",
+    "content_hash",
+    "content_ref",
+    "content_bytes",
+    "source_blob_refs",
+    "row_version",
+    "created_at",
+    "task_id",
+    "branch_id",
+    "input_epoch",
+    "goal_version",
+    "config_version",
+    "watermark"
+  ],
+  "title": "EvdDependencyUnitRow",
+  "type": "object"
+}

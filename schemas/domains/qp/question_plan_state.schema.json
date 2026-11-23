@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:question_plan_state:1",
+  "title": "PlanState",
+  "description": "Append-only plan state (DD-QP-20).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "plan_id",
+    "state_seq",
+    "state",
+    "reason_code",
+    "plan_hash",
+    "task_id",
+    "branch_id",
+    "recorded_at",
+    "content_hash"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "rsi.question_plan_state/1"
+    },
+    "plan_id": {
+      "type": "string",
+      "pattern": "^plan:"
+    },
+    "state_seq": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "state": {
+      "enum": [
+        "active",
+        "superseded",
+        "stale_goal",
+        "stale_binding",
+        "stale_template",
+        "rejected"
+      ]
+    },
+    "reason_code": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "plan_hash": {
+      "$ref": "#/$defs/Hash"
+    },
+    "task_id": {
+      "type": "string"
+    },
+    "branch_id": {
+      "type": "string"
+    },
+    "recorded_at": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "content_hash": {
+      "$ref": "#/$defs/Hash"
+    }
+  },
+  "$defs": {
+    "Hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    }
+  }
+}

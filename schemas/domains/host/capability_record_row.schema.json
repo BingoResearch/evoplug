@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:host_capability_record_row:1",
+  "title": "CapabilityRecordPhysicalRow",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "capability_id", "binding_key", "binding_json", "name", "status", "evidence_stage",
+    "evidence_refs_json", "probe_ref", "probe_result", "blocker_code", "failure_code",
+    "checked_at", "verified_at", "last_verified_at", "details_json", "legacy_json", "row_version"
+  ],
+  "properties": {
+    "capability_id": { "type": "string", "pattern": "^cap:" },
+    "binding_key": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "binding_json": { "type": "string" },
+    "name": {
+      "enum": [
+        "input_capture", "sync_wait", "source_trust", "tool_id", "compaction_event",
+        "request_observation", "managed_object_load", "online_delivery", "stable_boundary",
+        "host_budget", "association", "human_interaction_attested", "capacity_window",
+        "generation.service_profile", "generation.create", "generation.auth",
+        "generation.cancel", "generation.recover", "generation.output"
+      ]
+    },
+    "status": { "enum": ["unknown", "verified", "unsupported", "failed"] },
+    "evidence_stage": { "enum": ["none", "static", "loaded", "roundtrip"] },
+    "evidence_refs_json": { "type": "string" },
+    "probe_ref": { "type": ["string", "null"] },
+    "probe_result": { "type": ["string", "null"], "enum": ["passed", "failed", "blocked", "unknown", null] },
+    "blocker_code": { "type": ["string", "null"] },
+    "failure_code": { "type": ["string", "null"] },
+    "checked_at": { "type": "integer", "minimum": 0 },
+    "verified_at": { "type": ["integer", "null"] },
+    "last_verified_at": { "type": ["integer", "null"] },
+    "details_json": { "type": "string" },
+    "legacy_json": { "type": ["string", "null"] },
+    "row_version": { "type": "integer", "minimum": 1 }
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:host_vocabulary:1",
+  "title": "HostVocabulary",
+  "description": "HOST-owned primitive vocabulary projected into packages/core/src/generated/host-vocabulary.ts. HOST remains the owner; FND, CFG, REV, QP and EVD only import the generated types.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["host_ids", "host_modes", "capability_statuses", "evidence_stages", "host_probe_results", "capability_subjects", "host_version_kinds", "execution_environments"],
+  "properties": {
+    "host_ids": { "type": "array", "minItems": 7, "uniqueItems": true, "items": { "$ref": "#/$defs/HostId" } },
+    "host_modes": { "type": "array", "minItems": 11, "uniqueItems": true, "items": { "$ref": "#/$defs/HostMode" } },
+    "capability_statuses": { "type": "array", "minItems": 4, "uniqueItems": true, "items": { "$ref": "#/$defs/CapabilityStatus" } },
+    "evidence_stages": { "type": "array", "minItems": 4, "uniqueItems": true, "items": { "$ref": "#/$defs/EvidenceStage" } },
+    "host_probe_results": { "type": "array", "minItems": 4, "uniqueItems": true, "items": { "$ref": "#/$defs/HostProbeResult" } },
+    "capability_subjects": { "type": "array", "minItems": 2, "uniqueItems": true, "items": { "$ref": "#/$defs/CapabilitySubject" } },
+    "host_version_kinds": { "type": "array", "minItems": 3, "uniqueItems": true, "items": { "$ref": "#/$defs/HostVersionKind" } },
+    "execution_environments": { "type": "array", "minItems": 3, "uniqueItems": true, "items": { "$ref": "#/$defs/ExecutionEnvironmentKind" } }
+  },
+  "x-evoplug-vocabulary": {
+    "host_ids": ["pi", "oh-my-pi", "step-code", "codex", "opencode", "openhands-sdk", "claude-code"],
+    "host_modes": ["interactive", "print", "rpc", "acp", "sdk", "sdk_stdio", "exec", "app-server", "server", "local_conversation", "remote_conversation"],
+    "capability_statuses": ["unknown", "verified", "unsupported", "failed"],
+    "evidence_stages": ["none", "static", "loaded", "roundtrip"],
+    "host_probe_results": ["passed", "failed", "blocked", "unknown"],
+    "capability_subjects": ["host_contract", "product_adapter"],
+    "host_version_kinds": ["release", "source_commit", "binary_hash"],
+    "execution_environments": ["local", "container", "remote"]
+  },
+  "$defs": {
+    "HostId": { "title": "HostId", "enum": ["pi", "oh-my-pi", "step-code", "codex", "opencode", "openhands-sdk", "claude-code"] },
+    "HostMode": { "title": "HostMode", "enum": ["interactive", "print", "rpc", "acp", "sdk", "sdk_stdio", "exec", "app-server", "server", "local_conversation", "remote_conversation"] },
+    "CapabilityStatus": { "title": "CapabilityStatus", "enum": ["unknown", "verified", "unsupported", "failed"] },
+    "EvidenceStage": { "title": "EvidenceStage", "enum": ["none", "static", "loaded", "roundtrip"] },
+    "HostProbeResult": { "title": "HostProbeResult", "enum": ["passed", "failed", "blocked", "unknown"] },
+    "CapabilitySubject": { "title": "CapabilitySubject", "enum": ["host_contract", "product_adapter"] },
+    "HostVersionKind": { "title": "HostVersionKind", "enum": ["release", "source_commit", "binary_hash"] },
+    "ExecutionEnvironmentKind": { "title": "ExecutionEnvironmentKind", "enum": ["local", "container", "remote"] }
+  }
+}

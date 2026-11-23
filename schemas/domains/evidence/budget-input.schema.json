@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:budget_input:1",
+  "title": "BudgetInput",
+  "description": "DD-EVD-026 budget input.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "plan_id",
+    "plan_hash",
+    "pack_key",
+    "shards",
+    "service_profile",
+    "limits",
+    "counting_method_version"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "rsi.budget_input/1"
+    },
+    "plan_id": {
+      "type": "string"
+    },
+    "plan_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "pack_key": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "shards": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "service_profile": {
+      "type": "object"
+    },
+    "limits": {
+      "type": "object"
+    },
+    "counting_method_version": {
+      "type": "string"
+    }
+  }
+}

@@ -1,0 +1,144 @@
+{
+  "$id": "urn:evoplug:schema:evd_omission_row:1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Physical row of evd_omission (DD-EVD-024); values are the frozen row_json columns.",
+  "properties": {
+    "branch_id": {
+      "type": "string"
+    },
+    "config_version": {
+      "type": "string"
+    },
+    "content_bytes": {
+      "maximum": 33554432,
+      "minimum": 1,
+      "type": "integer"
+    },
+    "content_hash": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "content_ref": {
+      "pattern": "^blob://",
+      "type": "string"
+    },
+    "created_at": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "goal_version": {
+      "type": "string"
+    },
+    "impact": {
+      "enum": [
+        "none",
+        "may_change_answer",
+        "blocking"
+      ],
+      "type": "string"
+    },
+    "input_epoch": {
+      "minimum": 1,
+      "type": "integer"
+    },
+    "omission_id": {
+      "type": "string"
+    },
+    "omission_key": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "plan_hash": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "question_keys": {
+      "description": "JCS text; JSON array",
+      "type": "string"
+    },
+    "reason": {
+      "enum": [
+        "not_required",
+        "dedup_same_content",
+        "budget_context",
+        "budget_exceeds",
+        "limits_unknown",
+        "outside_scope",
+        "unretrievable",
+        "template_filtered",
+        "retrieval_gap",
+        "deterministic_skip"
+      ],
+      "type": "string"
+    },
+    "recoverable": {
+      "enum": [
+        0,
+        1
+      ],
+      "type": "integer"
+    },
+    "required_for_issue": {
+      "enum": [
+        0,
+        1
+      ],
+      "type": "integer"
+    },
+    "row_version": {
+      "const": 0,
+      "type": "integer"
+    },
+    "shard_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "shard_plan_id": {
+      "type": "string"
+    },
+    "source_blob_refs": {
+      "description": "JCS text; JSON array",
+      "type": "string"
+    },
+    "task_id": {
+      "type": "string"
+    },
+    "unit_keys": {
+      "description": "JCS text; JSON array",
+      "type": "string"
+    },
+    "watermark": {
+      "minimum": 0,
+      "type": "integer"
+    }
+  },
+  "required": [
+    "omission_id",
+    "omission_key",
+    "shard_plan_id",
+    "plan_hash",
+    "question_keys",
+    "unit_keys",
+    "impact",
+    "reason",
+    "required_for_issue",
+    "recoverable",
+    "content_hash",
+    "content_ref",
+    "content_bytes",
+    "source_blob_refs",
+    "row_version",
+    "created_at",
+    "task_id",
+    "branch_id",
+    "input_epoch",
+    "goal_version",
+    "config_version",
+    "watermark"
+  ],
+  "title": "EvdOmissionRow",
+  "type": "object"
+}

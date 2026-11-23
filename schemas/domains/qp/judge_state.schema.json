@@ -1,0 +1,688 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:judge_state:2",
+  "title": "JudgeState",
+  "description": "QP local JudgeState /2 content template (DD-QP-23, DD-QP-24). v1 is read-only and never projected or sent.",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/ProgressIssueJudgeState"
+    },
+    {
+      "$ref": "#/$defs/ExperienceReviewJudgeState"
+    }
+  ],
+  "$defs": {
+    "Hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "SourceRef": {
+      "type": "string",
+      "pattern": "^(journal://ev:[0-9A-HJKMNP-TV-Z]{26}|blob://sha256:[0-9a-f]{64})#bytes=(0|[1-9][0-9]*)-(0|[1-9][0-9]*)$"
+    },
+    "VersionBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "task_id",
+        "branch_id",
+        "input_epoch",
+        "goal_version",
+        "config_version",
+        "watermark"
+      ],
+      "properties": {
+        "task_id": {
+          "type": "string"
+        },
+        "branch_id": {
+          "type": "string"
+        },
+        "input_epoch": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "goal_version": {
+          "type": "string"
+        },
+        "config_version": {
+          "type": "string"
+        },
+        "watermark": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "JudgeQuestionScope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "issue_key",
+        "issue_type",
+        "scope_kind",
+        "requirement_ids",
+        "artifact_paths",
+        "whole_task_verdict_requested"
+      ],
+      "properties": {
+        "issue_key": {
+          "$ref": "#/$defs/Hash"
+        },
+        "issue_type": {
+          "enum": [
+            "constraint_violation",
+            "missing_requirement",
+            "wrong_target",
+            "missing_verification",
+            "goal_change",
+            "insufficient_evidence",
+            "stall_or_regression_candidate",
+            "experience_applicability"
+          ]
+        },
+        "scope_kind": {
+          "enum": [
+            "issue",
+            "experience_review"
+          ]
+        },
+        "requirement_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "artifact_paths": {
+          "type": "array",
+          "maxItems": 64,
+          "items": {
+            "type": "string"
+          }
+        },
+        "whole_task_verdict_requested": {
+          "type": "boolean"
+        }
+      }
+    },
+    "JudgeCoverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "checked_requirement_ids",
+        "searched_sources",
+        "counterevidence_evidence_ids",
+        "counterevidence_search_complete_for",
+        "omitted",
+        "missing",
+        "whole_task_coverage_complete"
+      ],
+      "properties": {
+        "checked_requirement_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "searched_sources": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "counterevidence_evidence_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "counterevidence_search_complete_for": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "omitted": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "logical_id",
+              "reason",
+              "affects_question_keys"
+            ],
+            "properties": {
+              "logical_id": {
+                "type": "string"
+              },
+              "reason": {
+                "enum": [
+                  "budget",
+                  "not_available",
+                  "not_relevant",
+                  "capture_gap"
+                ]
+              },
+              "affects_question_keys": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/Hash"
+                }
+              }
+            }
+          }
+        },
+        "missing": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "code",
+              "requirement_id",
+              "logical_id",
+              "affects_question_keys"
+            ],
+            "properties": {
+              "code": {
+                "enum": [
+                  "source_unretrievable",
+                  "interface_contract_missing",
+                  "artifact_version_unknown",
+                  "verifier_absent",
+                  "counterevidence_not_searched",
+                  "capture_gap",
+                  "template_role_unresolved",
+                  "authorization_not_local",
+                  "conflicting_sources"
+                ]
+              },
+              "requirement_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "logical_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "affects_question_keys": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/Hash"
+                }
+              }
+            }
+          }
+        },
+        "whole_task_coverage_complete": {
+          "type": "boolean"
+        }
+      }
+    },
+    "JudgeEvidence": {
+      "type": "object",
+      "description": "Closed JudgeEvidence union; kind selects the leaf (DD-QP-24).",
+      "additionalProperties": true,
+      "required": [
+        "display_id",
+        "logical_id",
+        "role",
+        "excerpt",
+        "requirement_ids",
+        "kind"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "code",
+            "interface_contract",
+            "test",
+            "call",
+            "result",
+            "diff",
+            "message",
+            "feedback",
+            "unverified_constraint"
+          ]
+        }
+      }
+    },
+    "JudgeRequirement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "display_id",
+        "logical_id",
+        "quote",
+        "valid_from_event",
+        "goal_version",
+        "acceptance"
+      ],
+      "properties": {
+        "display_id": {
+          "type": "string",
+          "pattern": "^R[1-9][0-9]*$"
+        },
+        "logical_id": {
+          "type": "string",
+          "pattern": "^requirement:"
+        },
+        "quote": {
+          "type": "string"
+        },
+        "valid_from_event": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "goal_version": {
+          "type": "string"
+        },
+        "scope": {
+          "type": "object"
+        },
+        "acceptance": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "criterion"
+          ],
+          "properties": {
+            "kind": {
+              "enum": [
+                "human_acceptance",
+                "test",
+                "artifact",
+                "constraint"
+              ]
+            },
+            "criterion": {
+              "type": "string"
+            },
+            "acceptance_ref_id": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "JudgeLatestInput": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "display_id",
+        "logical_id",
+        "quote",
+        "origin",
+        "goal_changed"
+      ],
+      "properties": {
+        "display_id": {
+          "const": "U1"
+        },
+        "logical_id": {
+          "type": "string"
+        },
+        "quote": {
+          "type": "string"
+        },
+        "origin": {
+          "enum": [
+            "human",
+            "agent",
+            "tool",
+            "evaluator",
+            "system",
+            "unknown"
+          ]
+        },
+        "directive_strength": {
+          "enum": [
+            "explicit",
+            "ambiguous"
+          ]
+        },
+        "requirement_operation": {
+          "enum": [
+            "add",
+            "clarify",
+            "supersede",
+            "retract",
+            "confirm"
+          ]
+        },
+        "requirement_op_status": {
+          "enum": [
+            "applied",
+            "proposed",
+            "conflict"
+          ]
+        },
+        "goal_changed": {
+          "type": "boolean"
+        }
+      }
+    },
+    "JudgeComparison": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "comparison_view_key",
+        "before_watermark",
+        "after_watermark",
+        "goal_version",
+        "before_evidence_ids",
+        "after_evidence_ids",
+        "new_information",
+        "pending_calls",
+        "excluded_hypothesis_ids"
+      ],
+      "properties": {
+        "comparison_view_key": {
+          "type": "string"
+        },
+        "before_watermark": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "after_watermark": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "goal_version": {
+          "type": "string"
+        },
+        "before_evidence_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "after_evidence_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "new_information": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "pending_calls": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "excluded_hypothesis_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "JudgeTaskCondition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "display_id",
+        "logical_id",
+        "condition_id",
+        "value",
+        "quote",
+        "origin"
+      ],
+      "properties": {
+        "display_id": {
+          "type": "string",
+          "pattern": "^C[1-9][0-9]*$"
+        },
+        "logical_id": {
+          "type": "string"
+        },
+        "condition_id": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        },
+        "quote": {
+          "type": "string"
+        },
+        "origin": {
+          "enum": [
+            "human",
+            "fact",
+            "config",
+            "review"
+          ]
+        }
+      }
+    },
+    "JudgeExperienceCandidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "display_id",
+        "logical_id",
+        "experience_id",
+        "version",
+        "content_hash",
+        "type",
+        "title",
+        "summary",
+        "trigger",
+        "scope",
+        "preconditions",
+        "steps",
+        "expected_effects",
+        "completion_check",
+        "counterexamples",
+        "risk",
+        "excerpt",
+        "shortlist"
+      ],
+      "properties": {
+        "display_id": {
+          "type": "string",
+          "pattern": "^X[1-9][0-9]*$"
+        },
+        "logical_id": {
+          "type": "string"
+        },
+        "experience_id": {
+          "type": "string"
+        },
+        "version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "content_hash": {
+          "$ref": "#/$defs/Hash"
+        },
+        "type": {
+          "enum": [
+            "recovery_procedure",
+            "tool_workflow",
+            "project_constraint",
+            "user_preference",
+            "validation_check"
+          ]
+        },
+        "title": {
+          "type": "string"
+        },
+        "summary": {
+          "type": "string"
+        },
+        "trigger": {
+          "type": "object"
+        },
+        "scope": {
+          "type": "object"
+        },
+        "preconditions": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "steps": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "expected_effects": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "completion_check": {
+          "type": "object"
+        },
+        "counterexamples": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "risk": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "excerpt": {
+          "type": "string"
+        },
+        "shortlist": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    "ProgressIssueJudgeState": {
+      "type": "object",
+      "required": [
+        "schema_version",
+        "binding",
+        "question_scope",
+        "coverage",
+        "profile",
+        "requirements",
+        "evidence"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "rsi.judge_state/2"
+        },
+        "binding": {
+          "$ref": "#/$defs/VersionBinding"
+        },
+        "question_scope": {
+          "$ref": "#/$defs/JudgeQuestionScope"
+        },
+        "coverage": {
+          "$ref": "#/$defs/JudgeCoverage"
+        },
+        "requirements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/JudgeRequirement"
+          }
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/JudgeEvidence"
+          }
+        },
+        "profile": {
+          "const": "progress_issue"
+        },
+        "latest_input": {
+          "$ref": "#/$defs/JudgeLatestInput"
+        },
+        "comparison": {
+          "$ref": "#/$defs/JudgeComparison"
+        },
+        "deadline_ms": {
+          "type": "number",
+          "description": "Runtime deadline; volatile, rejected by the semantic validator."
+        }
+      }
+    },
+    "ExperienceReviewJudgeState": {
+      "type": "object",
+      "required": [
+        "schema_version",
+        "binding",
+        "question_scope",
+        "coverage",
+        "profile",
+        "requirements",
+        "task_conditions",
+        "experience_candidates",
+        "evidence"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "rsi.judge_state/2"
+        },
+        "binding": {
+          "$ref": "#/$defs/VersionBinding"
+        },
+        "question_scope": {
+          "$ref": "#/$defs/JudgeQuestionScope"
+        },
+        "coverage": {
+          "$ref": "#/$defs/JudgeCoverage"
+        },
+        "requirements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/JudgeRequirement"
+          }
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/JudgeEvidence"
+          }
+        },
+        "profile": {
+          "const": "experience_review"
+        },
+        "task_conditions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/JudgeTaskCondition"
+          }
+        },
+        "experience_candidates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/JudgeExperienceCandidate"
+          }
+        },
+        "deadline_ms": {
+          "type": "number",
+          "description": "Runtime deadline; volatile, rejected by the semantic validator."
+        }
+      }
+    }
+  }
+}

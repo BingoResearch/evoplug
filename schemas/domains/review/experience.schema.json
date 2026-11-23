@@ -1,0 +1,138 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:experiences:1",
+  "title": "ExperienceJournalRow",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "experience_id",
+    "version",
+    "type",
+    "title",
+    "summary",
+    "validation_plan_id",
+    "validation_plan_hash",
+    "body_ref",
+    "risk",
+    "content_hash",
+    "created_at",
+    "lineage_json",
+    "trigger_json",
+    "scope_json",
+    "preconditions_json",
+    "steps_json",
+    "expected_effects_json",
+    "completion_check_json",
+    "failure_branches_json",
+    "counterexamples_json",
+    "expiry_policy_json",
+    "evidence_refs_json"
+  ],
+  "properties": {
+    "experience_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "version": {
+      "type": "integer"
+    },
+    "type": {
+      "type": "string",
+      "minLength": 1
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 1
+    },
+    "validation_plan_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "validation_plan_hash": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "body_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "risk": {
+      "type": "string",
+      "minLength": 1
+    },
+    "content_hash": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "created_at": {
+      "type": "integer"
+    },
+    "superseded_by_version": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "lineage_json": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Canonical JSON text."
+    },
+    "trigger_json": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Canonical JSON text."
+    },
+    "scope_json": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Canonical JSON text."
+    },
+    "preconditions_json": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Canonical JSON text."
+    },
+    "steps_json": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Canonical JSON text."
+    },
+    "expected_effects_json": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Canonical JSON text."
+    },
+    "completion_check_json": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Canonical JSON text."
+    },
+    "failure_branches_json": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Canonical JSON text."
+    },
+    "counterexamples_json": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Canonical JSON text."
+    },
+    "expiry_policy_json": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Canonical JSON text."
+    },
+    "evidence_refs_json": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Canonical JSON text."
+    }
+  }
+}

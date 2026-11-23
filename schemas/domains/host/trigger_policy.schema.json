@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:host_trigger_policy:1",
+  "title": "TriggerPolicy",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "policy_id", "policy_version", "policy_hash", "lifecycle", "scope", "online", "progress", "review", "origin", "capabilities", "budget", "created_at", "updated_at"],
+  "properties": {
+    "schema_version": { "const": "rsi.trigger_policy/1" },
+    "policy_id": { "type": "string", "pattern": "^pol:" },
+    "policy_version": { "type": "string", "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$" },
+    "policy_hash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "lifecycle": { "enum": ["active", "superseded"] },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scope_kind"],
+      "properties": {
+        "scope_kind": { "enum": ["global", "host", "host_mode", "project", "project_host", "project_host_mode"] },
+        "host_id": { "enum": ["pi", "oh-my-pi", "step-code", "codex", "opencode", "openhands-sdk", "claude-code"] },
+        "mode": { "enum": ["interactive", "print", "rpc", "acp", "sdk", "sdk_stdio", "exec", "app-server", "server", "local_conversation", "remote_conversation"] },
+        "config_space": { "type": "string", "pattern": "^[a-z][a-z0-9_]{0,63}$" },
+        "project_id": { "type": "string", "minLength": 1 }
+      }
+    },
+    "online": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["enabled", "on_input", "on_tool_event", "on_compaction", "remote_semantics", "min_interval_ms", "max_remote_checks_per_input", "max_remote_checks_per_minute", "semantic_merge_window_ms", "local_fact_priority", "delivery_min_inclusion"],
+      "properties": {
+        "enabled": { "const": true },
+        "on_input": { "const": true },
+        "on_tool_event": { "const": "update_only" },
+        "on_compaction": { "const": "refresh_refs" },
+        "remote_semantics": { "const": "shadow" },
+        "min_interval_ms": { "type": "integer", "minimum": 0, "maximum": 60000 },
+        "max_remote_checks_per_input": { "type": "integer", "minimum": 0 },
+        "max_remote_checks_per_minute": { "type": "integer", "minimum": 0 },
+        "semantic_merge_window_ms": { "type": "integer", "minimum": 0 },
+        "local_fact_priority": { "const": "always_sync" },
+        "delivery_min_inclusion": { "enum": ["none", "constructive", "context_projection", "provider_payload", "transport_body", "unknown"] }
+      }
+    },
+    "progress": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["enabled", "on_input_boundary", "on_stable_boundary", "min_checks", "min_span_ms", "window_ms", "max_checks_per_window", "excluded_task_states", "stall_opens_issue", "step_effect_mode", "semantic_compare"],
+      "properties": {
+        "enabled": { "const": true },
+        "on_input_boundary": { "const": true },
+        "on_stable_boundary": { "const": true },
+        "min_checks": { "const": 2 },
+        "min_span_ms": { "type": "integer", "minimum": 1000, "maximum": 3600000 },
+        "window_ms": { "type": "integer", "minimum": 1000, "maximum": 3600000 },
+        "max_checks_per_window": { "type": "integer", "minimum": 0 },
+        "excluded_task_states": {
+          "type": "array",
+          "items": { "enum": ["advancing", "information_gain", "stalled_candidate", "regressing", "baseline", "waiting", "blocked", "paused", "cancelled", "collection_gap", "unknown"] }
+        },
+        "stall_opens_issue": { "type": "boolean" },
+        "step_effect_mode": { "const": "shadow" },
+        "semantic_compare": { "enum": ["disabled", "shadow"] }
+      }
+    },
+    "review": { "type": "object" },
+    "origin": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["evaluator_suppression", "descendant_suppression", "unknown_origin_auto_review", "unknown_origin_online_checks", "unknown_origin_explicit_review", "registry_ttl_ms"],
+      "properties": {
+        "evaluator_suppression": { "const": true },
+        "descendant_suppression": { "const": true },
+        "unknown_origin_auto_review": { "const": "suppress" },
+        "unknown_origin_online_checks": { "const": "local_only" },
+        "unknown_origin_explicit_review": { "const": "grant_required" },
+        "registry_ttl_ms": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "capabilities": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["profile_version", "subject", "allow_unverified_auto_review", "allow_unverified_online_semantics", "require_probe_freshness_ms"],
+      "properties": {
+        "profile_version": { "const": "cap-gate/1" },
+        "subject": { "const": "product_adapter" },
+        "allow_unverified_auto_review": { "const": false },
+        "allow_unverified_online_semantics": { "const": false },
+        "require_probe_freshness_ms": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "budget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["budget_policy_ref", "require_budget_for_paid_request", "require_budget_for_generation"],
+      "properties": {
+        "budget_policy_ref": { "type": "string", "minLength": 1 },
+        "require_budget_for_paid_request": { "const": true },
+        "require_budget_for_generation": { "const": true }
+      }
+    },
+    "created_at": { "type": "integer", "minimum": 0 },
+    "updated_at": { "type": "integer", "minimum": 0 }
+  }
+}

@@ -1,0 +1,163 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:id-prefix-registry:1",
+  "title": "IdPrefixRegistry",
+  "description": "Single machine source for registered ULID prefixes (DD-FND-030). Generates packages/core/src/generated/ids.ts and schemas/generated/id-prefix-registry.json.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "prefixes",
+    "content_key_prefixes"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "rsi.id_prefix_registry/1"
+    },
+    "prefixes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/prefix_entry"
+      }
+    },
+    "content_key_prefixes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/content_key_prefix_entry"
+      }
+    },
+    "hash_id_prefixes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/hash_prefix_entry"
+      }
+    }
+  },
+  "$defs": {
+    "prefix_entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "prefix",
+        "owner",
+        "object",
+        "format",
+        "since",
+        "state"
+      ],
+      "properties": {
+        "prefix": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9]{0,15}$"
+        },
+        "owner": {
+          "enum": [
+            "fnd",
+            "qp",
+            "evd",
+            "rev",
+            "host",
+            "cfg"
+          ]
+        },
+        "object": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_.-]{0,127}$"
+        },
+        "format": {
+          "const": "ulid"
+        },
+        "since": {
+          "type": "string",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+        },
+        "state": {
+          "enum": [
+            "active",
+            "reserved"
+          ]
+        }
+      }
+    },
+    "content_key_prefix_entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "prefix",
+        "owner",
+        "object",
+        "format",
+        "since",
+        "state"
+      ],
+      "properties": {
+        "prefix": {
+          "const": "propo"
+        },
+        "owner": {
+          "const": "qp"
+        },
+        "object": {
+          "const": "proposition"
+        },
+        "format": {
+          "const": "sha256"
+        },
+        "since": {
+          "type": "string",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+        },
+        "state": {
+          "const": "active"
+        }
+      }
+    },
+    "hash_prefix_entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "prefix",
+        "owner",
+        "object",
+        "format",
+        "since",
+        "state"
+      ],
+      "properties": {
+        "prefix": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9]{0,15}$"
+        },
+        "owner": {
+          "enum": [
+            "fnd",
+            "qp",
+            "evd",
+            "rev",
+            "host",
+            "cfg"
+          ]
+        },
+        "object": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_.-]{0,127}$"
+        },
+        "format": {
+          "const": "sha256"
+        },
+        "since": {
+          "type": "string",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+        },
+        "state": {
+          "enum": [
+            "active",
+            "reserved"
+          ]
+        }
+      }
+    }
+  }
+}

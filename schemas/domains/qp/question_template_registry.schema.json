@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:question_template_registry:1",
+  "title": "QuestionTemplateRegistry",
+  "description": "Immutable registry snapshot (DD-QP-12).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "registry_version",
+    "templates",
+    "registry_hash"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "rsi.question_template_registry/1"
+    },
+    "registry_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "templates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "template_id",
+          "template_version",
+          "template_hash",
+          "status"
+        ],
+        "properties": {
+          "template_id": {
+            "type": "string"
+          },
+          "template_version": {
+            "type": "string"
+          },
+          "template_hash": {
+            "$ref": "#/$defs/Hash"
+          },
+          "status": {
+            "enum": [
+              "active",
+              "deprecated"
+            ]
+          }
+        }
+      }
+    },
+    "registry_hash": {
+      "$ref": "#/$defs/Hash"
+    }
+  },
+  "$defs": {
+    "Hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    }
+  }
+}

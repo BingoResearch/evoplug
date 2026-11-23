@@ -1,0 +1,350 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:decision_record:1",
+  "title": "DecisionRecord",
+  "description": "Accepted decision with canonical hash (DD-FND-072). outcome is the call result axis, not proof of an external effect.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "decision_id", "binding", "policy_version", "issue_id", "action", "action_kind", "outcome", "reason_code", "dedupe_key", "evidence_hash", "pack_hash", "request_hash", "delivery_id", "job_id", "write_id", "aggregate_id", "inputs", "diagnostics", "decided_at", "decision_hash"],
+  "properties": {
+    "schema_version": { "const": "rsi.decision/1" },
+    "decision_id": { "type": "string", "pattern": "^dec:[0-9A-HJKMNP-TV-Z]{26}$" },
+    "binding": { "$ref": "#/$defs/VersionBinding" },
+    "policy_version": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "issue_id": { "type": ["string", "null"], "pattern": "^issue:[0-9A-HJKMNP-TV-Z]{26}$" },
+    "action": { "$ref": "#/$defs/DecisionAction" },
+    "action_kind": { "$ref": "#/$defs/DecisionActionKind" },
+    "outcome": { "enum": ["ok", "no_op", "degraded", "rejected", "conflict", "pending", "unknown"] },
+    "reason_code": { "$ref": "#/$defs/DecisionReasonCode" },
+    "dedupe_key": { "type": ["string", "null"], "maxLength": 256 },
+    "evidence_hash": { "type": ["string", "null"], "pattern": "^sha256:[0-9a-f]{64}$" },
+    "pack_hash": { "type": ["string", "null"], "pattern": "^sha256:[0-9a-f]{64}$" },
+    "request_hash": { "type": ["string", "null"], "pattern": "^sha256:[0-9a-f]{64}$" },
+    "delivery_id": { "type": ["string", "null"], "pattern": "^del:[0-9A-HJKMNP-TV-Z]{26}$" },
+    "job_id": { "type": ["string", "null"], "pattern": "^job:[0-9A-HJKMNP-TV-Z]{26}$" },
+    "write_id": { "type": ["string", "null"], "pattern": "^wi:[0-9A-HJKMNP-TV-Z]{26}$" },
+    "aggregate_id": { "type": ["string", "null"], "pattern": "^agg:[0-9A-HJKMNP-TV-Z]{26}$" },
+    "inputs": { "$ref": "#/$defs/DecisionInputs" },
+    "diagnostics": { "$ref": "#/$defs/DecisionDiagnostics" },
+    "decided_at": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+    "decision_hash": { "$ref": "#/$defs/Hash" }
+  },
+  "$defs": {
+    "Hash": { "title": "Hash", "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "SourceRef": {
+      "title": "SourceRef",
+      "oneOf": [
+        { "type": "string", "pattern": "^journal://ev:[0-9A-HJKMNP-TV-Z]{26}#bytes=(0|[1-9][0-9]*)-(0|[1-9][0-9]*)$" },
+        { "type": "string", "pattern": "^blob://sha256:[0-9a-f]{64}#bytes=(0|[1-9][0-9]*)-(0|[1-9][0-9]*)$" }
+      ]
+    },
+    "VersionBinding": {
+      "title": "VersionBinding",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["task_id", "branch_id", "input_epoch", "goal_version", "config_version", "watermark"],
+      "properties": {
+        "task_id": { "type": "string", "pattern": "^task:[0-9A-HJKMNP-TV-Z]{26}$" },
+        "branch_id": { "type": "string", "pattern": "^br:[0-9A-HJKMNP-TV-Z]{26}$" },
+        "input_epoch": { "type": "integer", "minimum": 1 },
+        "goal_version": { "type": "string" },
+        "config_version": { "type": "string" },
+        "watermark": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "DecisionActionKind": {
+      "title": "DecisionActionKind",
+      "enum": ["no_op", "dedupe_hit", "fact_reminder", "semantic_reminder", "shadow_recorded", "needs_evidence", "abstain", "review_enqueued", "write_pending", "write_authorized", "late_history", "sync_requirement", "budget_blocked", "delivery_expired", "identity_fork", "identity_resume"]
+    },
+    "DecisionReasonCode": {
+      "title": "DecisionReasonCode",
+      "enum": ["none", "duplicate", "already_delivered", "hard_fact", "semantic_candidate", "shadow_only", "missing_evidence", "ambiguous", "explicit_request", "authorized_write", "late_evidence", "goal_changed", "budget_unknown", "budget_limited", "rate_limited", "delivery_expired", "capability_unknown", "policy_block"]
+    },
+    "DecisionTarget": {
+      "title": "DecisionTarget",
+      "oneOf": [
+        { "$ref": "#/$defs/RequirementTarget" },
+        { "$ref": "#/$defs/FactTarget" },
+        { "$ref": "#/$defs/IssueTarget" },
+        { "$ref": "#/$defs/DeliveryTarget" },
+        { "$ref": "#/$defs/ReviewJobTarget" },
+        { "$ref": "#/$defs/WriteTarget" },
+        { "$ref": "#/$defs/PackTarget" },
+        { "$ref": "#/$defs/SourceTarget" }
+      ]
+    },
+    "RequirementTarget": {
+      "title": "RequirementTarget",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "id"],
+      "properties": { "kind": { "const": "requirement" }, "id": { "type": "string", "pattern": "^req:[0-9A-HJKMNP-TV-Z]{26}$" } }
+    },
+    "FactTarget": {
+      "title": "FactTarget",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "id"],
+      "properties": { "kind": { "const": "fact" }, "id": { "type": "string", "pattern": "^fact:[0-9A-HJKMNP-TV-Z]{26}$" } }
+    },
+    "IssueTarget": {
+      "title": "IssueTarget",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "id"],
+      "properties": { "kind": { "const": "issue" }, "id": { "type": "string", "pattern": "^issue:[0-9A-HJKMNP-TV-Z]{26}$" } }
+    },
+    "DeliveryTarget": {
+      "title": "DeliveryTarget",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "id"],
+      "properties": { "kind": { "const": "delivery" }, "id": { "type": "string", "pattern": "^del:[0-9A-HJKMNP-TV-Z]{26}$" } }
+    },
+    "ReviewJobTarget": {
+      "title": "ReviewJobTarget",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "id"],
+      "properties": { "kind": { "const": "review_job" }, "id": { "type": "string", "pattern": "^job:[0-9A-HJKMNP-TV-Z]{26}$" } }
+    },
+    "WriteTarget": {
+      "title": "WriteTarget",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "id"],
+      "properties": { "kind": { "const": "write" }, "id": { "type": "string", "pattern": "^wi:[0-9A-HJKMNP-TV-Z]{26}$" } }
+    },
+    "PackTarget": {
+      "title": "PackTarget",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "hash"],
+      "properties": { "kind": { "const": "pack" }, "hash": { "$ref": "#/$defs/Hash" } }
+    },
+    "SourceTarget": {
+      "title": "SourceTarget",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "ref"],
+      "properties": { "kind": { "const": "source" }, "ref": { "$ref": "#/$defs/SourceRef" } }
+    },
+    "DecisionAction": {
+      "title": "DecisionAction",
+      "oneOf": [
+        { "$ref": "#/$defs/NoOpAction" },
+        { "$ref": "#/$defs/DedupeHitAction" },
+        { "$ref": "#/$defs/FactReminderAction" },
+        { "$ref": "#/$defs/SemanticReminderAction" },
+        { "$ref": "#/$defs/ShadowRecordedAction" },
+        { "$ref": "#/$defs/NeedsEvidenceAction" },
+        { "$ref": "#/$defs/AbstainAction" },
+        { "$ref": "#/$defs/ReviewEnqueuedAction" },
+        { "$ref": "#/$defs/WritePendingAction" },
+        { "$ref": "#/$defs/WriteAuthorizedAction" },
+        { "$ref": "#/$defs/LateHistoryAction" },
+        { "$ref": "#/$defs/SyncRequirementAction" },
+        { "$ref": "#/$defs/BudgetBlockedAction" },
+        { "$ref": "#/$defs/DeliveryExpiredAction" },
+        { "$ref": "#/$defs/IdentityForkAction" },
+        { "$ref": "#/$defs/IdentityResumeAction" }
+      ]
+    },
+    "DecisionTargetList": {
+      "title": "DecisionTargetList",
+      "type": "array",
+      "items": { "$ref": "#/$defs/DecisionTarget" },
+      "uniqueItems": true
+    },
+    "NoOpAction": {
+      "title": "NoOpAction",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "targets", "noop_reason"],
+      "properties": { "kind": { "const": "no_op" }, "targets": { "$ref": "#/$defs/DecisionTargetList" }, "noop_reason": { "enum": ["nothing_to_do", "below_threshold", "same_goal"] } }
+    },
+    "DedupeHitAction": {
+      "title": "DedupeHitAction",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "targets", "prior_decision_id"],
+      "properties": { "kind": { "const": "dedupe_hit" }, "targets": { "$ref": "#/$defs/DecisionTargetList" }, "prior_decision_id": { "type": "string", "pattern": "^dec:[0-9A-HJKMNP-TV-Z]{26}$" } }
+    },
+    "FactReminderAction": {
+      "title": "FactReminderAction",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "targets", "requirement_ids", "fact_ids"],
+      "properties": {
+        "kind": { "const": "fact_reminder" },
+        "targets": { "$ref": "#/$defs/DecisionTargetList" },
+        "requirement_ids": { "type": "array", "items": { "type": "string", "pattern": "^req:[0-9A-HJKMNP-TV-Z]{26}$" } },
+        "fact_ids": { "type": "array", "items": { "type": "string", "pattern": "^fact:[0-9A-HJKMNP-TV-Z]{26}$" } }
+      }
+    },
+    "SemanticReminderAction": {
+      "title": "SemanticReminderAction",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "targets", "question_plan_id", "pack_hash"],
+      "properties": {
+        "kind": { "const": "semantic_reminder" },
+        "targets": { "$ref": "#/$defs/DecisionTargetList" },
+        "question_plan_id": { "type": "string", "pattern": "^plan:[0-9A-HJKMNP-TV-Z]{26}$" },
+        "pack_hash": { "$ref": "#/$defs/Hash" }
+      }
+    },
+    "ShadowRecordedAction": {
+      "title": "ShadowRecordedAction",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "targets", "would_be", "shadow_reason"],
+      "properties": { "kind": { "const": "shadow_recorded" }, "targets": { "$ref": "#/$defs/DecisionTargetList" }, "would_be": { "$ref": "#/$defs/DecisionActionKind" }, "shadow_reason": { "enum": ["remote_shadow", "step_effect_shadow"] } }
+    },
+    "NeedsEvidenceAction": {
+      "title": "NeedsEvidenceAction",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "targets", "missing"],
+      "properties": { "kind": { "const": "needs_evidence" }, "targets": { "$ref": "#/$defs/DecisionTargetList" }, "missing": { "type": "array", "items": { "enum": ["fact", "test", "source", "human_acceptance"] } } }
+    },
+    "AbstainAction": {
+      "title": "AbstainAction",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "targets", "cause"],
+      "properties": { "kind": { "const": "abstain" }, "targets": { "$ref": "#/$defs/DecisionTargetList" }, "cause": { "enum": ["contradiction", "answer_conflict", "semantic_unknown"] } }
+    },
+    "ReviewEnqueuedAction": {
+      "title": "ReviewEnqueuedAction",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "targets", "issue_ids"],
+      "properties": {
+        "kind": { "const": "review_enqueued" },
+        "targets": { "$ref": "#/$defs/DecisionTargetList" },
+        "issue_ids": { "type": "array", "items": { "type": "string", "pattern": "^issue:[0-9A-HJKMNP-TV-Z]{26}$" } },
+        "job_id": { "type": "string", "pattern": "^job:[0-9A-HJKMNP-TV-Z]{26}$" }
+      }
+    },
+    "WritePendingAction": {
+      "title": "WritePendingAction",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "targets", "write_id"],
+      "properties": {
+        "kind": { "const": "write_pending" },
+        "targets": { "$ref": "#/$defs/DecisionTargetList" },
+        "write_id": { "type": "string", "pattern": "^wi:[0-9A-HJKMNP-TV-Z]{26}$" },
+        "grant_id": { "type": "string", "pattern": "^grant:[0-9A-HJKMNP-TV-Z]{26}$" }
+      }
+    },
+    "WriteAuthorizedAction": {
+      "title": "WriteAuthorizedAction",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "targets", "write_id", "grant_id"],
+      "properties": {
+        "kind": { "const": "write_authorized" },
+        "targets": { "$ref": "#/$defs/DecisionTargetList" },
+        "write_id": { "type": "string", "pattern": "^wi:[0-9A-HJKMNP-TV-Z]{26}$" },
+        "grant_id": { "type": "string", "pattern": "^grant:[0-9A-HJKMNP-TV-Z]{26}$" }
+      }
+    },
+    "LateHistoryAction": {
+      "title": "LateHistoryAction",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "targets", "delivery_id", "late_axis"],
+      "properties": { "kind": { "const": "late_history" }, "targets": { "$ref": "#/$defs/DecisionTargetList" }, "delivery_id": { "type": "string", "pattern": "^del:[0-9A-HJKMNP-TV-Z]{26}$" }, "late_axis": { "enum": ["inclusion", "adoption"] } }
+    },
+    "SyncRequirementAction": {
+      "title": "SyncRequirementAction",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "targets", "requirement_ids"],
+      "properties": {
+        "kind": { "const": "sync_requirement" },
+        "targets": { "$ref": "#/$defs/DecisionTargetList" },
+        "requirement_ids": { "type": "array", "items": { "type": "string", "pattern": "^req:[0-9A-HJKMNP-TV-Z]{26}$" } }
+      }
+    },
+    "BudgetBlockedAction": {
+      "title": "BudgetBlockedAction",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "targets", "scope_key", "limit_kind"],
+      "properties": {
+        "kind": { "const": "budget_blocked" },
+        "targets": { "$ref": "#/$defs/DecisionTargetList" },
+        "scope_key": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "limit_kind": { "enum": ["attempt", "token", "cost", "rate"] }
+      }
+    },
+    "DeliveryExpiredAction": {
+      "title": "DeliveryExpiredAction",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "targets", "expired_delivery_ids"],
+      "properties": {
+        "kind": { "const": "delivery_expired" },
+        "targets": { "$ref": "#/$defs/DecisionTargetList" },
+        "expired_delivery_ids": { "type": "array", "items": { "type": "string", "pattern": "^del:[0-9A-HJKMNP-TV-Z]{26}$" } }
+      }
+    },
+    "IdentityForkAction": {
+      "title": "IdentityForkAction",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "targets", "source_branch_id", "new_branch_id", "at_watermark"],
+      "properties": {
+        "kind": { "const": "identity_fork" },
+        "targets": { "$ref": "#/$defs/DecisionTargetList" },
+        "source_branch_id": { "type": "string", "pattern": "^br:[0-9A-HJKMNP-TV-Z]{26}$" },
+        "new_branch_id": { "type": "string", "pattern": "^br:[0-9A-HJKMNP-TV-Z]{26}$" },
+        "at_watermark": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "IdentityResumeAction": {
+      "title": "IdentityResumeAction",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "targets", "session_id", "observed_watermark"],
+      "properties": {
+        "kind": { "const": "identity_resume" },
+        "targets": { "$ref": "#/$defs/DecisionTargetList" },
+        "session_id": { "type": "string", "pattern": "^sess:[0-9A-HJKMNP-TV-Z]{26}$" },
+        "observed_watermark": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "DecisionInputs": {
+      "title": "DecisionInputs",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["requirement_snapshot_hash", "fact_snapshot_hash", "feedback_snapshot_hash", "constraint_snapshot_hash", "outcome_current_hash", "budget_state_hash", "capability_snapshot_hash", "issue_snapshot_hash", "evidence_refs"],
+      "properties": {
+        "requirement_snapshot_hash": { "$ref": "#/$defs/Hash" },
+        "fact_snapshot_hash": { "$ref": "#/$defs/Hash" },
+        "feedback_snapshot_hash": { "$ref": "#/$defs/Hash" },
+        "constraint_snapshot_hash": { "$ref": "#/$defs/Hash" },
+        "outcome_current_hash": { "$ref": "#/$defs/Hash" },
+        "budget_state_hash": { "$ref": "#/$defs/Hash" },
+        "capability_snapshot_hash": { "$ref": "#/$defs/Hash" },
+        "issue_snapshot_hash": { "type": ["string", "null"], "pattern": "^sha256:[0-9a-f]{64}$" },
+        "evidence_refs": { "type": "array", "items": { "$ref": "#/$defs/SourceRef" } }
+      }
+    },
+    "DecisionDiagnostics": {
+      "title": "DecisionDiagnostics",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["rule_ids", "classifier_version", "degraded_reasons", "elapsed_ms"],
+      "properties": {
+        "rule_ids": { "type": "array", "items": { "type": "string", "minLength": 1, "maxLength": 128 } },
+        "classifier_version": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "degraded_reasons": { "type": "array", "items": { "enum": ["limits_unknown", "budget_unsettled", "semantic_unavailable", "late_history", "capability_unknown"] } },
+        "elapsed_ms": { "type": "number", "minimum": 0 }
+      }
+    }
+  }
+}

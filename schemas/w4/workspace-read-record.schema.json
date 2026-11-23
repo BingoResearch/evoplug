@@ -1,0 +1,171 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:workspace_read_record:1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "read_id",
+    "task_id",
+    "branch_id",
+    "input_epoch",
+    "goal_version",
+    "config_version",
+    "watermark",
+    "supplement_id",
+    "action",
+    "root_id",
+    "path_rel",
+    "path_hash",
+    "content_hash",
+    "byte_length",
+    "range_start",
+    "range_end",
+    "binary",
+    "status",
+    "reason_code",
+    "observed_at",
+    "row_version"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "rsi.workspace_read_record/1"
+    },
+    "read_id": {
+      "type": "string",
+      "pattern": "^wrd:[0-9a-f]{64}$"
+    },
+    "task_id": {
+      "type": "string"
+    },
+    "branch_id": {
+      "type": "string"
+    },
+    "input_epoch": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "goal_version": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "config_version": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "watermark": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "supplement_id": {
+      "type": "string",
+      "pattern": "^sup:[0-9a-f]{64}$"
+    },
+    "action": {
+      "enum": [
+        "list",
+        "read",
+        "stat",
+        "attachment"
+      ]
+    },
+    "root_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "path_rel": {
+      "type": "string"
+    },
+    "path_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "content_hash": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "byte_length": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 1048576
+    },
+    "range_start": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 0,
+      "maximum": 1048576
+    },
+    "range_end": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 0,
+      "maximum": 1048576
+    },
+    "binary": {
+      "enum": [
+        0,
+        1
+      ]
+    },
+    "status": {
+      "enum": [
+        "ok",
+        "denied",
+        "too_large",
+        "not_found",
+        "changed",
+        "unsupported",
+        "binary"
+      ]
+    },
+    "reason_code": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "observed_at": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "row_version": {
+      "type": "integer",
+      "minimum": 1
+    }
+  },
+  "title": "WorkspaceReadRecord",
+  "description": "Physical state row of workspace_read_record; insert-only audit row written through StateRowLiveCommitPort.commitLiveGated. Absolute root paths and file bytes are not stored.",
+  "x-evoplug-ddl": {
+    "table": "workspace_read_record",
+    "enums": {
+      "action": [
+        "list",
+        "read",
+        "stat",
+        "attachment"
+      ],
+      "binary": [
+        0,
+        1
+      ],
+      "status": [
+        "ok",
+        "denied",
+        "too_large",
+        "not_found",
+        "changed",
+        "unsupported",
+        "binary"
+      ]
+    }
+  }
+}

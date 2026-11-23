@@ -1,0 +1,175 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:ipc-response:1",
+  "title": "IpcResponse",
+  "description": "Response frame body. The `value` payload is typed by IpcResult[method]; `error` carries the canonical error envelope (DD-FND-034).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "request_id",
+    "method",
+    "result"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "rsi.ipc_response/1"
+    },
+    "request_id": {
+      "type": "string",
+      "pattern": "^ipc:[0-9A-HJKMNP-TV-Z]{26}$"
+    },
+    "method": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Echo of the request method, or the value the peer declared when the request envelope failed."
+    },
+    "result": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/success"
+        },
+        {
+          "$ref": "#/$defs/failure"
+        }
+      ]
+    }
+  },
+  "$defs": {
+    "success": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ok",
+        "status",
+        "value"
+      ],
+      "properties": {
+        "ok": {
+          "const": true
+        },
+        "status": {
+          "enum": [
+            "ok",
+            "no_op"
+          ]
+        },
+        "value": {}
+      }
+    },
+    "failure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ok",
+        "status",
+        "error"
+      ],
+      "properties": {
+        "ok": {
+          "const": false
+        },
+        "status": {
+          "enum": [
+            "degraded",
+            "rejected",
+            "conflict",
+            "pending",
+            "unknown"
+          ]
+        },
+        "error": {
+          "$ref": "#/$defs/errorEnvelope"
+        }
+      }
+    },
+    "errorEnvelope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "code",
+        "category",
+        "retryable",
+        "side_effect",
+        "message_key",
+        "details",
+        "stage",
+        "trace_id"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "rsi.error/1"
+        },
+        "code": {
+          "type": "string",
+          "pattern": "^E_[A-Z0-9_]+$"
+        },
+        "category": {
+          "enum": [
+            "usage",
+            "schema",
+            "version",
+            "not_found",
+            "policy",
+            "authorization",
+            "budget",
+            "deadline",
+            "source",
+            "conflict",
+            "storage",
+            "ipc",
+            "capacity",
+            "external",
+            "internal"
+          ]
+        },
+        "retryable": {
+          "type": "boolean"
+        },
+        "side_effect": {
+          "enum": [
+            "none",
+            "committed",
+            "partial",
+            "unknown"
+          ]
+        },
+        "message_key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "details": {
+          "type": "object",
+          "required": [
+            "kind"
+          ],
+          "properties": {
+            "kind": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "description": "Discriminated union owned by DD-FND-035; the branch payload is validated by the error registry schema.",
+          "additionalProperties": true
+        },
+        "stage": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_.-]{0,63}$"
+        },
+        "detail_ref": {
+          "type": "string",
+          "pattern": "^(journal|blob)://"
+        },
+        "retry_after_ms": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "trace_id": {
+          "type": "string",
+          "pattern": "^ipc:[0-9A-HJKMNP-TV-Z]{26}$"
+        }
+      }
+    }
+  }
+}

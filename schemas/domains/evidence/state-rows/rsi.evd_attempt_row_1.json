@@ -1,0 +1,121 @@
+{
+  "$id": "urn:evoplug:schema:evd_attempt_row:1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Physical row of evd_attempt (DD-EVD-024); values are the frozen row_json columns.",
+  "properties": {
+    "attempt_id": {
+      "type": "string"
+    },
+    "attempt_key": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "attempt_no": {
+      "minimum": 1,
+      "type": "integer"
+    },
+    "binding_id": {
+      "type": "string"
+    },
+    "body_json": {
+      "description": "JCS text; JSON object",
+      "type": "string"
+    },
+    "branch_id": {
+      "type": "string"
+    },
+    "config_version": {
+      "type": "string"
+    },
+    "created_at": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "dispatch_key": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "error_code": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "goal_version": {
+      "type": "string"
+    },
+    "http_status": {
+      "maximum": 599,
+      "minimum": 100,
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "input_epoch": {
+      "minimum": 1,
+      "type": "integer"
+    },
+    "late_result_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "request_id": {
+      "type": "string"
+    },
+    "response_envelope_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "row_version": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "state": {
+      "enum": [
+        "prepared",
+        "sending",
+        "response_received",
+        "accepted",
+        "degraded",
+        "transport_error",
+        "timeout",
+        "outcome_unknown",
+        "cancelled"
+      ],
+      "type": "string"
+    },
+    "task_id": {
+      "type": "string"
+    },
+    "watermark": {
+      "minimum": 0,
+      "type": "integer"
+    }
+  },
+  "required": [
+    "attempt_id",
+    "attempt_key",
+    "binding_id",
+    "request_id",
+    "dispatch_key",
+    "attempt_no",
+    "state",
+    "body_json",
+    "row_version",
+    "created_at",
+    "task_id",
+    "branch_id",
+    "input_epoch",
+    "goal_version",
+    "config_version",
+    "watermark"
+  ],
+  "title": "EvdAttemptRow",
+  "type": "object"
+}

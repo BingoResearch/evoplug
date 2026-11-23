@@ -1,0 +1,77 @@
+{
+  "files": [],
+  "references": [
+    {
+      "path": "adapters/claude-code"
+    },
+    {
+      "path": "adapters/codex"
+    },
+    {
+      "path": "adapters/oh-my-pi"
+    },
+    {
+      "path": "adapters/opencode"
+    },
+    {
+      "path": "adapters/openhands-sdk"
+    },
+    {
+      "path": "adapters/pi"
+    },
+    {
+      "path": "adapters/step-code"
+    },
+    {
+      "path": "packages/adapter-kit"
+    },
+    {
+      "path": "apps/cli"
+    },
+    {
+      "path": "apps/kernel"
+    },
+    {
+      "path": "packages/auth"
+    },
+    {
+      "path": "packages/budget"
+    },
+    {
+      "path": "packages/core"
+    },
+    {
+      "path": "packages/delivery"
+    },
+    {
+      "path": "packages/egress"
+    },
+    {
+      "path": "packages/evidence"
+    },
+    {
+      "path": "packages/host-runtime"
+    },
+    {
+      "path": "packages/ipc"
+    },
+    {
+      "path": "packages/kernel"
+    },
+    {
+      "path": "packages/ledger"
+    },
+    {
+      "path": "packages/replay"
+    },
+    {
+      "path": "packages/review"
+    },
+    {
+      "path": "packages/storage"
+    },
+    {
+      "path": "packages/test-support"
+    }
+  ]
+}

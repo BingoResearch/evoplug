@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:compiled_pack:1",
+  "title": "CompiledPack",
+  "description": "DD-EVD-026 compiled pack output.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "pack",
+    "units",
+    "manifests"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "rsi.compiled_pack/1"
+    },
+    "pack": {
+      "type": "object"
+    },
+    "units": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "manifests": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    }
+  }
+}

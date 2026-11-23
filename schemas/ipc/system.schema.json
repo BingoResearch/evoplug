@@ -1,0 +1,223 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:system_description:1",
+  "title": "SystemDescription",
+  "description": "system.describe result plus SystemStatus and GcReport (DD-FND-103). No secrets, usernames or provider tokens.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "protocol_version", "product_version", "schema_major", "schema_minor", "journal_frame_version", "runtime", "read_only", "feature_flags", "policy_version", "policy_hash"],
+  "properties": {
+    "schema_version": { "const": "rsi.system_description/1" },
+    "protocol_version": { "type": "integer", "minimum": 1 },
+    "product_version": { "type": "string", "minLength": 1, "maxLength": 64 },
+    "schema_major": { "type": "integer", "minimum": 1 },
+    "schema_minor": { "type": "integer", "minimum": 0 },
+    "journal_frame_version": { "type": "integer", "minimum": 1 },
+    "runtime": { "$ref": "#/$defs/RuntimeDescription" },
+    "read_only": { "type": "boolean" },
+    "feature_flags": { "type": "array", "items": { "enum": ["runtime_probe", "fresh_home_admission", "dispatch_short_circuit", "evidence_supplement", "delivery_ttl", "feedback_ledger", "experience_retrieval", "rollback_resolution", "cli_generation", "config_autotune", "active_replay", "semantic_judge", "managed_blocks"] } },
+    "policy_version": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "policy_hash": { "$ref": "#/$defs/Hash" }
+  },
+  "$defs": {
+    "Hash": { "title": "Hash", "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "RuntimeDescription": {
+      "title": "RuntimeDescription",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "version", "sqlite_version", "sqlite_safe"],
+      "properties": {
+        "name": { "const": "node" },
+        "version": { "type": "string", "minLength": 1, "maxLength": 32 },
+        "sqlite_version": { "type": "string", "minLength": 1, "maxLength": 32 },
+        "sqlite_safe": { "type": "boolean" }
+      }
+    },
+    "SystemStatus": {
+      "title": "SystemStatus",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "status", "recovery_state", "storage", "ipc", "budget", "outbox", "config", "capabilities", "recovery"],
+      "properties": {
+        "schema_version": { "const": "rsi.system_status/1" },
+        "status": { "enum": ["ready", "degraded_read_only", "starting", "stopped"] },
+        "recovery_state": { "enum": ["closed", "scanning", "replaying", "reconciling_outbox", "complete", "failed"] },
+        "storage": { "$ref": "#/$defs/StorageStatus" },
+        "ipc": { "$ref": "#/$defs/IpcStatus" },
+        "budget": { "$ref": "#/$defs/BudgetStatus" },
+        "outbox": { "$ref": "#/$defs/OutboxStatus" },
+        "config": { "$ref": "#/$defs/ConfigStatus" },
+        "capabilities": { "type": "array", "items": { "$ref": "#/$defs/CapabilityStatusEntry" } },
+        "recovery": { "$ref": "#/$defs/RecoveryStatus" },
+        "pending_candidates": { "type": "integer", "minimum": 0 },
+        "feature_flags": { "type": "array", "items": { "enum": ["runtime_probe", "fresh_home_admission", "dispatch_short_circuit", "evidence_supplement", "delivery_ttl", "feedback_ledger", "experience_retrieval", "rollback_resolution", "cli_generation", "config_autotune", "active_replay", "semantic_judge", "managed_blocks"] } }
+      }
+    },
+    "RecoveryStatus": {
+      "title": "RecoveryStatus",
+      "description": "Appendix P post-endpoint background recovery progress. pending and terminal_failed are durable; processed and failed are process-local.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state", "pending", "terminal_failed", "processed", "failed", "last_run"],
+      "properties": {
+        "state": { "enum": ["idle", "running", "waiting", "stopped"] },
+        "pending": { "type": "integer", "minimum": 0 },
+        "terminal_failed": { "type": "integer", "minimum": 0 },
+        "processed": { "type": "integer", "minimum": 0 },
+        "failed": { "type": "integer", "minimum": 0 },
+        "last_run": {
+          "type": ["object", "null"],
+          "additionalProperties": false,
+          "required": ["started_at", "finished_at", "scanned", "recorded", "skipped", "failed", "terminal_failed", "remaining", "stopped_reason"],
+          "properties": {
+            "started_at": { "type": "integer", "minimum": 0 },
+            "finished_at": { "type": "integer", "minimum": 0 },
+            "scanned": { "type": "integer", "minimum": 0 },
+            "recorded": { "type": "integer", "minimum": 0 },
+            "skipped": { "type": "integer", "minimum": 0 },
+            "failed": { "type": "integer", "minimum": 0 },
+            "terminal_failed": { "type": "integer", "minimum": 0 },
+            "remaining": { "type": "integer", "minimum": 0 },
+            "stopped_reason": { "enum": ["complete", "item_limit", "wall_limit"] }
+          }
+        }
+      }
+    },
+    "StorageStatus": {
+      "title": "StorageStatus",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["journal_tail_state", "trusted_prefix_end", "quarantine_count", "db_quick_check", "journal"],
+      "properties": {
+        "journal_tail_state": { "enum": ["clean", "corrupt_tail", "corrupt_middle"] },
+        "trusted_prefix_end": { "type": "integer", "minimum": 0 },
+        "quarantine_count": { "type": "integer", "minimum": 0 },
+        "db_quick_check": { "enum": ["ok", "failed", "not_run"] },
+        "journal": { "enum": ["ok", "recovery_required"] },
+        "journal_fence": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["frame_type", "observed_at", "hint"],
+          "properties": {
+            "frame_type": { "type": "string", "minLength": 1 },
+            "observed_at": { "type": "integer", "minimum": 0 },
+            "hint": { "const": "restart serve" }
+          }
+        }
+      }
+    },
+    "IpcStatus": {
+      "title": "IpcStatus",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["socket_mode", "token_mode", "home_mode", "active_connections"],
+      "properties": {
+        "socket_mode": { "const": "0600" },
+        "token_mode": { "const": "0600" },
+        "home_mode": { "const": "0700" },
+        "active_connections": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "BudgetStatus": {
+      "title": "BudgetStatus",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["active_reservations", "unsettled_reservations", "cooldown_scopes"],
+      "properties": {
+        "active_reservations": { "type": "integer", "minimum": 0 },
+        "unsettled_reservations": { "type": "integer", "minimum": 0 },
+        "cooldown_scopes": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "OutboxStatus": {
+      "title": "OutboxStatus",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["pending", "leased", "uncertain", "failed"],
+      "properties": {
+        "pending": { "type": "integer", "minimum": 0 },
+        "leased": { "type": "integer", "minimum": 0 },
+        "uncertain": { "type": "integer", "minimum": 0 },
+        "failed": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "ConfigStatus": {
+      "title": "ConfigStatus",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["config_version", "config_hash", "egress_policy_version"],
+      "properties": {
+        "config_version": { "type": "string" },
+        "config_hash": { "$ref": "#/$defs/Hash" },
+        "egress_policy_version": { "type": "string" },
+        "egress_policies": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["policy_version", "policy_hash", "receiver", "data_classes"],
+            "properties": {
+              "policy_version": { "type": "string" },
+              "policy_hash": { "$ref": "#/$defs/Hash" },
+              "receiver": {
+                "type": ["object", "null"],
+                "additionalProperties": false,
+                "required": ["kind", "host_id", "provider_host", "provider_model"],
+                "properties": {
+                  "kind": { "const": "host_cli" },
+                  "host_id": { "type": "string" },
+                  "provider_host": { "type": "string" },
+                  "provider_model": { "type": ["string", "null"] }
+                }
+              },
+              "data_classes": { "type": "array", "items": { "type": "string" } }
+            }
+          }
+        }
+      }
+    },
+    "CapabilityStatusEntry": {
+      "title": "CapabilityStatusEntry",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["host_id", "capability", "status", "evidence_stage"],
+      "properties": {
+        "host_id": { "enum": ["pi", "oh-my-pi", "step-code", "codex", "opencode", "openhands-sdk", "claude-code"] },
+        "capability": { "enum": ["input_capture", "sync_wait", "source_trust", "tool_id", "compaction_event", "request_observation", "managed_object_load", "online_delivery", "stable_boundary", "host_budget", "association", "human_interaction_attested", "capacity_window", "generation.service_profile", "generation.create", "generation.auth", "generation.cancel", "generation.recover", "generation.output"] },
+        "status": { "enum": ["unknown", "verified", "unsupported", "failed"] },
+        "evidence_stage": { "enum": ["none", "static", "loaded", "roundtrip"] },
+        "failure_code": { "type": "string" },
+        "failure": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["code", "detail"],
+          "properties": {
+            "code": { "enum": ["auth_rejected", "provider_rejected", "process_exit_nonzero", "output_unparseable", "protocol_mismatch"] },
+            "detail": { "type": "string", "maxLength": 240 },
+            "provider_status": { "type": "integer", "minimum": 100, "maximum": 599 },
+            "provider_code": { "type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_.-]{1,63}$" },
+            "exit_code": { "type": "integer" }
+          }
+        },
+        "next_step": { "type": "string", "maxLength": 400 }
+      }
+    },
+    "GcReport": {
+      "title": "GcReport",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "mode", "keep_blobs", "delete_blobs", "quarantine_blobs", "reclaimed_bytes", "expired_idempotency_rows", "deleted_temp_files", "run_id"],
+      "properties": {
+        "schema_version": { "const": "rsi.gc_report/1" },
+        "mode": { "enum": ["dry_run", "apply"] },
+        "keep_blobs": { "type": "integer", "minimum": 0 },
+        "delete_blobs": { "type": "integer", "minimum": 0 },
+        "quarantine_blobs": { "type": "integer", "minimum": 0 },
+        "reclaimed_bytes": { "type": "integer", "minimum": 0 },
+        "expired_idempotency_rows": { "type": "integer", "minimum": 0 },
+        "deleted_temp_files": { "type": "integer", "minimum": 0 },
+        "run_id": { "type": ["string", "null"], "pattern": "^mnt:[0-9A-HJKMNP-TV-Z]{26}$" }
+      }
+    }
+  }
+}

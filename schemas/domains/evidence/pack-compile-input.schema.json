@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:pack_compile_input:1",
+  "title": "PackCompileInput",
+  "description": "DD-EVD-026 pack compile input.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "plan_id",
+    "plan_hash",
+    "issue_id",
+    "issue_key",
+    "binding",
+    "snapshot",
+    "service_profile_key",
+    "limits",
+    "compiler_version",
+    "counting_method_version"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "rsi.pack_compile_input/1"
+    },
+    "plan_id": {
+      "type": "string"
+    },
+    "plan_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "issue_id": {
+      "type": "string"
+    },
+    "issue_key": {
+      "type": "string"
+    },
+    "binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "task_id",
+        "branch_id",
+        "input_epoch",
+        "goal_version",
+        "config_version",
+        "watermark"
+      ],
+      "properties": {
+        "task_id": {
+          "type": "string"
+        },
+        "branch_id": {
+          "type": "string"
+        },
+        "input_epoch": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "goal_version": {
+          "type": "string"
+        },
+        "config_version": {
+          "type": "string"
+        },
+        "watermark": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "snapshot": {
+      "type": "object"
+    },
+    "service_profile_key": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "limits": {
+      "type": "object"
+    },
+    "compiler_version": {
+      "type": "string"
+    },
+    "counting_method_version": {
+      "type": "string"
+    }
+  }
+}

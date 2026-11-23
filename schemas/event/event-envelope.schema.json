@@ -1,0 +1,358 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:event_envelope:1",
+  "title": "EventEnvelope",
+  "description": "Committed host event projected into event_log and journal payloads (DD-FND-070). Content bodies live in blobs; only StoredContent references appear here.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "event_id", "event_key", "commit_seq", "watermark", "received_at", "binding", "session_id", "resume_generation", "correlation_id", "origin", "origin_basis", "trigger_lineage", "attribution", "payload", "payload_hash"],
+  "properties": {
+    "schema_version": { "const": "rsi.event/1" },
+    "event_id": { "type": "string", "pattern": "^ev:[0-9A-HJKMNP-TV-Z]{26}$" },
+    "event_key": { "$ref": "#/$defs/Hash" },
+    "commit_seq": { "type": "integer", "minimum": 1, "maximum": 9007199254740991 },
+    "watermark": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+    "received_at": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+    "binding": { "$ref": "#/$defs/VersionBinding" },
+    "session_id": { "type": "string", "pattern": "^sess:[0-9A-HJKMNP-TV-Z]{26}$" },
+    "resume_generation": { "type": "integer", "minimum": 1, "maximum": 9007199254740991 },
+    "input_id": { "type": "string", "pattern": "^input:[0-9A-HJKMNP-TV-Z]{26}$" },
+    "run_id": { "type": "string", "pattern": "^run:[0-9A-HJKMNP-TV-Z]{26}$" },
+    "parent_event_id": { "type": "string", "pattern": "^ev:[0-9A-HJKMNP-TV-Z]{26}$" },
+    "correlation_id": { "type": "string", "pattern": "^corr:[0-9A-HJKMNP-TV-Z]{26}$" },
+    "origin": { "$ref": "#/$defs/Origin" },
+    "origin_basis": { "$ref": "#/$defs/OriginBasis" },
+    "human_attestation": { "$ref": "#/$defs/HumanAttestation" },
+    "trigger_lineage": { "$ref": "#/$defs/TriggerLineage" },
+    "attribution": { "$ref": "#/$defs/NativeAttribution" },
+    "payload": { "$ref": "#/$defs/StoredEventPayload" },
+    "content_ref": { "$ref": "#/$defs/SourceRef" },
+    "content_hash": { "$ref": "#/$defs/Hash" },
+    "payload_hash": { "$ref": "#/$defs/Hash" }
+  },
+  "$defs": {
+    "Hash": { "title": "Hash", "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "SourceRef": {
+      "title": "SourceRef",
+      "oneOf": [
+        { "type": "string", "pattern": "^journal://ev:[0-9A-HJKMNP-TV-Z]{26}#bytes=(0|[1-9][0-9]*)-(0|[1-9][0-9]*)$" },
+        { "type": "string", "pattern": "^blob://sha256:[0-9a-f]{64}#bytes=(0|[1-9][0-9]*)-(0|[1-9][0-9]*)$" }
+      ]
+    },
+    "VersionBinding": {
+      "title": "VersionBinding",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["task_id", "branch_id", "input_epoch", "goal_version", "config_version", "watermark"],
+      "properties": {
+        "task_id": { "type": "string", "pattern": "^task:[0-9A-HJKMNP-TV-Z]{26}$" },
+        "branch_id": { "type": "string", "pattern": "^br:[0-9A-HJKMNP-TV-Z]{26}$" },
+        "input_epoch": { "type": "integer", "minimum": 1, "maximum": 9007199254740991 },
+        "goal_version": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,255}$" },
+        "config_version": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,127}$" },
+        "watermark": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 }
+      }
+    },
+    "StoredContent": {
+      "title": "StoredContent",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["content_ref", "content_hash", "byte_length"],
+      "properties": {
+        "content_ref": { "$ref": "#/$defs/SourceRef" },
+        "content_hash": { "$ref": "#/$defs/Hash" },
+        "byte_length": { "type": "integer", "minimum": 0, "maximum": 8388608 }
+      }
+    },
+    "Origin": { "title": "Origin", "enum": ["human", "user", "agent", "evaluator", "system", "host", "unknown"] },
+    "OriginBasis": { "title": "OriginBasis", "enum": ["host_typed_field", "host_tui_session", "host_capability", "explicit_event", "inferred_from_agent", "unavailable"] },
+    "HumanAttestation": {
+      "title": "HumanAttestation",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "capability_id", "evidence_ref", "confirmed_at"],
+      "properties": {
+        "kind": { "enum": ["host_verified_interactive_user", "control_plane_explicit_confirmation", "test_backdoor_confirmation"] },
+        "capability_id": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "evidence_ref": { "$ref": "#/$defs/SourceRef" },
+        "confirmed_at": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 }
+      }
+    },
+    "TriggerLineage": {
+      "title": "TriggerLineage",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["axis", "root_event_id", "depth"],
+      "properties": {
+        "axis": { "enum": ["external", "internal_evaluator", "internal_review", "unknown"] },
+        "root_event_id": { "type": ["string", "null"], "pattern": "^ev:[0-9A-HJKMNP-TV-Z]{26}$" },
+        "depth": { "type": "integer", "minimum": 0, "maximum": 64 }
+      }
+    },
+    "NativeAttribution": {
+      "title": "NativeAttribution",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sender", "typed_user_message", "typed_field_names"],
+      "properties": {
+        "sender": { "enum": ["human", "agent", "tool", "system", "unknown"] },
+        "typed_user_message": { "type": "boolean" },
+        "typed_field_names": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "StoredEventPayload": {
+      "title": "StoredEventPayload",
+      "oneOf": [
+        { "$ref": "#/$defs/InputReceivedPayload" },
+        { "$ref": "#/$defs/InputRetryPayload" },
+        { "$ref": "#/$defs/AgentMessagePayload" },
+        { "$ref": "#/$defs/ToolCallPayload" },
+        { "$ref": "#/$defs/ToolResultPayload" },
+        { "$ref": "#/$defs/HostBoundaryPayload" },
+        { "$ref": "#/$defs/CompactionObservedPayload" },
+        { "$ref": "#/$defs/SubagentStartedPayload" },
+        { "$ref": "#/$defs/SubagentEndedPayload" },
+        { "$ref": "#/$defs/DeliveryReceiptPayload" },
+        { "$ref": "#/$defs/FeedbackObservedPayload" },
+        { "$ref": "#/$defs/LedgerCorrectionPayload" },
+        { "$ref": "#/$defs/ReviewRequestedPayload" },
+        { "$ref": "#/$defs/CapabilityObservedPayload" },
+        { "$ref": "#/$defs/ConfigAppliedPayload" },
+        { "$ref": "#/$defs/IdentityForkPayload" },
+        { "$ref": "#/$defs/IdentityResumePayload" },
+        { "$ref": "#/$defs/HostUnclassifiedPayload" }
+      ]
+    },
+    "InputReceivedPayload": {
+      "title": "InputReceivedPayload",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "content", "directive_strength"],
+      "properties": {
+        "kind": { "const": "input.received" },
+        "content": { "$ref": "#/$defs/StoredContent" },
+        "directive_strength": { "enum": ["explicit", "ambiguous"] },
+        "parent_native_id": { "type": "string", "minLength": 1, "maxLength": 512 }
+      }
+    },
+    "InputRetryPayload": {
+      "title": "InputRetryPayload",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "retry_of_event_key", "reason_code"],
+      "properties": {
+        "kind": { "const": "input.retry" },
+        "retry_of_event_key": { "$ref": "#/$defs/Hash" },
+        "reason_code": { "enum": ["host_retry", "transport_retry"] }
+      }
+    },
+    "AgentMessagePayload": {
+      "title": "AgentMessagePayload",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "content", "phase"],
+      "properties": {
+        "kind": { "const": "agent.message" },
+        "content": { "$ref": "#/$defs/StoredContent" },
+        "phase": { "enum": ["assistant", "tool_preface", "final"] }
+      }
+    },
+    "ToolCallPayload": {
+      "title": "ToolCallPayload",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "tool_call_id", "tool_name", "arguments_json"],
+      "properties": {
+        "kind": { "const": "tool.call" },
+        "tool_call_id": { "type": "string", "minLength": 1, "maxLength": 512 },
+        "tool_name": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "arguments_json": { "$ref": "#/$defs/JsonValue" }
+      }
+    },
+    "ToolResultPayload": {
+      "title": "ToolResultPayload",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "tool_call_id", "status", "content"],
+      "properties": {
+        "kind": { "const": "tool.result" },
+        "tool_call_id": { "type": "string", "minLength": 1, "maxLength": 512 },
+        "status": { "enum": ["ok", "error", "unknown"] },
+        "content": { "$ref": "#/$defs/StoredContent" }
+      }
+    },
+    "HostBoundaryPayload": {
+      "title": "HostBoundaryPayload",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "boundary", "pending_work_claimed"],
+      "properties": {
+        "kind": { "const": "host.boundary" },
+        "boundary": { "enum": ["stop", "agent_end", "session_end", "error"] },
+        "pending_work_claimed": { "type": "boolean" }
+      }
+    },
+    "CompactionObservedPayload": {
+      "title": "CompactionObservedPayload",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "compaction_kind"],
+      "properties": {
+        "kind": { "const": "compaction.observed" },
+        "compaction_kind": { "enum": ["auto", "manual", "host_summary"] },
+        "checkpoint_ref": { "$ref": "#/$defs/SourceRef" },
+        "omitted_range": { "$ref": "#/$defs/OmittedRange" }
+      }
+    },
+    "OmittedRange": {
+      "title": "OmittedRange",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["from_watermark", "to_watermark"],
+      "properties": {
+        "from_watermark": { "type": "integer", "minimum": 0 },
+        "to_watermark": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "SubagentStartedPayload": {
+      "title": "SubagentStartedPayload",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "native_agent_id", "relation"],
+      "properties": {
+        "kind": { "const": "subagent.started" },
+        "native_agent_id": { "type": "string", "minLength": 1, "maxLength": 512 },
+        "relation": { "enum": ["child", "sibling"] },
+        "parent_event_id": { "type": "string", "pattern": "^ev:[0-9A-HJKMNP-TV-Z]{26}$" }
+      }
+    },
+    "SubagentEndedPayload": {
+      "title": "SubagentEndedPayload",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "native_agent_id", "status"],
+      "properties": {
+        "kind": { "const": "subagent.ended" },
+        "native_agent_id": { "type": "string", "minLength": 1, "maxLength": 512 },
+        "status": { "enum": ["ok", "error", "unknown"] },
+        "summary_ref": { "$ref": "#/$defs/SourceRef" }
+      }
+    },
+    "DeliveryReceiptPayload": {
+      "title": "DeliveryReceiptPayload",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "delivery_id", "axis", "evidence_kind", "observed_at"],
+      "properties": {
+        "kind": { "const": "delivery.receipt" },
+        "delivery_id": { "type": "string", "pattern": "^del:[0-9A-HJKMNP-TV-Z]{26}$" },
+        "axis": { "enum": ["transport", "inclusion", "adoption"] },
+        "evidence_kind": { "enum": ["hook_return_accepted", "context_projection_seen", "provider_payload_captured", "transport_body_captured", "host_confirmed", "behavior_observed", "independent_verifier"] },
+        "evidence_ref": { "$ref": "#/$defs/SourceRef" },
+        "observed_at": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "FeedbackObservedPayload": {
+      "title": "FeedbackObservedPayload",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "feedback_kind", "content"],
+      "properties": {
+        "kind": { "const": "feedback.observed" },
+        "feedback_kind": { "enum": ["correction", "dissatisfaction", "new_goal", "acceptance"] },
+        "content": { "$ref": "#/$defs/StoredContent" },
+        "target_issue_id": { "type": "string", "pattern": "^issue:[0-9A-HJKMNP-TV-Z]{26}$" }
+      }
+    },
+    "LedgerCorrectionPayload": {
+      "title": "LedgerCorrectionPayload",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "corrected_record_id", "correction_kind", "original_source_ref", "original_text_hash"],
+      "properties": {
+        "kind": { "const": "ledger.correction" },
+        "corrected_record_id": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "correction_kind": { "enum": ["missed_extraction", "wrong_extraction", "wrong_link"] },
+        "original_source_ref": { "$ref": "#/$defs/SourceRef" },
+        "original_text_hash": { "$ref": "#/$defs/Hash" }
+      }
+    },
+    "ReviewRequestedPayload": {
+      "title": "ReviewRequestedPayload",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "issue_ids", "scope"],
+      "properties": {
+        "kind": { "const": "review.requested" },
+        "issue_ids": { "type": "array", "minItems": 1, "items": { "type": "string", "pattern": "^issue:[0-9A-HJKMNP-TV-Z]{26}$" } },
+        "scope": { "enum": ["explicit_user", "explicit_host"] }
+      }
+    },
+    "CapabilityObservedPayload": {
+      "title": "CapabilityObservedPayload",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "capability", "observed_value", "evidence_ref"],
+      "properties": {
+        "kind": { "const": "capability.observed" },
+        "capability": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "observed_value": { "enum": ["present", "absent"] },
+        "evidence_ref": { "$ref": "#/$defs/SourceRef" }
+      }
+    },
+    "ConfigAppliedPayload": {
+      "title": "ConfigAppliedPayload",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "config_version", "config_space", "evidence_ref"],
+      "properties": {
+        "kind": { "const": "config.applied" },
+        "config_version": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,127}$" },
+        "config_space": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "evidence_ref": { "$ref": "#/$defs/SourceRef" }
+      }
+    },
+    "IdentityForkPayload": {
+      "title": "IdentityForkPayload",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "source_branch_id", "at_watermark"],
+      "properties": {
+        "kind": { "const": "identity.fork" },
+        "source_branch_id": { "type": "string", "pattern": "^br:[0-9A-HJKMNP-TV-Z]{26}$" },
+        "at_watermark": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "IdentityResumePayload": {
+      "title": "IdentityResumePayload",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "session_id", "observed_watermark"],
+      "properties": {
+        "kind": { "const": "identity.resume" },
+        "session_id": { "type": "string", "pattern": "^sess:[0-9A-HJKMNP-TV-Z]{26}$" },
+        "observed_watermark": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "HostUnclassifiedPayload": {
+      "title": "HostUnclassifiedPayload",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "native_type", "content", "reason_code"],
+      "properties": {
+        "kind": { "const": "host.unclassified" },
+        "native_type": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "content": { "$ref": "#/$defs/StoredContent" },
+        "reason_code": { "enum": ["no_mapping", "unsupported_version"] }
+      }
+    },
+    "JsonValue": {
+      "title": "JsonValue",
+      "anyOf": [
+        { "type": ["string", "number", "boolean", "null"] },
+        { "type": "array", "items": { "$ref": "#/$defs/JsonValue" } },
+        { "type": "object", "additionalProperties": { "$ref": "#/$defs/JsonValue" } }
+      ]
+    }
+  }
+}

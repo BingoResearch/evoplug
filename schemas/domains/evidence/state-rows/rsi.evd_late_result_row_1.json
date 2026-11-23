@@ -1,0 +1,102 @@
+{
+  "$id": "urn:evoplug:schema:evd_late_result_row:1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Physical row of evd_late_result (DD-EVD-024); values are the frozen row_json columns.",
+  "properties": {
+    "attempt_id": {
+      "type": "string"
+    },
+    "branch_id": {
+      "type": "string"
+    },
+    "config_version": {
+      "type": "string"
+    },
+    "content_bytes": {
+      "maximum": 33554432,
+      "minimum": 1,
+      "type": "integer"
+    },
+    "content_hash": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "content_ref": {
+      "pattern": "^blob://",
+      "type": "string"
+    },
+    "created_at": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "disposition": {
+      "enum": [
+        "appended_history",
+        "conflict_rejected"
+      ],
+      "type": "string"
+    },
+    "envelope_key": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "goal_version": {
+      "type": "string"
+    },
+    "input_epoch": {
+      "minimum": 1,
+      "type": "integer"
+    },
+    "late_result_id": {
+      "type": "string"
+    },
+    "late_result_key": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "received_at": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "row_version": {
+      "const": 0,
+      "type": "integer"
+    },
+    "source_blob_refs": {
+      "description": "JCS text; JSON array",
+      "type": "string"
+    },
+    "task_id": {
+      "type": "string"
+    },
+    "watermark": {
+      "minimum": 0,
+      "type": "integer"
+    }
+  },
+  "required": [
+    "late_result_id",
+    "late_result_key",
+    "attempt_id",
+    "disposition",
+    "received_at",
+    "content_hash",
+    "content_ref",
+    "content_bytes",
+    "source_blob_refs",
+    "row_version",
+    "created_at",
+    "task_id",
+    "branch_id",
+    "input_epoch",
+    "goal_version",
+    "config_version",
+    "watermark"
+  ],
+  "title": "EvdLateResultRow",
+  "type": "object"
+}

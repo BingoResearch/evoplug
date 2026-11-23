@@ -1,0 +1,139 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:proposal_candidates:1",
+  "title": "ProposalCandidateRow",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "candidate_key",
+    "job_id",
+    "attempt_id",
+    "ordinal",
+    "version_binding_json",
+    "output_ref",
+    "output_hash",
+    "candidate_ref",
+    "candidate_json_hash",
+    "generator_json",
+    "state",
+    "row_version",
+    "created_at"
+  ],
+  "properties": {
+    "candidate_key": {
+      "type": "string",
+      "minLength": 1
+    },
+    "job_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "attempt_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "ordinal": {
+      "type": "integer"
+    },
+    "version_binding_json": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Canonical JSON text."
+    },
+    "output_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "output_hash": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "candidate_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "candidate_json_hash": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "generator_json": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Canonical JSON text."
+    },
+    "state": {
+      "type": "string",
+      "minLength": 1
+    },
+    "failure_code": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "failure_step": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "diagnostic_ref": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "proposal_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "proposal_hash": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1,
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "experience_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "experience_version": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "accepted_bundle_ref": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "row_version": {
+      "type": "integer"
+    },
+    "created_at": {
+      "type": "integer"
+    },
+    "checked_at": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    }
+  }
+}

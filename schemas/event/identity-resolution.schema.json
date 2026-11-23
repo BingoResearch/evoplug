@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:identity_resolution:1",
+  "title": "IdentityResolution",
+  "description": "Result of identity.resolve plus fork/resume DTOs (DD-FND-073). resolve never creates identity.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["state", "reason_code"],
+  "properties": {
+    "state": { "enum": ["resolved", "not_found", "ambiguous", "stale"] },
+    "session_id": { "type": "string", "pattern": "^sess:[0-9A-HJKMNP-TV-Z]{26}$" },
+    "task_id": { "type": "string", "pattern": "^task:[0-9A-HJKMNP-TV-Z]{26}$" },
+    "branch_id": { "type": "string", "pattern": "^br:[0-9A-HJKMNP-TV-Z]{26}$" },
+    "input_id": { "type": "string", "pattern": "^input:[0-9A-HJKMNP-TV-Z]{26}$" },
+    "input_epoch": { "type": "integer", "minimum": 1 },
+    "goal_version": { "type": "string" },
+    "watermark": { "type": "integer", "minimum": 0 },
+    "candidates": { "type": "array", "items": { "$ref": "#/$defs/IdentityCandidate" } },
+    "reason_code": { "enum": ["native_not_mapped", "multiple_branches", "host_conflict", "none"] }
+  },
+  "$defs": {
+    "IdentityCandidate": {
+      "title": "IdentityCandidate",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["branch_id", "task_id", "watermark"],
+      "properties": {
+        "branch_id": { "type": "string", "pattern": "^br:[0-9A-HJKMNP-TV-Z]{26}$" },
+        "task_id": { "type": "string", "pattern": "^task:[0-9A-HJKMNP-TV-Z]{26}$" },
+        "watermark": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "BranchForkResult": {
+      "title": "BranchForkResult",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["branch_id", "parent_branch_id", "forked_from_watermark", "goal_snapshot_id", "task_id", "goal_version", "input_epoch", "created"],
+      "properties": {
+        "branch_id": { "type": "string", "pattern": "^br:[0-9A-HJKMNP-TV-Z]{26}$" },
+        "parent_branch_id": { "type": "string", "pattern": "^br:[0-9A-HJKMNP-TV-Z]{26}$" },
+        "forked_from_watermark": { "type": "integer", "minimum": 0 },
+        "goal_snapshot_id": { "type": "string", "pattern": "^gsnap:[0-9A-HJKMNP-TV-Z]{26}$" },
+        "task_id": { "type": "string", "pattern": "^task:[0-9A-HJKMNP-TV-Z]{26}$" },
+        "goal_version": { "type": "string" },
+        "input_epoch": { "type": "integer", "minimum": 1 },
+        "created": { "type": "boolean" }
+      }
+    },
+    "ResumeResult": {
+      "title": "ResumeResult",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["session_id", "branch_id", "resume_generation", "observed_watermark", "current_watermark", "status", "missing_ranges", "replayed_events"],
+      "properties": {
+        "session_id": { "type": "string", "pattern": "^sess:[0-9A-HJKMNP-TV-Z]{26}$" },
+        "branch_id": { "type": "string", "pattern": "^br:[0-9A-HJKMNP-TV-Z]{26}$" },
+        "resume_generation": { "type": "integer", "minimum": 1 },
+        "observed_watermark": { "type": "integer", "minimum": 0 },
+        "current_watermark": { "type": "integer", "minimum": 0 },
+        "status": { "enum": ["resumed", "stale", "recovery_required"] },
+        "missing_ranges": { "type": "array", "items": { "$ref": "#/$defs/WatermarkRange" } },
+        "replayed_events": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "WatermarkRange": {
+      "title": "WatermarkRange",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["from", "to"],
+      "properties": {
+        "from": { "type": "integer", "minimum": 0 },
+        "to": { "type": "integer", "minimum": 0 }
+      }
+    }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:ipc-frame:1",
+  "title": "IpcFrame",
+  "description": "JSON view of a decoded 24-byte frame header, used by diagnostics and tests. The binary layout in DD-FND-040 is authoritative; this object never appears on the wire.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "magic",
+    "version",
+    "kind",
+    "flags",
+    "body_len",
+    "deadline_ms",
+    "crc32c",
+    "reserved"
+  ],
+  "properties": {
+    "schema_version": { "const": "rsi.ipc_frame/1" },
+    "magic": { "const": "EVPC" },
+    "version": { "const": 1 },
+    "kind": {
+      "enum": [1, 2, 3, 4],
+      "description": "1=hello, 2=request, 3=response, 4=cancel"
+    },
+    "flags": { "const": 0 },
+    "body_len": { "type": "integer", "minimum": 0, "maximum": 16777216 },
+    "deadline_ms": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 600000,
+      "description": "Remaining milliseconds; hello is fixed at 1000"
+    },
+    "crc32c": { "type": "integer", "minimum": 0, "maximum": 4294967295 },
+    "reserved": { "const": 0 }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:commit_record:1",
+  "title": "CommitRecord",
+  "description": "Durable journal commit index row (DD-FND-051/059).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["journal_id", "commit_seq", "event_id", "payload_hash", "blob_hashes", "batch_hash", "batch_first_commit_seq", "batch_ordinal", "committed_at", "indexed_at"],
+  "properties": {
+    "journal_id": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "commit_seq": { "type": "integer", "minimum": 1, "maximum": 9007199254740991 },
+    "event_id": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "payload_hash": { "$ref": "#/$defs/Hash" },
+    "blob_hashes": { "type": "array", "items": { "$ref": "#/$defs/Hash" } },
+    "batch_hash": { "type": ["string", "null"], "pattern": "^sha256:[0-9a-f]{64}$" },
+    "batch_first_commit_seq": { "type": ["integer", "null"], "minimum": 1 },
+    "batch_ordinal": { "type": ["integer", "null"], "minimum": 0 },
+    "committed_at": { "type": "integer", "minimum": 0 },
+    "indexed_at": { "type": ["integer", "null"], "minimum": 0 }
+  },
+  "$defs": {
+    "Hash": { "title": "Hash", "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" }
+  }
+}

@@ -1,0 +1,411 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:error_details_registry:1",
+  "title": "ErrorDetailsRegistry",
+  "description": "Closed registry detail branch for the 81 EVD-owned codes (DD-EVD-024). Key sets are frozen in the evd.json fragment.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "kind",
+    "code",
+    "details"
+  ],
+  "properties": {
+    "kind": {
+      "const": "registry"
+    },
+    "code": {
+      "type": "string",
+      "pattern": "^E_[A-Z0-9_]+$",
+      "enum": [
+        "E_INDEX_REQUEST_INVALID",
+        "E_INDEX_BINDING_INVALID",
+        "E_INDEX_WATERMARK_INVALID",
+        "E_INDEX_WINDOW_INVALID",
+        "E_INDEX_REVIEW_SNAPSHOT_INVALID",
+        "E_INDEX_REVIEW_SNAPSHOT_MISSING",
+        "E_INDEX_UPSTREAM_UNAVAILABLE",
+        "E_INDEX_PROGRESS_UNSUPPORTED",
+        "E_INDEX_SOURCE_UNRETRIEVABLE",
+        "E_INDEX_SOURCE_UTF8_INVALID",
+        "E_INDEX_SOURCE_HASH_MISMATCH",
+        "E_INDEX_SOURCE_CONFLICT",
+        "E_INDEX_SOURCE_TOO_LARGE",
+        "E_INDEX_LIMIT_EXCEEDED",
+        "E_INDEX_VERSION_CONFLICT",
+        "E_INDEX_DERIVATION_FAILED",
+        "E_INDEX_ABORTED",
+        "E_INDEX_SCOPE_MISMATCH",
+        "E_INDEX_SNAPSHOT_ID_MISMATCH",
+        "E_INDEX_NOT_LOADED",
+        "E_INDEX_DEADLINE_EXCEEDED",
+        "E_EVIDENCE_PACK_V1_READ_ONLY",
+        "E_BINDING_V1_READ_ONLY",
+        "E_EVIDENCE_PACK_STALE",
+        "E_EVIDENCE_CLOSURE_INCOMPLETE",
+        "E_EVIDENCE_INSEPARABLE_SPLIT",
+        "E_EVIDENCE_EXCEEDS_BUDGET",
+        "E_EVIDENCE_OMISSION_BINDING",
+        "E_EVIDENCE_LIMITS_UNKNOWN",
+        "E_EVIDENCE_PLAN_NOT_DISPATCHABLE",
+        "E_EVIDENCE_MANIFEST_MISMATCH",
+        "E_BUDGET_RESERVE_INCONSISTENT",
+        "E_PROJECTION_VIEW_MISSING",
+        "E_PROJECTION_SOURCE_MISSING",
+        "E_PROJECTION_OMISSION_BLOCKING",
+        "E_STATE_LOCAL_URI",
+        "E_STATE_VOLATILE_FIELD",
+        "E_STATE_WHOLE_TASK_SCOPE",
+        "E_STATE_VERSION_UNSUPPORTED",
+        "E_JUDGE_STATE_V1_READ_ONLY",
+        "E_WIRE_INVALID",
+        "E_ANSWER_SET",
+        "E_TYPE",
+        "E_NON_FINITE",
+        "E_PROBABILITY_KEYS",
+        "E_PROBABILITY_RANGE",
+        "E_PROBABILITY_SUM",
+        "E_CHOICE_OUT_OF_SET",
+        "E_UNKNOWN_OPTION",
+        "E_OPTION_COUNT",
+        "E_SCORE_LEVELS",
+        "E_CONFIDENCE_MISMATCH",
+        "E_MODEL_MISMATCH",
+        "E_UNSUPPORTED_QUESTION_TYPE",
+        "E_SERVICE_PROFILE_UNKNOWN",
+        "E_SERVICE_PROFILE_BLOCKED",
+        "E_SERVICE_PROFILE_MISMATCH",
+        "E_SEMANTIC_BACKEND_UNKNOWN",
+        "E_SEMANTIC_SCOPE_UNSUPPORTED",
+        "E_SEMANTIC_CONTRACT_UNSUPPORTED",
+        "E_SEMANTIC_OUTPUT_INVALID",
+        "E_SERVICE_UNAVAILABLE",
+        "E_RATE_LIMITED",
+        "E_HTTP_5XX",
+        "E_HTTP_4XX",
+        "E_OUTCOME_UNKNOWN",
+        "E_USAGE_ESTIMATE_UNDERFLOW",
+        "E_ATTEMPT_IN_FLIGHT",
+        "E_AGGREGATE_BINDING_INCOMPLETE",
+        "E_AGGREGATE_SNAPSHOT_MISMATCH",
+        "E_AGGREGATE_NO_PROPOSITIONS",
+        "E_HARD_FACT_KEY_MISMATCH",
+        "E_PLAN_AGGREGATION_BINDING",
+        "E_AGGREGATE_NOT_FOUND",
+        "E_AGGREGATE_NOT_ACCEPTED",
+        "E_AGGREGATE_HASH_MISMATCH",
+        "E_EVD_OBJECT_TOO_LARGE",
+        "E_CONTENT_HASH_MISMATCH",
+        "E_VALIDATOR_BINDING_MISSING",
+        "E_VALIDATOR_POLICY_MISMATCH",
+        "E_SERVICE_STATE_INCONSISTENT"
+      ]
+    },
+    "details": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "actual": true,
+        "aggregate_id": {
+          "type": "string"
+        },
+        "aggregate_output_reserve_tokens": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "attempt_id": {
+          "type": "string"
+        },
+        "backend_key": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "binding": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "binding_schema_version": {
+          "type": "string"
+        },
+        "choice": {
+          "type": "string"
+        },
+        "conflict_type": {
+          "type": "string"
+        },
+        "content_ref": {
+          "type": "string"
+        },
+        "contract": {
+          "type": "string"
+        },
+        "current_version": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "deadline_ms": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "dimension": {
+          "type": "string"
+        },
+        "display_id": {
+          "type": "string"
+        },
+        "estimate": {
+          "type": "number"
+        },
+        "expected": true,
+        "expected_previous_version": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "extra_question_keys": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "fact_id": {
+          "type": "string"
+        },
+        "field": {
+          "type": "string"
+        },
+        "final_state": {
+          "enum": [
+            "consistent",
+            "inconsistent",
+            "unknown",
+            "abstain",
+            "needs_evidence"
+          ]
+        },
+        "from_watermark": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "gate": {
+          "type": "string"
+        },
+        "host_code": {
+          "type": "string"
+        },
+        "http_status": {
+          "type": "integer",
+          "minimum": 100,
+          "maximum": 599
+        },
+        "impact": {
+          "type": "string"
+        },
+        "inseparable_group_key": {
+          "type": "string"
+        },
+        "lease_expires_at": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "limit": {
+          "type": "number"
+        },
+        "limiting_question_key": {
+          "type": "string"
+        },
+        "logical_id": {
+          "type": "string"
+        },
+        "max": {
+          "type": "number"
+        },
+        "method": {
+          "type": "string"
+        },
+        "min": {
+          "type": "number"
+        },
+        "missing_fields": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "missing_question_keys": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "object_id": {
+          "type": "string"
+        },
+        "object_type": {
+          "type": "string"
+        },
+        "observed": {
+          "type": [
+            "number",
+            "string"
+          ]
+        },
+        "offending_question_key": {
+          "type": "string"
+        },
+        "omission_keys": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "option": {
+          "type": "string"
+        },
+        "pack_hash": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "profile_key": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "profile_version": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "question_key": {
+          "type": "string"
+        },
+        "question_keys": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "reason": {
+          "type": "string"
+        },
+        "recomputed": {
+          "type": "number"
+        },
+        "reported": {
+          "type": "number"
+        },
+        "requested_model": {
+          "type": "string"
+        },
+        "required_order": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "retry_after_ms": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "returned_model": {
+          "type": "string"
+        },
+        "review_snapshot_id": {
+          "type": "string"
+        },
+        "schema_version": {
+          "type": "string"
+        },
+        "scope": {
+          "type": "string"
+        },
+        "scope_field": {
+          "type": "string"
+        },
+        "shard_key": {
+          "type": "string"
+        },
+        "shard_plan_key": {
+          "type": "string"
+        },
+        "source_id": {
+          "type": "string"
+        },
+        "source_ref": {
+          "type": "string"
+        },
+        "stage": {
+          "type": "string"
+        },
+        "sum": {
+          "type": "number"
+        },
+        "supported": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "to_watermark": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "tolerance": {
+          "type": "number"
+        },
+        "type": {
+          "type": "string"
+        },
+        "upstream_code": {
+          "type": "string"
+        },
+        "upstream_unknown": {
+          "$ref": "#/$defs/UpstreamUnknown"
+        },
+        "validator_binding_key": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "value": {
+          "type": "number"
+        },
+        "view_id": {
+          "type": "string"
+        },
+        "watermark": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    }
+  },
+  "$defs": {
+    "UpstreamUnknown": {
+      "title": "UpstreamUnknown",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "request_dispatched",
+        "attempt_status",
+        "retryable"
+      ],
+      "properties": {
+        "request_dispatched": {
+          "type": "boolean"
+        },
+        "attempt_status": {
+          "enum": [
+            "transport_error",
+            "outcome_unknown"
+          ]
+        },
+        "retryable": {
+          "type": "boolean"
+        },
+        "upstream_code": {
+          "type": "string",
+          "pattern": "^E_[A-Z0-9_]+$"
+        }
+      }
+    }
+  }
+}

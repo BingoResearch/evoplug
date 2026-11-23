@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:host_capacity_evidence_payload:1",
+  "title": "CapacityEvidencePayload",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "config_space_id", "capability_binding_key", "model", "model_scope_key", "scope", "window_tokens", "unit", "source_kind", "observed_at"],
+  "properties": {
+    "schema_version": { "const": "rsi.capacity_evidence_payload/1" },
+    "config_space_id": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "capability_binding_key": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "model": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["provider", "model_id", "variant", "resolution_source"],
+      "properties": {
+        "provider": { "type": "string", "minLength": 1 },
+        "model_id": { "type": "string", "minLength": 1 },
+        "variant": { "type": ["string", "null"] },
+        "resolution_source": { "enum": ["host_readback", "explicit"] }
+      }
+    },
+    "model_scope_key": { "type": "string", "minLength": 1, "maxLength": 256 },
+    "scope": { "const": "window_tokens" },
+    "window_tokens": { "type": "integer", "minimum": 1 },
+    "unit": { "const": "tokens" },
+    "source_kind": { "enum": ["host_capability_readback", "model_catalog"] },
+    "observed_at": { "type": "integer", "minimum": 0 }
+  }
+}

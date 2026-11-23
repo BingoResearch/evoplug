@@ -1,0 +1,149 @@
+{
+  "$id": "urn:evoplug:schema:evd_request_binding_row:1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Physical row of evd_request_binding (DD-EVD-024); values are the frozen row_json columns.",
+  "properties": {
+    "binding_id": {
+      "type": "string"
+    },
+    "branch_id": {
+      "type": "string"
+    },
+    "config_version": {
+      "type": "string"
+    },
+    "content_bytes": {
+      "maximum": 33554432,
+      "minimum": 1,
+      "type": "integer"
+    },
+    "content_hash": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "content_ref": {
+      "pattern": "^blob://",
+      "type": "string"
+    },
+    "created_at": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "dispatch_key": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "goal_version": {
+      "type": "string"
+    },
+    "input_epoch": {
+      "minimum": 1,
+      "type": "integer"
+    },
+    "plan_hash": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "plan_id": {
+      "type": "string"
+    },
+    "proposition_bindings_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "question_bindings_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "questions_hash": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "request_hash": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "row_version": {
+      "const": 0,
+      "type": "integer"
+    },
+    "service_profile_key": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "shard_id": {
+      "type": "string"
+    },
+    "shard_key": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "shard_plan_id": {
+      "type": "string"
+    },
+    "shard_plan_key": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "source_blob_refs": {
+      "description": "JCS text; JSON array",
+      "type": "string"
+    },
+    "state_content_hash": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "state_hash": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "task_id": {
+      "type": "string"
+    },
+    "template_bindings_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "validator_binding_key": {
+      "type": "string"
+    },
+    "watermark": {
+      "minimum": 0,
+      "type": "integer"
+    }
+  },
+  "required": [
+    "binding_id",
+    "request_hash",
+    "dispatch_key",
+    "plan_id",
+    "plan_hash",
+    "shard_id",
+    "shard_key",
+    "shard_plan_id",
+    "shard_plan_key",
+    "service_profile_key",
+    "validator_binding_key",
+    "state_hash",
+    "state_content_hash",
+    "questions_hash",
+    "template_bindings_digest",
+    "question_bindings_digest",
+    "proposition_bindings_digest",
+    "content_hash",
+    "content_ref",
+    "content_bytes",
+    "source_blob_refs",
+    "row_version",
+    "created_at",
+    "task_id",
+    "branch_id",
+    "input_epoch",
+    "goal_version",
+    "config_version",
+    "watermark"
+  ],
+  "title": "EvdRequestBindingRow",
+  "type": "object"
+}

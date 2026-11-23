@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:journal_frame:1",
+  "title": "JournalFrame",
+  "description": "JSON view of a decoded 24-byte journal frame header (DD-FND-059). The binary layout is authoritative.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "magic", "version", "flags", "payload_len", "crc32c", "commit_seq"],
+  "properties": {
+    "schema_version": { "const": "rsi.journal_frame/1" },
+    "magic": { "const": "RSIJ" },
+    "version": { "const": 1 },
+    "flags": { "const": 0 },
+    "payload_len": { "type": "integer", "minimum": 1, "maximum": 8388608 },
+    "crc32c": { "type": "integer", "minimum": 0, "maximum": 4294967295 },
+    "commit_seq": { "type": "integer", "minimum": 1, "maximum": 9007199254740991 }
+  }
+}

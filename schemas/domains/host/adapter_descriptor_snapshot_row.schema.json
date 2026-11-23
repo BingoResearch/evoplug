@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:host_adapter_descriptor_snapshot_row:1",
+  "title": "AdapterDescriptorSnapshotPhysicalRow",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["registration_hash", "descriptor_hash", "descriptor_json", "created_at"],
+  "properties": {
+    "registration_hash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "descriptor_hash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "descriptor_json": { "type": "string", "maxLength": 262144, "description": "JCS text of rsi.adapter_descriptor/1" },
+    "created_at": { "type": "integer", "minimum": 0 }
+  }
+}

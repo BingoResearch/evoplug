@@ -1,0 +1,157 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:issue_judgment:1",
+  "title": "IssueJudgment",
+  "description": "QP accepted judgment derived from a trusted aggregate or verified facts (DD-QP-05b).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "judgment_id",
+    "issue_key",
+    "issue_id",
+    "issue_version",
+    "decision",
+    "basis",
+    "outcome",
+    "requirement_results",
+    "accepted",
+    "recorded_at_watermark",
+    "judgment_hash"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "rsi.issue_judgment/1"
+    },
+    "judgment_id": {
+      "type": "string",
+      "pattern": "^judg:[0-9A-HJKMNP-TV-Z]{26}$"
+    },
+    "issue_key": {
+      "$ref": "#/$defs/Hash"
+    },
+    "issue_id": {
+      "type": "string"
+    },
+    "issue_version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "decision": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "aggregate_id",
+            "aggregate_key",
+            "aggregate_hash",
+            "plan_hash"
+          ],
+          "properties": {
+            "kind": {
+              "const": "answer_aggregate"
+            },
+            "aggregate_id": {
+              "type": "string"
+            },
+            "aggregate_key": {
+              "$ref": "#/$defs/Hash"
+            },
+            "aggregate_hash": {
+              "$ref": "#/$defs/Hash"
+            },
+            "plan_hash": {
+              "$ref": "#/$defs/Hash"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "fact_keys"
+          ],
+          "properties": {
+            "kind": {
+              "const": "local_facts"
+            },
+            "fact_keys": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "basis": {
+      "enum": [
+        "hard_fact",
+        "mixed"
+      ]
+    },
+    "outcome": {
+      "enum": [
+        "consistent",
+        "inconsistent",
+        "satisfied",
+        "not_satisfied"
+      ]
+    },
+    "requirement_results": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "requirement_id",
+          "proposition_id",
+          "result",
+          "aggregate_key"
+        ],
+        "properties": {
+          "requirement_id": {
+            "type": "string"
+          },
+          "proposition_id": {
+            "type": "string"
+          },
+          "result": {
+            "enum": [
+              "supports",
+              "contradicts",
+              "unknown"
+            ]
+          },
+          "aggregate_key": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      }
+    },
+    "accepted": {
+      "const": true
+    },
+    "recorded_at_watermark": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "judgment_hash": {
+      "$ref": "#/$defs/Hash"
+    }
+  },
+  "$defs": {
+    "Hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    }
+  }
+}

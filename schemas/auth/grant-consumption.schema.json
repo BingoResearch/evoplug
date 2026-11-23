@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:evoplug:schema:grant_consumption:1",
+  "title": "GrantConsumption",
+  "description": "v2 unified once-grant consumption key (DD-FND-056).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["grant_id", "write_kind", "managed_write_id", "config_write_id", "consumed_at"],
+  "properties": {
+    "grant_id": { "type": "string", "pattern": "^grant:[0-9A-HJKMNP-TV-Z]{26}$" },
+    "write_kind": { "enum": ["managed", "config"] },
+    "managed_write_id": { "type": ["string", "null"], "pattern": "^wi:[0-9A-HJKMNP-TV-Z]{26}$" },
+    "config_write_id": { "type": ["string", "null"], "pattern": "^cwi:[0-9A-HJKMNP-TV-Z]{26}$" },
+    "consumed_at": { "type": "integer", "minimum": 0 }
+  }
+}
